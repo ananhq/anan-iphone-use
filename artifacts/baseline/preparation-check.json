@@ -1,0 +1,188 @@
+{
+  "date": "2026-10-13",
+  "scope": "Repository documentation and local compilation/static preparation; user manual reflash before the first baseline commit.",
+  "commands": [
+    "Source ESP-IDF v5.5.5 export.sh with the existing tool installation",
+    "./build.sh",
+    "bash -n build.sh flash.sh",
+    "Python AST parse package.py",
+    "SHA-256 comparison with migration snapshot, prior preparation files and packaged manifest",
+    "Markdown file-target and bilingual navigation checks",
+    "Text whitespace and common private-path/credential-pattern checks",
+    "git check-ignore for generated outputs and local caches",
+    "git ls-files --stage"
+  ],
+  "changes": {
+    "firmwareSource": "unchanged",
+    "buildScriptsAndConfiguration": "unchanged",
+    "protocol": "unchanged",
+    "dependencies": "unchanged",
+    "licenseTexts": "unchanged",
+    "documentation": "Bilingual navigation, contribution guide, acceptance procedure, release preparation and readable spacing"
+  },
+  "image": {
+    "protocol": "ANAN1",
+    "board": "M5Stack StopWatch ESP32-S3 16MB",
+    "idf": "5.5.5",
+    "createdAt": "2026-10-13T05:55:15.296771+00:00",
+    "binary": "anan-stopwatch-flash.bin",
+    "flashOffset": "0x0",
+    "flashSize": "16MB",
+    "sha256": "423ac0db68f71674fdbc7eb1fc4cf3f3f452f79509cf3ab5b9a22f825199f3f4",
+    "bytes": 455840,
+    "sources": {
+      "CMakeLists.txt": "6300233d13d5af6b191f90e69286684ff9c796422631e3e83e00d4ea7cfc82e5",
+      "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+      "dependencies.lock": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+      "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+      "main/CMakeLists.txt": "1e4aed1d6c2a10f1332aa6844c3a1aa9f2011f1a8038eae6aab30d7f03290193",
+      "main/README.md": "412c0c483649dd0bef92e4a67eda9ebb8226cfee29e38f6c0fea56d0e26cee42",
+      "main/README.zh-CN.md": "3814db64d0be2c2f9e99eb874f24b6eb8f06538f6b613d82b41095f7763d1db6",
+      "main/board.c": "fc81a6d06e71a2b59b524b4af286b3fff6e9b1a1196c3d67bf62902b2bbe117e",
+      "main/bridge.h": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+      "main/idf_component.yml": "9e0ef085deaf6f697587794f713f054bbe78cdda6af5884bd22c3829ea2edb83",
+      "main/main.c": "6448ad5e0b4f48d0372dfc79448e3fa30b9b48047d175aba034e8bc06c7efc1c",
+      "main/usb.c": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+      "package.py": "649ff5265dc368aa4c17039a9c75f52980d09b48b21c7b4b4a294c0da484b407",
+      "sdkconfig.defaults": "7f917757776f9626dafab310516c77cf3594fca8b4946f2b65e95d5e4322da5e"
+    },
+    "idfVersion": "ESP-IDF v5.5.5",
+    "componentLockSHA256": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+    "validation": {
+      "compiled": true,
+      "flashed": false,
+      "deviceVerified": false
+    }
+  },
+  "flashFiles": {
+    "0x0": "bootloader/bootloader.bin",
+    "0x10000": "anan_stopwatch.bin",
+    "0x8000": "partition_table/partition-table.bin"
+  },
+  "checks": {
+    "preservedBuildInputs": 12,
+    "historicalEvidenceProtocolAndLicenseBytes": true,
+    "markdownFileLinksChecked": 164,
+    "bilingualPairs": 13,
+    "shellAndPythonSyntax": true,
+    "textWhitespaceAndPrivateDataPatterns": true,
+    "generatedFilesIgnored": true,
+    "indexEmpty": true,
+    "compiled": true,
+    "packaged": true,
+    "manifestHashes": true,
+    "targetOffsetsAndFlashSize": true,
+    "matchesMigrationImage": true
+  },
+  "documentationChanges": {
+    "CONTRIBUTING.md": {
+      "before": null,
+      "after": "957430abe90649db975275cff20a0ce57f47239827932f81ae3552cb7e1b3d49"
+    },
+    "CONTRIBUTING.zh-CN.md": {
+      "before": null,
+      "after": "71c1641b82c74db99608641538d9f4441ed03bb19c9af3c36ebda4777092a766"
+    },
+    "README.md": {
+      "before": "501650ecf4d4aec6b808fbca180d2f5a84ac79397ac8a10d5e909f241e4f93e7",
+      "after": "f1214db5a44ffd1bef82204410a487a1c62514729bde7fa63194239f502c2ab3"
+    },
+    "README.zh-CN.md": {
+      "before": "ea92a80cb965db60e8f23981be986439be36e24f020d153642a220d6b75eda1a",
+      "after": "f59c7ca126c0116d728aaa89c8016d2473a9aabe6cf06dd4bd916bf4628b169b"
+    },
+    "THIRD_PARTY.md": {
+      "before": "5477009e8d64077e3f609f46c600d2a5ad524b68a784b4e8f0e254611ca61c25",
+      "after": "3c190c3dc5b074a3808b548df831fef49fb93b96fcbcadf94a574030450fe417"
+    },
+    "THIRD_PARTY.zh-CN.md": {
+      "before": "14a11ffebef0161ac8a6d9c982d3c9bbd894b61cb5afe83d06ee36a286aa5c09",
+      "after": "6e291c67abd24be7a626ac8927c0cca801e4e115845575e1716b5754133b1699"
+    },
+    "docs/README.md": {
+      "before": "1f3698aa2842ed259baec3bd8f89536bc87ce67a44eeae2956dda2aae515c7b8",
+      "after": "b652312cefa9eadc4965e1a6d772e086168a6a4ff181afc215f5df5e62dbc8f2"
+    },
+    "docs/README.zh-CN.md": {
+      "before": "57983950999c630cfe9e35d0bc3a79b627ab539958dacd79d8baaafee47ec36f",
+      "after": "c53a75a57ac9fdbd2aa07e7bc884b1f6c312cd564be7f0b0466320154a452733"
+    },
+    "docs/baseline-acceptance.md": {
+      "before": null,
+      "after": "307425213c20d8acdf9dfd926f31e09f9fa21faf902ce063cf129e41f405fa6d"
+    },
+    "docs/baseline-acceptance.zh-CN.md": {
+      "before": null,
+      "after": "0e03136bae614e7fc9acffd6f9fcb247944dbdb167d23f683c4133e73edb05f3"
+    },
+    "docs/client.md": {
+      "before": "0ad81a749220bc435e9c42dc36f4dd9bdb5bc8760f2e80cd68382ebae745b40b",
+      "after": "c307af968bd7fee8fe9229294cf1f0d837cde070f4a9adf6608276e5e5ae2824"
+    },
+    "docs/client.zh-CN.md": {
+      "before": "d5a4adde64d22d9171d870f2baaa5b464b925ba0f1965beb6258fba54595ffca",
+      "after": "c26e03b5a1cb5de589a47b5df84eb44d92f27be64254c95a1b0207a2c0ab1aec"
+    },
+    "docs/release-preparation.md": {
+      "before": null,
+      "after": "a8d4737542a9b2311ff4d7eb40c73f845e0999a648c03ac3e9d8919fe04ef62b"
+    },
+    "docs/release-preparation.zh-CN.md": {
+      "before": null,
+      "after": "a0a24d4fef410909c45aee04f21260f77f57eacfbf10a21de9a0afaab629f45c"
+    },
+    "docs/roadmap.md": {
+      "before": "fffe186a5f550f4e6dbe07cc97e0327542d77cb6dbb8655bc6d7a094a0eb7587",
+      "after": "cd20e875984964953c8103ee58000db23daf4f892e3a773a335c2aa90c744a7b"
+    },
+    "docs/roadmap.zh-CN.md": {
+      "before": "feca018be982fbc949320518ac8bf7ae2e9c8f8e8327274ec27c16c773ca5f40",
+      "after": "f409b9e553de8a389dbb6335df715a53515475a1fc35bf5cf837112063063289"
+    },
+    "docs/setup.md": {
+      "before": "be0af5833f825a29a2f5f5b83cb8cfd821b207504f8b46a21c6e2bfa6f0ac5cc",
+      "after": "c6beabd6d58a8400a8d1c4b9c7d459cc8712d3f414bb564ea0a6bed7ed724b09"
+    },
+    "docs/setup.zh-CN.md": {
+      "before": "bae92d2d378ee3a54a83c5a82f00dd93cb7b9127bea3cf1c7cf8867d2b843c25",
+      "after": "889288fe22b413f88ef04e251cfdddd241d0829dd8ff1dc7944410285b487c4d"
+    },
+    "docs/validation.md": {
+      "before": "d13bd8dfeaf99925146e53cbec4fe0f320326dac34d90bd59a66b4b726fbf50f",
+      "after": "1d62de35f06338b01a9723319e870cadf51d335f16add1b5117f3c3fbb21d99b"
+    },
+    "docs/validation.zh-CN.md": {
+      "before": "cd7c5eaa5445a6224459f5154471f3f28e68be267663246bfa7b76b6f1cc5adf",
+      "after": "70095605fe2c903d751235ce10e4d60bf5ecd2b86f4062c578d1635887d47048"
+    },
+    "main/README.md": {
+      "before": "2cb8ec88a194693f2195b6f53bba1218a017466f7521acca29efe95f5342e97a",
+      "after": "412c0c483649dd0bef92e4a67eda9ebb8226cfee29e38f6c0fea56d0e26cee42"
+    },
+    "main/README.zh-CN.md": {
+      "before": "c78793eae5e0cd9c026b73fa3f13bf337eea1a968b4d7f5c3614f2cc916294a4",
+      "after": "3814db64d0be2c2f9e99eb874f24b6eb8f06538f6b613d82b41095f7763d1db6"
+    }
+  },
+  "privacyCheckLimit": "Pattern checks and inspected repository content; not a guarantee that all possible secrets or data formats are detected.",
+  "pending": [
+    "User fresh flash/manual verification against candidate image hash",
+    "Acceptance scope and source-handling confirmation",
+    "First local baseline commit",
+    "Implementation-origin resolution before public distribution",
+    "Final project address and publication authorization",
+    "Exact linked-component license inventory before binary distribution"
+  ],
+  "notExecuted": [
+    "flashing",
+    "phone/HID input",
+    "model calls",
+    "simulator/E2E",
+    "commit",
+    "public repository creation/push/release"
+  ],
+  "provenanceComplete": false,
+  "baselineAccepted": false,
+  "baselineCommit": null,
+  "publiclyReleased": false
+}

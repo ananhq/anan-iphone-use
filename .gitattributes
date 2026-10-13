@@ -1,0 +1,2 @@
+# Preserve the upstream license verbatim, including its trailing blank line.
+licenses/lwIP-BSD.txt whitespace=-blank-at-eof

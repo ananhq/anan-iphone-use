@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-13",
+  "scope": "compilation, packaging, source equivalence and static documentation checks only",
+  "commands": [
+    "source <ESP-IDF v5.5.5>/export.sh",
+    "./build.sh",
+    "bash -n build.sh flash.sh",
+    "Python AST parse package.py",
+    "SHA-256 verification against source-snapshot.json and build manifest",
+    "Markdown file-target check",
+    "git diff --check with temporary intent-to-add entries (index cleared afterward)"
+  ],
+  "environment": {
+    "idf": "5.5.5",
+    "idfCommit": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+    "python": "Python 3.13.1",
+    "compiler": "xtensa-esp-elf GCC 14.2.0",
+    "cmake": "cmake version 3.30.2",
+    "ninja": "1.12.1"
+  },
+  "standalone": {
+    "sourceDirectory": "independent sibling repository",
+    "freshBuildDirectory": true,
+    "managedComponents": "resolved by ESP-IDF Component Manager from registry; not copied from Anan",
+    "sdkconfig": "generated from checked-in defaults",
+    "requiresAnanSource": false,
+    "externalToolchainRequired": true
+  },
+  "preserved": {
+    "runtimeSourceBytes": true,
+    "scriptsBytes": true,
+    "dependencyLockBytes": true,
+    "protocolSemantics": true,
+    "idfAppVersion": "ec6bb29-dirty",
+    "usbBCDDevice": "0x0100",
+    "imageNames": true
+  },
+  "adjustments": {
+    ".gitignore": {
+      "before": "b8067a2c8aa2730955ad1a042fe52410599621693150cc647f747fa9230cd13e",
+      "after": "14049e5f467a2a2ced53e0ea45225d2f254c17e21f7e656a1168d4dff7aaa4b7"
+    },
+    "CMakeLists.txt": {
+      "before": "30e3318b8c821377e5804f0ae3bee11724b597063f3caf8563cb8507272016d6",
+      "after": "6300233d13d5af6b191f90e69286684ff9c796422631e3e83e00d4ea7cfc82e5"
+    },
+    "PROTOCOL.md": {
+      "before": "08183c28d8853e014db1a505951e423a130e846db9277adbc45f9343e3f41ba7",
+      "after": "a1830abc958a5c13e702c06ae58cd642a873bd982a658e106a6bc2db643c7454"
+    },
+    "README.md": {
+      "before": "3a114c00082e2a65d330adbd39e5c5a2996216b6ca4dca5e780148c908acf99b",
+      "after": "501650ecf4d4aec6b808fbca180d2f5a84ac79397ac8a10d5e909f241e4f93e7"
+    },
+    "README.zh-CN.md": {
+      "before": "7d0a2b86ed632a606ed7ef4d2ba1ec3553ba3042a816261b514f7bc1f3520abc",
+      "after": "ea92a80cb965db60e8f23981be986439be36e24f020d153642a220d6b75eda1a"
+    }
+  },
+  "image": {
+    "protocol": "ANAN1",
+    "board": "M5Stack StopWatch ESP32-S3 16MB",
+    "idf": "5.5.5",
+    "createdAt": "2026-10-13T05:28:02.826048+00:00",
+    "binary": "anan-stopwatch-flash.bin",
+    "flashOffset": "0x0",
+    "flashSize": "16MB",
+    "sha256": "423ac0db68f71674fdbc7eb1fc4cf3f3f452f79509cf3ab5b9a22f825199f3f4",
+    "bytes": 455840,
+    "sources": {
+      "CMakeLists.txt": "6300233d13d5af6b191f90e69286684ff9c796422631e3e83e00d4ea7cfc82e5",
+      "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+      "dependencies.lock": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+      "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+      "main/CMakeLists.txt": "1e4aed1d6c2a10f1332aa6844c3a1aa9f2011f1a8038eae6aab30d7f03290193",
+      "main/README.md": "2cb8ec88a194693f2195b6f53bba1218a017466f7521acca29efe95f5342e97a",
+      "main/README.zh-CN.md": "c78793eae5e0cd9c026b73fa3f13bf337eea1a968b4d7f5c3614f2cc916294a4",
+      "main/board.c": "fc81a6d06e71a2b59b524b4af286b3fff6e9b1a1196c3d67bf62902b2bbe117e",
+      "main/bridge.h": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+      "main/idf_component.yml": "9e0ef085deaf6f697587794f713f054bbe78cdda6af5884bd22c3829ea2edb83",
+      "main/main.c": "6448ad5e0b4f48d0372dfc79448e3fa30b9b48047d175aba034e8bc06c7efc1c",
+      "main/usb.c": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+      "package.py": "649ff5265dc368aa4c17039a9c75f52980d09b48b21c7b4b4a294c0da484b407",
+      "sdkconfig.defaults": "7f917757776f9626dafab310516c77cf3594fca8b4946f2b65e95d5e4322da5e"
+    },
+    "idfVersion": "ESP-IDF v5.5.5",
+    "componentLockSHA256": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+    "validation": {
+      "compiled": true,
+      "flashed": false,
+      "deviceVerified": false
+    }
+  },
+  "flashFiles": {
+    "0x0": "bootloader/bootloader.bin",
+    "0x10000": "anan_stopwatch.bin",
+    "0x8000": "partition_table/partition-table.bin"
+  },
+  "checks": {
+    "compiled": true,
+    "packaged": true,
+    "manifestHashes": true,
+    "originalRuntimeSourceHashes": true,
+    "shellSyntax": true,
+    "pythonSyntax": true,
+    "markdownFileTargets": true,
+    "gitWhitespace": true,
+    "ignoredGeneratedFiles": true,
+    "ananIntegrationLinks": true
+  },
+  "notExecuted": [
+    "flashing",
+    "phone/HID input",
+    "model calls",
+    "simulator/E2E",
+    "public repository creation/push/release"
+  ],
+  "provenanceComplete": false,
+  "baselineAccepted": false,
+  "baselineCommit": null,
+  "markdownFileLinksChecked": 102,
+  "ananIntegrationFileLinksChecked": 202
+}

@@ -1,0 +1,12 @@
+StopWatch firmware (provisional project name)
+Copyright 2026 Haoran Wang
+
+This product includes software developed for Anan.
+Original repository: https://github.com/ananhq/anan
+Original directory: hardware/stopwatch/
+New repository address: not assigned; this is a local migration checkpoint.
+
+Existing first-party Apache-2.0 declarations are preserved during migration.
+Source provenance review is incomplete; see THIRD_PARTY.md before distribution.
+Third-party components retain their own licenses and attribution notices.
+See THIRD_PARTY.md and licenses/ for dependency notices.

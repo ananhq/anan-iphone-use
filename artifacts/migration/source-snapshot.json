@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-13",
+  "sourceRepository": "https://github.com/ananhq/anan",
+  "sourceHEAD": "ec6bb29448b2620a4ee23c9c112a137799967a1e",
+  "sourceDirectory": "hardware/stopwatch",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "b8067a2c8aa2730955ad1a042fe52410599621693150cc647f747fa9230cd13e",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "additional editor/cache exclusions",
+      "migratedSHA256": "14049e5f467a2a2ced53e0ea45225d2f254c17e21f7e656a1168d4dff7aaa4b7"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "30e3318b8c821377e5804f0ae3bee11724b597063f3caf8563cb8507272016d6",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "pin historical IDF app version ec6bb29-dirty",
+      "migratedSHA256": "6300233d13d5af6b191f90e69286684ff9c796422631e3e83e00d4ea7cfc82e5"
+    },
+    {
+      "path": "PROTOCOL.md",
+      "sha256": "08183c28d8853e014db1a505951e423a130e846db9277adbc45f9343e3f41ba7",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "documentation/path/provenance update",
+      "migratedSHA256": "a1830abc958a5c13e702c06ae58cd642a873bd982a658e106a6bc2db643c7454"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3a114c00082e2a65d330adbd39e5c5a2996216b6ca4dca5e780148c908acf99b",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "documentation/path/provenance update",
+      "migratedSHA256": "501650ecf4d4aec6b808fbca180d2f5a84ac79397ac8a10d5e909f241e4f93e7"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "sha256": "7d0a2b86ed632a606ed7ef4d2ba1ec3553ba3042a816261b514f7bc1f3520abc",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "documentation/path/provenance update",
+      "migratedSHA256": "ea92a80cb965db60e8f23981be986439be36e24f020d153642a220d6b75eda1a"
+    },
+    {
+      "path": "build.sh",
+      "sha256": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c"
+    },
+    {
+      "path": "dependencies.lock",
+      "sha256": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976"
+    },
+    {
+      "path": "flash.sh",
+      "sha256": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3"
+    },
+    {
+      "path": "main/CMakeLists.txt",
+      "sha256": "1e4aed1d6c2a10f1332aa6844c3a1aa9f2011f1a8038eae6aab30d7f03290193",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "1e4aed1d6c2a10f1332aa6844c3a1aa9f2011f1a8038eae6aab30d7f03290193"
+    },
+    {
+      "path": "main/board.c",
+      "sha256": "fc81a6d06e71a2b59b524b4af286b3fff6e9b1a1196c3d67bf62902b2bbe117e",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "fc81a6d06e71a2b59b524b4af286b3fff6e9b1a1196c3d67bf62902b2bbe117e"
+    },
+    {
+      "path": "main/bridge.h",
+      "sha256": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993"
+    },
+    {
+      "path": "main/idf_component.yml",
+      "sha256": "9e0ef085deaf6f697587794f713f054bbe78cdda6af5884bd22c3829ea2edb83",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "9e0ef085deaf6f697587794f713f054bbe78cdda6af5884bd22c3829ea2edb83"
+    },
+    {
+      "path": "main/main.c",
+      "sha256": "6448ad5e0b4f48d0372dfc79448e3fa30b9b48047d175aba034e8bc06c7efc1c",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "6448ad5e0b4f48d0372dfc79448e3fa30b9b48047d175aba034e8bc06c7efc1c"
+    },
+    {
+      "path": "main/usb.c",
+      "sha256": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe"
+    },
+    {
+      "path": "package.py",
+      "sha256": "649ff5265dc368aa4c17039a9c75f52980d09b48b21c7b4b4a294c0da484b407",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "649ff5265dc368aa4c17039a9c75f52980d09b48b21c7b4b4a294c0da484b407"
+    },
+    {
+      "path": "sdkconfig.defaults",
+      "sha256": "7f917757776f9626dafab310516c77cf3594fca8b4946f2b65e95d5e4322da5e",
+      "gitStatus": "untracked in Anan",
+      "migrationChange": "none",
+      "migratedSHA256": "7f917757776f9626dafab310516c77cf3594fca8b4946f2b65e95d5e4322da5e"
+    }
+  ],
+  "historicalImage": {
+    "protocol": "ANAN1",
+    "board": "M5Stack StopWatch ESP32-S3 16MB",
+    "idf": "5.5.5",
+    "binary": "anan-stopwatch-flash.bin",
+    "flashOffset": "0x0",
+    "flashSize": "16MB",
+    "sha256": "5e3e96b3bf2e1699c6406874de66a85e7efa1e3823ec83738f4971b0f2d8e230",
+    "bytes": 455840,
+    "sources": {
+      "CMakeLists.txt": "30e3318b8c821377e5804f0ae3bee11724b597063f3caf8563cb8507272016d6",
+      "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+      "dependencies.lock": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+      "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+      "main/CMakeLists.txt": "1e4aed1d6c2a10f1332aa6844c3a1aa9f2011f1a8038eae6aab30d7f03290193",
+      "main/board.c": "fc81a6d06e71a2b59b524b4af286b3fff6e9b1a1196c3d67bf62902b2bbe117e",
+      "main/bridge.h": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+      "main/idf_component.yml": "9e0ef085deaf6f697587794f713f054bbe78cdda6af5884bd22c3829ea2edb83",
+      "main/main.c": "6448ad5e0b4f48d0372dfc79448e3fa30b9b48047d175aba034e8bc06c7efc1c",
+      "main/usb.c": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+      "package.py": "649ff5265dc368aa4c17039a9c75f52980d09b48b21c7b4b4a294c0da484b407",
+      "sdkconfig.defaults": "7f917757776f9626dafab310516c77cf3594fca8b4946f2b65e95d5e4322da5e"
+    },
+    "idfVersion": "ESP-IDF v5.5.5",
+    "componentLockSHA256": "c0ba6e7e88bf20920f2f614e775e84daa13d2433bddfee502bc9df96fc440976",
+    "validation": {
+      "compiled": true,
+      "flashed": false,
+      "deviceVerified": false
+    }
+  },
+  "historicalImageActualSHA256": "5e3e96b3bf2e1699c6406874de66a85e7efa1e3823ec83738f4971b0f2d8e230",
+  "historicalImageSourceMatches": {
+    "CMakeLists.txt": true,
+    "build.sh": true,
+    "dependencies.lock": true,
+    "flash.sh": true,
+    "main/CMakeLists.txt": true,
+    "main/board.c": true,
+    "main/bridge.h": true,
+    "main/idf_component.yml": true,
+    "main/main.c": true,
+    "main/usb.c": true,
+    "package.py": true,
+    "sdkconfig.defaults": true
+  },
+  "validation": {
+    "sourceCaptured": true,
+    "migrationCompiled": true,
+    "migrationFlashed": false,
+    "migrationDeviceVerified": false,
+    "provenanceReviewComplete": false,
+    "baselineAccepted": false,
+    "publiclyReleased": false
+  }
+}
