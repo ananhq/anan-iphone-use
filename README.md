@@ -10,10 +10,23 @@ Connect it to a client agent to add **iPhone Use**: the client observes the scre
 
 ## Demos and setup
 
-| Draw in Notes | Check Xiaohongshu followers | Do Not Disturb and timer |
-| --- | --- | --- |
-| **Prompt:** Open Notes and draw a little dog. | **Prompt:** Open Xiaohongshu and check how many followers I have. | **Prompt:** Turn on Do Not Disturb, then start a 25-minute timer. |
-| <video src="https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/f7dc814c-bf89-4d8d-bdd8-1e7c6a837279" width="260" controls></video> |
+<table width="100%">
+<tr>
+<th width="33%">Draw in Notes</th>
+<th width="33%">Check Xiaohongshu followers</th>
+<th width="33%">Do Not Disturb and timer</th>
+</tr>
+<tr>
+<td width="33%" valign="top"><strong>Prompt:</strong> Open Notes and draw a little dog.</td>
+<td width="33%" valign="top"><strong>Prompt:</strong> Open Xiaohongshu and check how many followers I have.</td>
+<td width="33%" valign="top"><strong>Prompt:</strong> Turn on Do Not Disturb, then start a 25-minute timer.</td>
+</tr>
+<tr>
+<td width="33%" align="center"><video src="https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780" width="260" controls></video></td>
+<td width="33%" align="center"><video src="https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6" width="260" controls></video></td>
+<td width="33%" align="center"><video src="https://github.com/user-attachments/assets/f7dc814c-bf89-4d8d-bdd8-1e7c6a837279" width="260" controls></video></td>
+</tr>
+</table>
 
 **1 · Connect and configure the local network:** connect the iPhone to StopWatch and set up USB Ethernet on the phone: manual IP `192.168.7.2`, mask `255.255.255.0`, no router or DNS, and enable AssistiveTouch. Then pair, import the MCP configuration and enable control as shown below.
 
