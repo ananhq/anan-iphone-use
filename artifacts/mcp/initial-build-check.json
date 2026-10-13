@@ -1,0 +1,116 @@
+{
+  "stage": "MCP development candidate",
+  "date": "2026-10-13",
+  "checkpoint": "4c6015c",
+  "branch": "feat/device-mcp",
+  "firmwareVersion": "0.1.0-mcp",
+  "scope": "compilation, packaging, static source/assets/docs checks only",
+  "image": {
+    "binary": "anan-stopwatch-flash.bin",
+    "sha256": "6ab6ff3362b30a3a75677c561c536059236281465552f9577f134af3bf9257ce",
+    "bytes": 786144,
+    "flashOffset": "0x0",
+    "flashSize": "16MB"
+  },
+  "versions": {
+    "ESP-IDF": "5.5.5",
+    "esptool": "4.12.0",
+    "MCP": "2025-11-25",
+    "CO5300": "2.2.0",
+    "cmake_utilities": "0.5.3",
+    "cJSON": "1.7.19",
+    "mbedTLS": "3.6.6"
+  },
+  "sources": {
+    "CMakeLists.txt": "e7ccd9fb9e8da4abe0abcdc05431f3fbfcf37da7c33d8e4ba6094fadc8d4f177",
+    "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+    "dependencies.lock": "1b475b1c868e239f587d361fd11e2de0c016cbcf219ebb9fa70e9797af525672",
+    "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+    "main/.DS_Store": "69ba3df1fbde01be57174ad5d1ab3bbe379d1fc774d727b913aa7afbc8139558",
+    "main/CMakeLists.txt": "ea6d9189e71dbf906b4674c5907abf106fe2a6ad15516310e58b18bdb4054112",
+    "main/README.md": "14238cc96f761565da6e2a349e34541fb53b1075838b47e2b85664a2f817d255",
+    "main/README.zh-CN.md": "3c2c51cfe83449b1be86207f0c23dc88c8b9491b3643404bd2c450dcb05c8266",
+    "main/actions.c": "f2702c7339976f80f8af095a49878a70ed0547269754de476b1499853bcb5e47",
+    "main/actions.h": "830622f3e6edc4d7f80cc3099542d4c80da431c0f57b452d59085b51f10727b6",
+    "main/board.c": "3a55e8225cc2230f7a3bbc05e5b74a03d37f5394b6521e2a9203bf68270af633",
+    "main/bridge.h": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+    "main/device.c": "25657a3005c0c02bf2992124b63f3eb2da67c1b369ad629c8bfb4165207947b0",
+    "main/device.h": "0d4b215cfb8c9a3d1e13716a693626df6365437629e66e908a1cdd61300d2cc2",
+    "main/display.c": "99e33fcff6f8cae7a2118cfc8861d3a3d7bf721582bc62296bf2d5fa5ea18183",
+    "main/display.h": "0c36588aa9e516f0381b330080afa27104de811f1b635cadc94f6cfec2dc14f0",
+    "main/identity.c": "73be388dd210067bfe60cb8b79f0bdf07785fc836ff58cf914c6d8bdcaceb7b8",
+    "main/identity.h": "fa926a6f0004a1ea235f1907929633c53b7b368e0eb6cae3382d6fe5474981ca",
+    "main/idf_component.yml": "bb3bb3e7bac5abd75570a60a2f002ef09a024f59acdf8b7fb831874e59f89e01",
+    "main/main.c": "0c7d433908c73b17725c02e7dffd1899b992bd39a504db1f52f56eb435724b79",
+    "main/mcp.c": "aef791d67508468778d4e29d84c0c86b511af0311e62bb2feb2e3fe506c871dc",
+    "main/mcp.h": "66b4b3337cfa534379bdb12713ba6ffe2ba6568e219a49eefec0d33021acc754",
+    "main/mcp_tools.h": "9f094a7356af3c7e329dc1ab28fc654495f82f052a4141f96a149b6b55b7ccea",
+    "main/panel_init.h": "75ed3403c1423050d1fd8ab3183d6f92c8a401044cf7821ae9dc6acafa99c3d1",
+    "main/usb.c": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+    "main/web/setup.html": "50ab3af22a6d8bc0e91e3056cd84055b24a2c72b833022fd49e37916f8c1684e",
+    "package.py": "a831f3bef6cf86a2fbf7ca50be891dae9386345b51bea8586902604e9ce1fadb",
+    "partitions.csv": "d9dafbd13f79c0dfa6b1ec13a952c5e84a1aa3ac07d59cc6b30157a33b59b949",
+    "sdkconfig.defaults": "e9c0d433dd92dd3b45d631e5b4ddae3cd44f9b1b6537307911e086192036fdf9"
+  },
+  "checks": {
+    "compiled": true,
+    "compilerWarnings": 0,
+    "packaged": true,
+    "configChecked": true,
+    "usbSourceUnchanged": true,
+    "ANAN1ContractUnchanged": true,
+    "originalActionBodies": {
+      "ascii_key": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "d0419604f09e9514f0d3f93bc9239e4a317cb3c4a2262f65b19842411e7c98a9"
+      },
+      "pause_action": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "f491c16c33d1dc7a97da396b4095998e73bbbf0295353dbd6f16faac92218a8c"
+      },
+      "stroke": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "8a670e761e42fe40c20aefe147efb479342c2d2cee38e6b8ba9e32c418d35ed0"
+      },
+      "execute": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "f7f39b262919c1157a161c4c8fc0bdbc87b4ce6f9ee197080ae792c5ade89998"
+      }
+    },
+    "embeddedToolsJSON": "six tool schemas parsed",
+    "setupJavaScript": "node --check passed",
+    "packagePython": "py_compile passed",
+    "nameConstraintDER": "openssl asn1parse passed",
+    "localDocumentationLinks": 218,
+    "gitDiffCheck": true,
+    "identityPartitionOutsideImage": true
+  },
+  "memory": {
+    "staticDIRAMBytes": 112383,
+    "staticDIRAMRemainingBytes": 229377,
+    "reportedImageBytes": 720493,
+    "runtimeHeapPeakMeasured": false
+  },
+  "validation": {
+    "flashed": false,
+    "deviceVerified": false,
+    "iPhoneTrustVerified": false,
+    "displayVerified": false,
+    "MCPInteroperabilityVerified": false,
+    "legacyDeviceRegressionVerified": false,
+    "stopLatencyMeasured": false,
+    "wirelessImplemented": false,
+    "AnanModified": false,
+    "provenanceResolved": false,
+    "published": false
+  },
+  "pending": [
+    "display placement/power",
+    "certificate generation and normal iPhone trust",
+    "MCP discovery with unchanged Anan/independent client",
+    "synthetic input and stop/cancellation/arbitration",
+    "default legacy regression",
+    "runtime memory/endurance",
+    "original USB/board provenance"
+  ]
+}

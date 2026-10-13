@@ -25,7 +25,7 @@ python -m esptool --chip esp32s3 --port /dev/cu.usbmodemXXXX \
   0x0 build/anan-stopwatch-flash.bin
 ```
 
-Require a successful write/hash verification. Short-press power to reset. Black AMOLED is expected: no display driver is initialized. Flashing replaces factory firmware; restore the correct StopWatch factory package via official M5Burner and its instructions. These scripts do not modify eFuses or enable Secure Boot. This migration does not flash any device.
+Require a successful write/hash verification. Short-press power to reset. This MCP development build initializes a simple status/menu display; a blank screen is no longer its intended UI. Flashing replaces factory firmware; restore the correct StopWatch factory package via official M5Burner and its instructions. These scripts do not modify eFuses or enable Secure Boot. This migration does not flash any device.
 
 ## Configure the phone
 
@@ -34,20 +34,20 @@ Require a successful write/hash verification. Short-press power to reset. Black 
 | Cable | StopWatch Type-C → unlocked portrait USB-C iPhone |
 | IPv4 | USB Ethernet manual 192.168.7.2, mask 255.255.255.0; router empty, no DNS |
 | Pointer | Enable Settings → Accessibility → Touch → AssistiveTouch |
-| Keyboard | Hardware layout US; TYPE supports printable ASCII, TAB/LF |
-| Client | Allow Anan local-network access; connect StopWatch, start whole-display sharing, check local preview |
-| Agent | Configure an image-capable model; enable control for the next task |
+| Keyboard | Hardware layout US; type_ascii supports printable ASCII, TAB/LF |
+| Client | Allow local-network access; import/connect the device MCP configuration; start client screen sharing for observation |
+| Agent | Configure an image-capable model and client task permission; tap Start control on StopWatch for hardware input |
 
 Anan's capture requires iOS 27+. The USB subnet is not an internet gateway; retain the phone's existing Wi-Fi/cellular model connection. HID/Ethernet does not itself require developer mode. Current Anan developer-signed installation does; TestFlight/App Store distribution is not validated by this migration.
 
-Start with observe-only, then one small input in an empty test note; observe after every action. Each new Anan task requires new control permission. Stop via either front button, Anan stop or cable removal. Reconnect explicitly and inspect partial effects; never automatically replay a failed command.
+Start with observe-only, then one small input in an empty test note; observe after every action. Client task permission is separate from the board's volatile MCP grant. Stop via either front button, MCP stop or cable removal. Reconnect explicitly and inspect partial effects; never automatically replay a failed command.
 
 ## Troubleshooting
 
 | Symptom | Next check |
 | --- | --- |
 | No Ethernet | Data cable, exit bootloader/reset, correct 16MB image |
-| No READY/timeout | Manual IP/mask, local-network permission, stop button released |
+| MCP connection/timeout | Manual IP/mask, local-network permission, correct HTTP endpoint and imported Bearer; do not use retired port28766 |
 | Preview invalid | Unlock/portrait, whole-display consent; protected content may be unavailable |
 | Pointer/click mismatch | AssistiveTouch and overlay; stop and inspect coordinates |
 | Wrong characters | US hardware layout; no Unicode/IME support |
@@ -55,3 +55,5 @@ Start with observe-only, then one small input in an empty test note; observe aft
 | Partial text/unknown result | Observe manually, reconnect/re-authorize; no replay |
 
 Use synthetic screens/notes and keep private screenshots/device identifiers out of logs. A future device run needs separately approved scope and a record of firmware hash, client version, OS and observed outcomes.
+
+For device MCP buttons, HTTP-first configuration export and optional HTTPS certificates, follow [MCP setup](mcp.md).

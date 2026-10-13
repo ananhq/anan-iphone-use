@@ -71,3 +71,7 @@ Record the accepted baseline commit ID when that stage completes. The earlier
 local checkpoint is identified by Git history and the
 [checkpoint record](../artifacts/baseline/checkpoint.json). Keep failed or unrun
 checks explicit. A local commit does not authorize a push or public release.
+
+This procedure records the historical ANAN1 checkpoint scope. Current
+`0.4.0-mcp` retires that service; use [MCP setup](mcp.md) and current
+[validation](validation.md) for the new candidate, not READY/PONG acceptance.

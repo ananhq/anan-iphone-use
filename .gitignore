@@ -2,8 +2,25 @@
 /managed_components/
 /sdkconfig
 /sdkconfig.old
-/__pycache__/
+__pycache__/
 .DS_Store
 /.idea/
 /.vscode/
 *.pyc
+
+# Local environments and raw build/device logs.
+.venv/
+venv/
+.cache/
+*.log
+
+# Local credentials and device pairing/certificate exports.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.mobileconfig
+stopwatch-mcp*.json

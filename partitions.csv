@@ -1,0 +1,6 @@
+# Name, Type, SubType, Offset, Size, Flags
+nvs, data, nvs, 0x9000, 0x6000,
+phy_init, data, phy, 0xf000, 0x1000,
+factory, app, factory, 0x10000, 0x300000,
+# Kept outside the merged image erase range; explicit device reset clears this.
+mcp_kv, data, nvs, 0xf00000, 0x10000,

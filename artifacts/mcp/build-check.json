@@ -1,0 +1,207 @@
+{
+  "stage": "MCP development candidate",
+  "date": "2026-10-13",
+  "checkpoint": "4c6015c",
+  "branch": "feat/device-mcp",
+  "firmwareVersion": "0.4.0-mcp",
+  "scope": "user-approved MCP-only input transport and simplified home UI; compilation/packaging/static/symbol/document-render checks only",
+  "image": {
+    "binary": "anan-stopwatch-flash.bin",
+    "sha256": "39c322aaff6ff58de59dd74f2fcb0f8615ec829010780ec82ebb6b91e0b1a59a",
+    "bytes": 802608,
+    "flashOffset": "0x0",
+    "flashSize": "16MB"
+  },
+  "versions": {
+    "ESP-IDF": "5.5.5",
+    "esptool": "4.12.0",
+    "MCP": "2025-11-25",
+    "CO5300": "2.2.0",
+    "cmake_utilities": "0.5.3",
+    "cJSON": "1.7.19",
+    "mbedTLS": "3.6.6"
+  },
+  "sources": {
+    "CMakeLists.txt": "1caa4db0e7daf3ae6cc478824ee8d49d301a8cf8d7935bb74ce55632552acd4f",
+    "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+    "dependencies.lock": "1b475b1c868e239f587d361fd11e2de0c016cbcf219ebb9fa70e9797af525672",
+    "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+    "main/.DS_Store": "28c84e47abc6f9366116e728664fa1197efd0164348fda72e54e5e203ede68e1",
+    "main/CMakeLists.txt": "66a38c9351469591bca43cb08fb6ed61392308e2233193692fa54fc3f164c310",
+    "main/README.md": "438ecb1eff29c1c6b564780b5d3e7dfc9c6006da4bb165a63ab245e8966629af",
+    "main/README.zh-CN.md": "59a738b73cec2dbc37a0b23d5af9f4eff4b77ff8453de5230a448aa0e3df3514",
+    "main/actions.c": "834fe295eca4c5333ec227f92c8fbab0ae8fd9047cf13ae0824a6197523ba8cc",
+    "main/actions.h": "8ee50a90beba29c30dfb3ac738fe76af57a5cb866136d8836735e0e24bb31438",
+    "main/board.c": "3a55e8225cc2230f7a3bbc05e5b74a03d37f5394b6521e2a9203bf68270af633",
+    "main/bridge.h": "bd8c3ed2b0fee7eb18993f46ed7e26244647b684a6fff1973d626d9540603993",
+    "main/device.c": "812f54d4d9b7b14ddcd279e0775c58bfad12ef7065cb875926bd4119025bf449",
+    "main/device.h": "1ee2320e0093eada0546f9603a06ae1edc9eeb4e7bc3bac1da645299314cae95",
+    "main/display.c": "db0f38c2ad5ec4a4bb4884c7540633fe51f59ee996f3ff9917d40398415d0eb4",
+    "main/display.h": "fda1901261e5666f529b672c35b254961748085c129c04bfb25e8512b390adf4",
+    "main/identity.c": "73be388dd210067bfe60cb8b79f0bdf07785fc836ff58cf914c6d8bdcaceb7b8",
+    "main/identity.h": "fa926a6f0004a1ea235f1907929633c53b7b368e0eb6cae3382d6fe5474981ca",
+    "main/idf_component.yml": "bb3bb3e7bac5abd75570a60a2f002ef09a024f59acdf8b7fb831874e59f89e01",
+    "main/main.c": "c212ec38ae33e6e64b93706ab343e105064427601cb8ba76f18048d57d4a90ae",
+    "main/mcp.c": "ca61e1b9cf27fc4073d9e8afbd8e07b3032c53a9ffb5cf8df50e6c98eb3e800d",
+    "main/mcp.h": "8173bc77bd0254ce26dd30c4a64487851df4edb59a7a7e8cade5826523fa7f30",
+    "main/mcp_tools.h": "9f094a7356af3c7e329dc1ab28fc654495f82f052a4141f96a149b6b55b7ccea",
+    "main/panel_init.h": "75ed3403c1423050d1fd8ab3183d6f92c8a401044cf7821ae9dc6acafa99c3d1",
+    "main/touch.c": "aaa3484590be996422bb7ce39a9d766de1ee604daf2608ad4f65c9f6bdaf3535",
+    "main/touch.h": "aa5706991edce0d8aa09b00d963e9107cc523d4ce4e6e928a3f46883000674de",
+    "main/ui.c": "916a9f7282160558a6ffe89dcc84e7192b2c96ae7bdf3114ba160b0143613660",
+    "main/ui.h": "e03358f296c392f458d2f3444439fb888d45956db51085780a383fedfcb4f093",
+    "main/ui_font.h": "e3703af538a618190bc92821c79d1c7566d1a7729fb9d92bca9af7ab7239df03",
+    "main/ui_layout.c": "85b4e4cb10a123111016187b08d9486189b7f1b9157708ebc31bf3a67e229f40",
+    "main/ui_preferences.c": "332d3b1edd53c22ec1ef2567c55630ebfc25e84bdcf31baeba6b162d20161e80",
+    "main/ui_preferences.h": "acd8a59bdb4373affaae9bc3ae66b4aa230e49482ed5afea13b1839db6eb156e",
+    "main/usb.c": "dfb8b7022b69ea805480096877c665dd104817f2ad0cdb9660ac4b31d8419cbe",
+    "main/web/setup.html": "0ce761b9cf48dd97c49f2f7608f4faab8c305bb300e3bf8a9e1d04630d9b9634",
+    "package.py": "e09c9ed7a96f1fb8139504e69270e2f43c9449a15c89b74703d0e5513afb82c9",
+    "partitions.csv": "d9dafbd13f79c0dfa6b1ec13a952c5e84a1aa3ac07d59cc6b30157a33b59b949",
+    "sdkconfig.defaults": "e9c0d433dd92dd3b45d631e5b4ddae3cd44f9b1b6537307911e086192036fdf9"
+  },
+  "checks": {
+    "compiled": true,
+    "compilerWarnings": 0,
+    "packaged": true,
+    "configChecked": true,
+    "usbSourceUnchanged": true,
+    "ANAN1ContractUnchanged": true,
+    "originalActionBodies": {
+      "ascii_key": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "d0419604f09e9514f0d3f93bc9239e4a317cb3c4a2262f65b19842411e7c98a9"
+      },
+      "pause_action": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "f491c16c33d1dc7a97da396b4095998e73bbbf0295353dbd6f16faac92218a8c"
+      },
+      "stroke": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "8a670e761e42fe40c20aefe147efb479342c2d2cee38e6b8ba9e32c418d35ed0"
+      },
+      "execute": {
+        "equalIgnoringWhitespace": true,
+        "bodySHA256": "f7f39b262919c1157a161c4c8fc0bdbc87b4ce6f9ee197080ae792c5ade89998"
+      }
+    },
+    "embeddedToolsJSON": "six tool schemas parsed",
+    "setupJavaScript": "node --check passed",
+    "packagePython": "py_compile passed",
+    "nameConstraintDER": "openssl asn1parse passed",
+    "localDocumentationLinks": 296,
+    "gitDiffCheck": true,
+    "identityPartitionOutsideImage": true,
+    "bilingualFontCoverage": true,
+    "CJKGlyphCount": 76,
+    "staticPreviewCount": 20,
+    "previewGeometryAndTextWidth": true,
+    "toolsPython": "py_compile passed",
+    "controlGrantTimerRemoved": true,
+    "stopAndDetachRevocationSourceReviewed": true,
+    "compiledSourceManifestMatches": true,
+    "HTTPRoutesAndConfigReviewed": true,
+    "identityMaintenanceReaderGateReviewed": true,
+    "HTTPBrowserCopyFallbackSourceReviewed": true,
+    "legacyTCPSourceRemoved": true,
+    "legacySymbolsAbsent": true,
+    "ANAN1StringAbsentFromELF": true,
+    "MCPDefaultWithoutAutomaticGrant": true,
+    "originalHIDBodiesEquivalent": true
+  },
+  "memory": {
+    "staticDIRAMBytes": 112479,
+    "staticDIRAMRemainingBytes": 229281,
+    "reportedImageBytes": 736957,
+    "runtimeHeapPeakMeasured": false
+  },
+  "validation": {
+    "flashed": false,
+    "deviceVerified": false,
+    "iPhoneTrustVerified": false,
+    "displayVerified": false,
+    "MCPInteroperabilityVerified": false,
+    "stopLatencyMeasured": false,
+    "wirelessImplemented": false,
+    "AnanModified": false,
+    "provenanceResolved": false,
+    "published": false,
+    "touchVerified": false,
+    "languagePersistenceVerified": false,
+    "controlBeyond180SecondsVerified": false,
+    "HTTPMCPInteroperabilityVerified": false,
+    "firstUserHTTPFlowVerified": false,
+    "certificateRemovalVerified": false,
+    "pairingResetVerified": false,
+    "HTTPClipboardVerified": false,
+    "legacyServicePresent": false,
+    "MCPOnlyDeviceVerified": false,
+    "retiredPortClosureDeviceVerified": false
+  },
+  "pending": [
+    "reflash MCP-only image; retained pairing, MCP discovery/input/observe/stop and retired-port checks",
+    "control beyond 180 seconds and stop/detach/reboot revocation",
+    "real touch coordinate/contact/release behavior",
+    "physical/touch stop and no same-contact enable",
+    "language change/reboot/upgrade persistence",
+    "phone pairing/trust/export and unchanged Anan interoperability",
+    "MCP input regression/runtime memory/endurance",
+    "original USB/board provenance"
+  ],
+  "ui": {
+    "languages": [
+      "zh",
+      "en"
+    ],
+    "defaultLanguage": "zh",
+    "preference": "mcp_kv/ui/language",
+    "renderer": "native DMA strip, no LVGL",
+    "touch": "CST820B I2C0 address0x15 GPIO13, PYG4 reset",
+    "polling": {
+      "physicalStopMs": 5,
+      "touchDelayMs": 10,
+      "touchReadTimeoutMs": 20
+    },
+    "fontSourceSHA256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "fontLicense": "OFL-1.1",
+    "previewData": "synthetic, not a device or phone screenshot",
+    "CJKGlyphCount": 76,
+    "home": "MCP start/stop and Settings; no source selector"
+  },
+  "requestedUI": [
+    "touch-first control buttons",
+    "Chinese/English selectable and remembered",
+    "physical stop/fallback retained"
+  ],
+  "controlGrant": {
+    "timeLimitSeconds": null,
+    "persisted": false,
+    "endsOn": [
+      "physical or MCP stop",
+      "USB loss",
+      "mode change",
+      "identity maintenance",
+      "display failure",
+      "reboot"
+    ],
+    "statusSecondsRemaining": {
+      "enabled": null,
+      "disabled": 0
+    },
+    "sessionIdleTimeoutSeconds": 600,
+    "perInputLimitSeconds": 8
+  },
+  "previousCandidate": "http-onboarding-build-check.json",
+  "transport": {
+    "default": "HTTP",
+    "endpoint": "http://192.168.7.1/mcp",
+    "optionalHTTPS": "https://192.168.7.1:8443/mcp",
+    "USBOnly": true,
+    "certificateInstallRequiredForHTTP": false,
+    "physicalPairingAndBearerRetained": true,
+    "AnanHTTPReadiness": "user reported; current client source read-only confirms HTTP scheme acceptance",
+    "legacyANAN1": false,
+    "legacyPort28766": false
+  },
+  "priorUserFeedback": "http-user-feedback.json"
+}

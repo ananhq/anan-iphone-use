@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StopWatch 设置</title>
+<style>
+body{font:17px -apple-system,BlinkMacSystemFont,sans-serif;background:#111820;color:#f1f5f9;margin:0}
+main{max-width:560px;margin:auto;padding:32px 22px}h1{font-size:30px}p{line-height:1.65;color:#c8d4df}
+button,a.button{display:block;width:100%;box-sizing:border-box;margin:16px 0;padding:15px;border:0;border-radius:12px;background:#ffd34d;color:#161b20;font:600 17px -apple-system;text-align:center;text-decoration:none}
+button:disabled{opacity:.45}#language{width:auto;margin-left:auto;padding:9px 14px;background:#263746;color:#eef5ff;font-size:14px}
+code{word-break:break-all}textarea,pre{width:100%;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:10px;border:1px solid #405063;background:#172431;color:#eef5ff;padding:14px;font-size:13px}
+textarea{min-height:220px}[hidden]{display:none!important}.muted{font-size:14px}#status{padding:12px 0}
+</style>
+<main>
+<button id="language">English</button>
+<h1 data-i18n="title">连接 StopWatch</h1>
+<p data-i18n="intro">在 StopWatch 点“设置 → 连接MCP应用”。手机保持通过数据线连接。</p>
+<p id="deviceInfo" class="muted"></p><div id="status" role="status"></div>
+<section id="plain">
+<button id="begin" data-i18n="begin">开始配对</button>
+<div id="pair" hidden><p data-i18n="match">核对设备与这里的数字一致，再在设备点“确认配对”：</p><pre id="code"></pre></div>
+</section>
+<section id="configuration" hidden>
+<p data-i18n="importStep">复制配置，粘贴到 Anan 的 MCP 配置导入页，或其他支持 HTTP MCP 的客户端。</p>
+<button id="export" data-i18n="export">生成 MCP 配置</button>
+<div id="result" hidden>
+<textarea id="config" readonly aria-label="MCP configuration"></textarea>
+<button id="copy" data-i18n="copy">复制配置</button><a class="button" id="download" data-i18n="download">下载 JSON</a>
+<p data-i18n="finish">手机导入后，在设备点“已导入 返回”，再点“开始控制”。触屏或按实体键可停止。屏幕观察由客户端提供。</p>
+</div>
+<details id="optionalTLS"><summary data-i18n="optionalTLS">可选：使用 HTTPS</summary>
+<p data-i18n="trust">仅使用 HTTPS 时需要：下载并安装证书，再在“通用 → 关于本机 → 证书信任设置”启用完全信任。</p>
+<a class="button" href="/certificate.mobileconfig" data-i18n="certificate">下载设备证书</a>
+<code id="fingerprint"></code>
+<a class="button" href="https://192.168.7.1:8443/setup" data-i18n="secureLink">打开 HTTPS 配置页</a>
+</details>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id), status=t=>$('status').textContent=t;
+const translations={
+zh:{title:'连接 StopWatch',intro:'在 StopWatch 点“设置 → 连接MCP应用”。手机保持通过数据线连接，无需安装证书。',begin:'开始配对',match:'核对设备与这里的数字一致，再在设备点“确认配对”：',optionalTLS:'可选：使用 HTTPS',trust:'仅使用 HTTPS 时需要：下载并安装证书，再在“通用 → 关于本机 → 证书信任设置”启用完全信任。',certificate:'下载设备证书',secureLink:'打开 HTTPS 配置页',importStep:'复制配置，粘贴到 Anan 的 MCP 配置导入页，或其他支持 HTTP MCP 的客户端。',export:'生成 MCP 配置',copy:'复制配置',download:'下载 JSON',finish:'手机导入后，在设备点“已导入 返回”，再点“开始控制”。控制会保持开启直到停止、拔线或重启。触屏或按实体键可停止。屏幕观察由客户端提供。',waiting:'等待设备确认…',ready:'配对已确认',failed:'配对失败，请重新配对',private:'配置已准备好，请复制或下载后导入客户端',retry:'请在设备重新进入“连接MCP应用”，再打开本页',copied:'已复制',manualCopy:'请长按选中内容复制，或下载 JSON',requestFailed:'请求失败，请检查设备配对页面',unavailable:'无法读取设备状态',firmware:'固件',display:'显示',error:'错误'},
+en:{title:'Connect StopWatch',intro:'On StopWatch tap Settings → Connect MCP app. Keep your phone connected by USB. No certificate installation is needed.',begin:'Start pairing',match:'Match this code with the device, then tap Confirm pairing on StopWatch:',optionalTLS:'Optional: use HTTPS',trust:'Only for HTTPS: install the certificate profile, then enable full trust under General → About → Certificate Trust Settings.',certificate:'Download certificate profile',secureLink:'Open HTTPS configuration',importStep:'Copy the configuration into Anan MCP import, or another compatible HTTP MCP client.',export:'Generate MCP configuration',copy:'Copy configuration',download:'Download JSON',finish:'After importing on your phone, tap Imported, go back on StopWatch, then Start control. Control stays enabled until stopped, unplugged or rebooted. Touch the screen or press a button to stop. Your client supplies screen observation.',waiting:'Waiting for device confirmation…',ready:'Pairing confirmed',failed:'Pairing failed. Please pair again.',private:'Configuration ready. Copy or download it and import into your client.',retry:'Reopen Connect MCP app on the device, then reload this page.',copied:'Copied',manualCopy:'Select and copy the text, or download JSON.',requestFailed:'Request failed. Check the pairing screen on StopWatch.',unavailable:'Device status unavailable',firmware:'Firmware',display:'Display',error:'Error'}};
+let lang=localStorage.getItem('swLanguage')||'zh',nonce='',timer,exportURL;
+function tr(key){return translations[lang][key];}
+function setLanguage(value){lang=value==='en'?'en':'zh';document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.title=tr('title');document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=tr(e.dataset.i18n));$('language').textContent=lang==='zh'?'English':'简体中文';}
+$('language').onclick=()=>{setLanguage(lang==='zh'?'en':'zh');localStorage.setItem('swLanguage',lang);};setLanguage(lang);
+const secure=location.protocol==='https:';$('plain').hidden=secure;$('configuration').hidden=!secure;$('optionalTLS').hidden=secure;
+async function deviceInfo(){try{const r=await fetch('/status',{cache:'no-store'}),j=await r.json();if(!localStorage.getItem('swLanguage'))setLanguage(j.language);$('deviceInfo').textContent=tr('firmware')+' '+j.firmwareVersion+' · '+tr('display')+' '+j.displayStage+(j.displayError?' · '+tr('error')+' '+j.displayError:'');}catch(e){$('deviceInfo').textContent=tr('unavailable');}setTimeout(deviceInfo,2000);}if(!secure)deviceInfo();
+async function post(path,data){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),cache:'no-store',credentials:'same-origin'});const j=await r.json();if(!r.ok)throw Error(j.error||tr('requestFailed'));return j;}
+async function exportConfig(){try{const j=await post('/config',{}),text=JSON.stringify(j,null,2);$('config').value=text;$('result').hidden=false;if(exportURL)URL.revokeObjectURL(exportURL);exportURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));$('download').href=exportURL;$('download').download='stopwatch-mcp.json';status(tr('private'));}catch(e){status(e.message+' '+tr('retry'));}}
+$('begin').onclick=async()=>{try{$('begin').disabled=true;const j=await post('/enroll/start',{time:Math.floor(Date.now()/1000)});nonce=j.nonce;sessionStorage.setItem('swPair',JSON.stringify({nonce,code:j.code}));$('code').textContent=j.code;$('pair').hidden=false;status(tr('waiting'));clearTimeout(timer);poll();}catch(e){status(e.message);$('begin').disabled=false;}};
+async function poll(){try{const j=await post('/enroll/status',{nonce});if(j.state==='ready'){$('plain').hidden=true;$('configuration').hidden=false;$('fingerprint').textContent=j.fingerprint;status(tr('ready'));await exportConfig();return;}if(j.state==='failed')throw Error(tr('failed'));timer=setTimeout(poll,1500);}catch(e){status(e.message+' '+tr('retry'));$('begin').disabled=false;}}
+$('export').onclick=exportConfig;
+$('copy').onclick=async()=>{try{if(!navigator.clipboard)throw Error('clipboard unavailable');await navigator.clipboard.writeText($('config').value);status(tr('copied'));}catch(e){$('config').focus();$('config').select();$('config').setSelectionRange(0,$('config').value.length);let copied=false;try{copied=document.execCommand('copy');}catch(ignore){}status(tr(copied?'copied':'manualCopy'));}};
+if(!secure){try{const saved=JSON.parse(sessionStorage.getItem('swPair')||'null');if(saved&&/^[0-9a-f]{32}$/.test(saved.nonce)&&/^[0-9]{6}$/.test(saved.code)){nonce=saved.nonce;$('code').textContent=saved.code;$('pair').hidden=false;$('begin').disabled=true;poll();}}catch(e){sessionStorage.removeItem('swPair');}}
+</script>
+</html>

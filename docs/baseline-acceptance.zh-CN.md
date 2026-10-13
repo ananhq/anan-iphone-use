@@ -60,3 +60,7 @@ AssistiveTouch。在空白合成测试笔记中检查。每项可反馈通过、
 确认候选构建输入未改变，再形成已验收的本地基线 commit 并记录 ID。此前的本地检查点
 由 Git 历史和[检查点记录](../artifacts/baseline/checkpoint.json)标识。
 失败或未做项目明确保留；本地提交不授权 push 或公开发行。
+
+本流程记录历史 ANAN1 检查点范围；当前 `0.4.0-mcp` 已退役该服务。
+新候选采用[MCP配置](mcp.zh-CN.md)与当前[验证记录](validation.zh-CN.md)，
+不再执行 READY/PONG 验收。

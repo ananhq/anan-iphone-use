@@ -20,12 +20,14 @@ files = sorted(args["flash_files"].items(), key=lambda item: int(item[0], 0))
 for address, name in files:
     command.extend([address, str(build / name)])
 subprocess.run(command, check=True)
+# Credential storage is never packaged; ordinary writes must stop before mcp_kv.
+assert output.stat().st_size <= 0xf00000
 source = pathlib.Path(__file__).parent
 inputs = [path for path in (source / "main").rglob("*") if path.is_file()]
-inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh")]
+inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh", "partitions.csv")]
 source_hashes = {str(path.relative_to(source)): hashlib.sha256(path.read_bytes()).hexdigest()
                  for path in sorted(inputs)}
-manifest = {"protocol": "ANAN1", "board": "M5Stack StopWatch ESP32-S3 16MB",
+manifest = {"protocol": "MCP", "mcp": {"version": "2025-11-25", "transport": "HTTP/HTTPS Streamable HTTP"}, "board": "M5Stack StopWatch ESP32-S3 16MB",
             "idf": "5.5.5", "createdAt": datetime.now(timezone.utc).isoformat(),
             "binary": output.name, "flashOffset": "0x0", "flashSize": "16MB",
             "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),

@@ -2,7 +2,7 @@
 
 English · [简体中文](CONTRIBUTING.zh-CN.md)
 
-This repository maintains firmware for M5Stack StopWatch. Start with the
+Anan iPhone Use (`anan-iphone-use`) maintains device-side iPhone automation firmware for M5Stack StopWatch. Start with the
 [design](docs/design.md), [roadmap](docs/roadmap.md), [validation](docs/validation.md)
 and [source notices](THIRD_PARTY.md). The project is being prepared locally;
 its public repository address and release process are not assigned yet.
@@ -14,10 +14,12 @@ an external contribution. Discuss architecture, protocol, dependencies, board
 support and license changes first. Keep phone capture, agents, model connections
 and Anan-specific client code in their owning repositories.
 
-[PROTOCOL.md](PROTOCOL.md) is the only authoritative ANAN1 contract. Preserve
+MCP is the sole current control protocol; see [endpoint and lifecycle](docs/mcp.md).
+[PROTOCOL.md](PROTOCOL.md) is the retained historical ANAN1 contract, not a
+service in the current build. Preserve
 USB descriptors, input timing, power and stop behavior unless a change is
 explicitly agreed with the client. Do not automatically reconnect or replay input.
-Wi-Fi, BLE, MCP and display/touch support remain future work.
+MCP and Chinese/English touch UI are implemented development code with pending device acceptance; Wi-Fi/BLE remain planned. See the [roadmap](docs/roadmap.md) and [GPL license and source handling](docs/license-plan.md).
 
 ## Changes and validation
 

@@ -2,7 +2,7 @@
 
 [English](CONTRIBUTING.md) · 简体中文
 
-本仓库维护 M5Stack StopWatch 固件。开始前阅读[设计](docs/design.zh-CN.md)、
+Anan iPhone Use（`anan-iphone-use`）维护面向 M5Stack StopWatch 的设备端 iPhone 自动化固件。开始前阅读[设计](docs/design.zh-CN.md)、
 [路线图](docs/roadmap.zh-CN.md)、[验证记录](docs/validation.zh-CN.md)和
 [来源声明](THIRD_PARTY.zh-CN.md)。项目目前在本地整理，公开仓库地址与发行流程尚未确定。
 
@@ -11,9 +11,10 @@
 外部贡献先与维护者约定问题和验收范围。架构、协议、依赖、板型和许可证变更先讨论。
 手机采屏、Agent、模型连接和 Anan 专用客户端代码保留在各自所属仓库。
 
-[PROTOCOL.md](PROTOCOL.md) 是 ANAN1 唯一权威定义。除非已与客户端明确约定变更，
+MCP 是当前唯一控制协议，见[端点与生命周期](docs/mcp.zh-CN.md)。
+[PROTOCOL.md](PROTOCOL.md) 保留历史 ANAN1 契约，当前构建不运行该服务。除非已与客户端明确约定变更，
 保留 USB 描述、输入时序、供电与停止行为。不自动重连或重放输入。
-Wi-Fi、BLE、MCP 和显示/触摸支持仍为后续工作。
+MCP 和中英触屏 UI 已有开发实现，真机验收仍待完成；Wi-Fi/BLE 仍为规划。见[路线图](docs/roadmap.zh-CN.md)与[GPL许可与来源处理](docs/license-plan.zh-CN.md)。
 
 ## 修改与验证
 

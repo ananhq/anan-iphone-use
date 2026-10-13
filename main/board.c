@@ -4,6 +4,9 @@
 #include "driver/i2c_master.h"
 #include "esp_check.h"
 
+static i2c_master_bus_handle_t board_bus;
+i2c_master_bus_handle_t board_i2c_bus(void) { return board_bus; }
+
 void board_init(void) {
     // StopWatch's system I2C: SDA=47, SCL=48, M5PM1=0x6e.
     // Hold only the MCU's 3.3V rail; do not enable its external 5V boost.
@@ -23,6 +26,7 @@ void board_init(void) {
     ESP_ERROR_CHECK(i2c_master_transmit_receive(power, &reg, 1, &hold, 1, 100));
     uint8_t write[] = {reg, hold | (1u << 5)};
     ESP_ERROR_CHECK(i2c_master_transmit(power, write, sizeof(write), 100));
+    board_bus = bus;
     gpio_config_t buttons = {
         .pin_bit_mask = (1ULL << 1) | (1ULL << 2), .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_ENABLE, .pull_down_en = GPIO_PULLDOWN_DISABLE,

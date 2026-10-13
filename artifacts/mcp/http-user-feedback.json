@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-13",
+  "evidence": "user report",
+  "report": "用户反馈已验证 HTTP 新用户流程且体验良好",
+  "candidateContext": "0.3.0-mcp, last supplied candidate",
+  "exactDeviceVersionAndHashIndependentlyConfirmed": false,
+  "formalScenarioTraceAvailable": false,
+  "agentDeviceActionsPerformed": false,
+  "appliesToMCPOnlyCandidate": false
+}

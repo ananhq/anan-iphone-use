@@ -1,74 +1,113 @@
-# StopWatch 固件
+# Anan iPhone Use
 
 [English](README.md) · 简体中文
 
-面向 **M5Stack StopWatch（ESP32-S3、16MB Flash）** 的 USB 以太网与 HID 输入固件。手机内的 Agent 负责看屏幕，一根 USB-C 数据线向板子发送动作；板子模拟绝对坐标鼠标和键盘。Anan 是首个客户端，固件不运行模型、不获取手机截图。
+**运行在 ESP32-S3 上的 MCP Server，通过 USB 鼠标和键盘操作真实 iPhone。**
 
-本仓库从 Anan 拆出，正在整理开源发布所需内容。名称/地址暂定，尚无公开仓库或 Release。
-本地检查点记录编译/静态检查及用户反馈的重新烧录成功；手机输入/停止验收和来源核实仍待完成。
-当前范围是 StopWatch 的 USB 操控；Wi-Fi、BLE、MCP 和显示/触摸 UI 留到后续阶段。
+把它接到客户端 Agent，就能为 Agent 增加 **iPhone Use** 能力：客户端看屏幕、决定下一步，通过 MCP 执行操作，再观察结果。固件负责点击、拖动、按键和 ASCII 输入，不运行模型，也不提供手机截图。
 
-```text
-手机采屏 → 模型 → 手机客户端 → USB 以太网 / ANAN1
-                                      ↓
-                            StopWatch → USB HID → 手机
+**Anan 是首个客户端，当前硬件适配 M5Stack StopWatch。** 其他 Agent 可通过 MCP 接入，并自行提供屏幕观察能力。
+
+## 演示与配置
+
+| 操作备忘录 | 操作小红书 |
+| --- | --- |
+| 视频链接待补充 | 视频链接待补充 |
+
+<!-- Replace the video placeholders above with the supplied demo links. -->
+
+**1 · 连接与局域网设置：** 连接 iPhone 与 StopWatch，在手机配置 USB 以太网：手动 IP `192.168.7.2`、掩码 `255.255.255.0`，路由器留空、不配 DNS，并开启辅助触控。之后按下图配对、导入 MCP 配置、开启控制。
+
+<table>
+<tr>
+<th>2 · 进入连接设置</th>
+<th>3 · 核对并确认配对</th>
+<th>4 · 手机复制 JSON 并导入</th>
+<th>5 · 返回，开启控制</th>
+</tr>
+<tr>
+<td><img src="docs/images/setup/zh-settings.png" width="200" alt="StopWatch 设置页：连接MCP应用"></td>
+<td><img src="docs/images/setup/zh-pair-confirm.png" width="200" alt="StopWatch 配对确认页：核对手机验证码"></td>
+<td><img src="docs/images/setup/zh-pair-ready.png" width="200" alt="StopWatch 配对完成页：手机复制配置，导入后返回"></td>
+<td><img src="docs/images/setup/zh-home-active.png" width="200" alt="StopWatch 首页：控制已开启，可随时停止"></td>
+</tr>
+</table>
+
+*配置界面示意：由[当前固件布局](tools/render_ui.py)静态渲染，非真机截图；`123456` 是示例验证码。手机 Safari 打开 `http://192.168.7.1` 完成配对与配置导出，无需证书。完整流程由下方 skill 引导。*
+
+## 工作原理
+
+```mermaid
+flowchart LR
+    Phone["iPhone"] -->|"屏幕共享"| Agent["客户端 Agent（如 Anan）<br/>观察屏幕 · 推理 · 规划"]
+    Agent -->|"MCP 动作"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP Server"]
+    Device -->|"USB 鼠标 / 键盘"| Phone
 ```
 
-## 构建与使用
+每次动作后，客户端应重新观察屏幕，确认实际效果。工具执行完成只代表输入已发送，不代表目标操作成功。
 
-安装 ESP-IDF **v5.5.5**，先 source 其 `export.sh`：
+## 你需要什么
+
+| 项目 | 要求 |
+| --- | --- |
+| 设备 | M5Stack StopWatch（ESP32-S3）与 USB-C 数据线 |
+| 手机 | USB-C iPhone，开启辅助触控（AssistiveTouch） |
+| 客户端 | Anan，或能访问设备 USB 子网的 HTTP MCP 客户端 |
+| 屏幕观察 | 由客户端提供；Anan 的系统屏幕共享需要 iOS 27+ |
+
+## 快速开始
 
 ```sh
-./build.sh
-shasum -a 256 build/anan-stopwatch-flash.bin
+git clone https://github.com/ananhq/anan-iphone-use.git
+cd anan-iphone-use
 ```
 
-构建/打包不会访问串口。合并镜像与源码/哈希 manifest 生成在被忽略的 `build/` 下。
-指定实际串口烧录和手机配置见[配置与恢复](docs/setup.zh-CN.md)。烧录替换出厂固件，
-设备黑屏是当前预期。运行时使用手机原有模型连接，板子不需要 Mac、Wi-Fi 或 BLE。
-Anan 当前采屏客户端要求 iOS 27+。
+*以上是计划发布地址，仓库公开后可用；现有本地仓库可直接打开。*
 
-用户已提供候选镜像成功写入/哈希校验反馈，并授权首次本地检查点提交。
-手机行为仍需按[基线验收步骤](docs/baseline-acceptance.zh-CN.md)明确范围，
-历史输入反馈不能代替本次验证。
+在仓库目录打开你使用的 Agent，输入：
 
-## 目录
+```text
+使用 $anan-iphone-use，帮我确认开发板、完成烧录和 iPhone MCP 配置。
+若未自动识别 skill，请先读取 .agents/skills/anan-iphone-use/SKILL.md。
+```
 
-| 路径 | 职责 |
+[anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.zh-CN.md) 会引导 StopWatch 复用固件，其他 ESP32 按实际硬件做最小适配，并处理无屏设备的操作方式。
+
+## MCP 接口
+
+默认地址：`http://192.168.7.1/mcp`。配对后导出的配置包含所需的 Bearer 请求头；另保留可选 HTTPS 接口。
+
+| 工具 | 功能 |
 | --- | --- |
-| `main/` | StopWatch 供电/按钮、USB 网卡/HID、命令执行 |
-| `build.sh`、`package.py`、`flash.sh` | 固定 IDF 构建、镜像打包、显式设备写入 |
-| `sdkconfig.defaults`、`dependencies.lock` | 提交的默认配置与准确依赖解析 |
-| `docs/` | 双语设计、配置、接入、验收和路线图 |
-| `artifacts/` | 脱敏迁移与基线证据，不存生成镜像 |
-| `licenses/`、`THIRD_PARTY.md`、`NOTICE` | 依赖声明与实现来源记录 |
+| `device_status` | 查看连接与控制状态 |
+| `tap` | 点击指定位置 |
+| `drag` | 拖动或滑动 |
+| `key` | 发送键盘按键 |
+| `type_ascii` | 输入 ASCII 文本 |
+| `stop` | 停止输入并撤销控制授权 |
 
-## 文档
+屏幕观察由客户端提供，不是设备 MCP 工具。电脑或云端 Agent 需要另行建立到手机 USB 子网的网络路径；仅支持 MCP 不代表能直接连接设备。参数和会话说明见[客户端接入](docs/client.zh-CN.md)。
 
-- [背景与职责](docs/design.zh-CN.md)、[客户端接入](docs/client.zh-CN.md)。
-- [ANAN1 协议](PROTOCOL.md)：唯一权威的线协议/生命周期定义；当前没有 HTTP/MCP。
-- [适配指南与 Prompt](docs/porting.zh-CN.md)、[验证记录](docs/validation.zh-CN.md)、[路线图与交接](docs/roadmap.zh-CN.md)。
-- [第三方来源](THIRD_PARTY.zh-CN.md)、[LICENSE](LICENSE)、[NOTICE](NOTICE)、[源文件快照](artifacts/migration/source-snapshot.json)。
-- [基线验收](docs/baseline-acceptance.zh-CN.md)、[开源发布准备](docs/release-preparation.zh-CN.md)、[贡献说明](CONTRIBUTING.zh-CN.md)、[完整文档导航](docs/README.zh-CN.md)。
+## 当前限制
 
-首版仅竖屏、单指针、US 布局 ASCII、手动 IPv4。任一正面按键停止输入。
-`DONE` 是 HID 报告结果，目标操作是否成功需观察手机。不自动重放输入。
+- 当前适配 M5Stack StopWatch，使用有线 USB；Wi-Fi/BLE 尚未实现。
+- 只支持竖屏、单指针和 US 键盘布局的 ASCII 输入，不直接输入中文。
+- 其他客户端兼容性、最新仅 MCP 固件的真机回归与持续运行仍需验证，见[验证记录](docs/validation.zh-CN.md)。
 
-USB 等部分实现来源尚待核实。现有 Apache-2.0 声明保留，不能据此证明每个文件独立生成。
-公开发行前解决[已记录的来源缺口](THIRD_PARTY.zh-CN.md)；设备验证与来源处理是两项门槛。
+## 许可证
+
+项目整体采用 **[GPL-3.0-only](LICENSE)**。发行二进制时须按协议提供对应源码及所需构建材料。
+
+保留上游版权及第三方代码、字体的适用许可，见 [NOTICE](NOTICE) 和 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。
 
 ## 项目对比与致谢
 
-感谢 [ja1chen/actell](https://github.com/ja1chen/actell) 和
-[onehumanbeing/esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent)
-对手机 Agent 与外接输入设备的探索。下表对比本固件配合 Anan 的方案，以及链接所指的上游版本。
+感谢 **actell** 的 USB NCM/HID 源码参考，以及 **esp32-iphone-agent** 对 iPhone 硬件自动化的探索。
 
-| 项目 | 屏幕采集 | Agent 运行位置 | 命令通路 | iPhone 输入方式 |
-| --- | --- | --- | --- | --- |
-| 本固件 + Anan | 手机内 ScreenCaptureKit | iPhone | USB 以太网 / ANAN1 TCP → StopWatch | USB 绝对坐标鼠标与键盘 |
-| [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | CoreDevice 显示流 | iPhone | VPN 回环，或 ESP32-S3 USB NCM 转发 → CoreDevice | CoreDevice 点击与拖动 |
-| [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | AirPlay → 电脑端 UxPlay | 电脑 / Python | Wi-Fi TCP → ESP32-S3 | USB 相对鼠标与键盘 |
+| 项目 | 观察与 Agent | 动作接入 | iPhone 输入 |
+| --- | --- | --- | --- |
+| Anan iPhone Use + Anan | 手机内屏幕共享与 Agent | MCP | USB 绝对坐标鼠标与键盘 |
+| [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | 手机内 Agent、CoreDevice 显示流 | CoreDevice | CoreDevice 点击与拖动 |
+| [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | 电脑端 AirPlay 与 Python Agent | Wi-Fi TCP | USB 相对鼠标与键盘 |
 
-actell 还保留较早的 ScreenCaptureKit + USB NCM/HID 方案，该路线是本固件相关参考；
-表格描述的是其后来的 CoreDevice 路线。esp32-iphone-agent 提供了外接 USB HID/Agent
-架构参考。准确参考版本、实现来源待核实项和适用声明见 [THIRD_PARTY.md](THIRD_PARTY.md)。
+actell 另保留本项目参考的 USB NCM/HID 方案，表中列的是其 CoreDevice 方案。esp32-iphone-agent 的 MIT 许可与 Copyright (c) 2026 Henry Yuan 保留于[完整声明](licenses/esp32-iphone-agent-MIT.txt)。准确版本、文件来源和修改记录见 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。

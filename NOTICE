@@ -1,12 +1,41 @@
-StopWatch firmware (provisional project name)
+Anan iPhone Use
+Chosen repository name: anan-iphone-use
 Copyright 2026 Haoran Wang
 
 This product includes software developed for Anan.
 Original repository: https://github.com/ananhq/anan
 Original directory: hardware/stopwatch/
-New repository address: not assigned; this is a local migration checkpoint.
+Public repository address: not assigned; no repository creation or publication is implied.
 
-Existing first-party Apache-2.0 declarations are preserved during migration.
-Source provenance review is incomplete; see THIRD_PARTY.md before distribution.
+The combined Anan iPhone Use project is distributed under GPL-3.0-only.
+See LICENSE for the complete GPL version 3 text. This follows the maintainer's
+authorization to adopt an open-source license compatible with the actell source
+reference. Historical Apache-2.0 file declarations and grants are retained;
+the prior root license is preserved in licenses/Legacy-first-party-Apache-2.0.txt.
+Third-party files/fonts retain their own applicable terms and notices.
+The user confirms that actell source was referenced. The inspected actell version
+is e701786d1686823f9ab60524e689e387b7c3b904 (GPL-3.0-only), specifically
+firmware-device/main/usb_network.c and firmware-device/main/usb_hid.c.
+Current main/usb.c has substantial structural overlap; exact derivation and
+historical source handling remain unresolved. See THIRD_PARTY.md.
+The overall GPL-3.0-only license does not establish a completed derivation audit.
+Existing source headers are retained, and their declarations alone do not resolve
+unknown source origin. Preserve applicable upstream terms and modified-file
+notices, and supply Corresponding Source for a GPL-covered binary distribution.
+
+esp32-iphone-agent reference: 68584cfc8b3f227d6324ec7c8008c48b53f20a18,
+MIT License, Copyright (c) 2026 Henry Yuan. Its complete notice is retained in
+licenses/esp32-iphone-agent-MIT.txt; historical reuse scope remains unverified.
+
+Source provenance review is incomplete; see THIRD_PARTY.md and
+docs/license-plan.md before distribution. Credit does not replace license duties.
 Third-party components retain their own licenses and attribution notices.
 See THIRD_PARTY.md and licenses/ for dependency notices.
+
+MCP display initialization data includes an adaptation from M5Stack
+M5StopWatch-UserDemo, Copyright (c) 2026 M5Stack Technology CO LTD, MIT.
+See main/panel_init.h, licenses/M5Stack-demo-MIT.txt and THIRD_PARTY.md.
+
+Chinese UI glyph data is derived from Noto Sans SC under SIL OFL-1.1,
+Copyright 2014-2021 Adobe, with Reserved Font Name 'Source'. The derived subset
+is named StopWatch UI Glyphs. See licenses/NotoSansSC-OFL-1.1.txt and THIRD_PARTY.md.

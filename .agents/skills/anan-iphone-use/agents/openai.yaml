@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anan iPhone Use"
+  short_description: "Flash StopWatch or adapt ESP32 for iPhone MCP control"
+  default_prompt: "Use $anan-iphone-use to set up my board, flash its firmware, and connect my iPhone MCP client."

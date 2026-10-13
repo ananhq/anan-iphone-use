@@ -2,25 +2,26 @@
 
 English · [简体中文](client.zh-CN.md)
 
-The service is raw TCP at **192.168.7.1:28766** over USB Ethernet. It is not HTTP or MCP. Bind the USB local address/interface (phone 192.168.7.2/24). Consult [PROTOCOL.md](../PROTOCOL.md) for the authoritative grammar and closed sets.
+Anan iPhone Use (`anan-iphone-use`) is a device-side executor. Anan is the first client; other agents may integrate through the public [MCP endpoint](mcp.md). Only M5Stack StopWatch is currently targeted. The client owns observation, inference, planning and user authorization; the board owns USB mouse/keyboard execution.
 
-1. Obtain user control permission in your client. Connect and await `ANAN1 READY` (Anan timeout 8s).
-2. Send `PING\n` every 300ms on the same connection. Parse `ANAN1 PONG` independently of action replies. Serialize writes and retain a read loop while waiting for an action.
-3. Assign increasing nonzero UInt32 IDs; permit one action in flight. Await its `DONE`/`ERROR`, with bounded timeout. Do not treat PONG as an action result.
-4. On stop/cancel/timeout/EOF send best-effort `STOP\n`, close, revoke control and report uncertain partial effects. Do not reconnect/resend automatically.
-5. Observe the phone screen before and after input. Reconnect/re-authorize only on an explicit user action.
+## Client iPhone Use description
 
-Illustrative lines (these cause real input if transmitted; documentation does not execute them):
+Recommended description for a client tool group that exposes both observation and hardware input (documentation only; not the current Anan implementation):
 
-```text
-1 TAP 32768 32768
-2 DRAG 32768 50000 32768 16000 500
-3 KEY 40 0
-4 TYPE 416e616e205553422074657374
-```
+> Observe and interact with this iPhone. Capture the shared screen and use connected hardware to click, drag, press keys, and type ASCII text. Requires user-enabled control for the current task. Observe after actions to verify their effects.
 
-The last line types `Anan USB test`. Normalized coordinates map by the client's established rounding to 0…65535; the device maps them to 0…32767. Keep portrait orientation and verify absolute pointer mapping on the device. Key 40 is Return, not the text character code 40.
+`observe` / Anan's `phone.observe` is provided by the phone client through system screen sharing, not by this firmware or its MCP tools. `tap`, `drag`, `key` and `type_ascii` execute on the hardware. HID `DONE` or an MCP tool result confirms an input sequence, not a target operation's success; capture a fresh screen and verify the effect after each action.
 
-The Anan mapping is `phone.tap`→TAP, `phone.drag`→DRAG, `phone.key`→KEY, `phone.type_ascii`→TYPE. `phone.observe` runs in the phone-side ScreenCaptureKit client and does not send a firmware command. The agent, model network, capture, per-Turn permission, attachments and Live Activity remain in [Anan](https://github.com/ananhq/anan); current integration source was uncommitted at migration time, not guaranteed available in a public tag.
+An on-phone client and a computer-side agent have different network access. The attached phone can use its USB subnet; a desktop/cloud agent needs an explicit route/bridge and its own screenshot source. Supporting MCP alone supplies neither. Third-party interoperability remains unverified. Actual Anan tool-description code belongs to the separate Anan repository/session and is not changed here.
 
-An on-phone client can reach the attached USB subnet. A computer-side/remote agent requires an explicit bridge and separate screenshot source; implementing MCP later will not supply either. No generic-agent integration or Android capture support has been validated. Do not expose this unauthenticated input port outside its physical USB trust boundary.
+At this documentation review, the read-only Anan source snapshot in `apps/ios/Anan/Tools/Phone/PhoneTools.swift` filters the native group to `phone.observe` and rejects native input tool dispatch. Thus the description above is the recommended combined capability, not a claim that all native Anan phone tools are currently exposed. Use firmware MCP tools for hardware input. The old Anan direct TCP input path is retired; the inspected observation readiness does not require an input connection.
+
+## MCP integration
+
+1. Follow [pairing/import](mcp.md). Use `http://192.168.7.1/mcp`, or optional HTTPS8443, with the board's Bearer header. Import through Anan MCP settings; do not use its old direct StopWatch TCP connection entry.
+2. Initialize MCP, retain the session/version headers, send initialized notification and discover the six tools. Status/discovery do not authorize phone input.
+3. On StopWatch tap Start control. The first input session owns that grant. `tap`, `drag`, `key`, `type_ascii` execute USB HID; `device_status` and `stop` inspect/revoke control. See [schemas and session rules](mcp.md).
+4. Supply normalized portrait coordinates 0…1, US-layout ASCII up to120 bytes, keyboard usages4…231 and modifier bits0…255. Do not send the historical ANAN1 line format.
+5. Observe before and after actions. Completion confirms input dispatch, not app success; stop/cancel and inspect unknown partial results instead of replaying. USB loss/reboot revoke control, and no reconnect restores input permission.
+
+From `0.4.0-mcp`, port28766, ANAN1 READY/PING/STOP and direct/MCP source switching no longer exist. [PROTOCOL.md](../PROTOCOL.md) is retained solely for historical builds, not a current integration option. USB Ethernet and HID still use the same cable; supporting MCP does not provide screenshots or a route from desktop/cloud to that USB subnet.

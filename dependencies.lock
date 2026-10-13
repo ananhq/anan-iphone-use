@@ -1,4 +1,28 @@
 dependencies:
+  espressif/cmake_utilities:
+    component_hash: 351350613ceafba240b761b4ea991e0f231ac7a9f59a9ee901f751bddc0bb18f
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.1'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 0.5.3
+  espressif/esp_lcd_co5300:
+    component_hash: 1a5cbaa0069c3c72c238e5a1eb32ec9dd390ec1c7c46b24bf44b9037f2fe6c56
+    dependencies:
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: 0.*
+    - name: idf
+      require: private
+      version: '>=5.4'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 2.2.0
   espressif/esp_tinyusb:
     component_hash: 8e57a14ac14d8e4d4588b5b9222977b96475323bcebae3c838919bb4e8587887
     dependencies:
@@ -40,9 +64,10 @@ dependencies:
       type: idf
     version: 5.5.5
 direct_dependencies:
+- espressif/esp_lcd_co5300
 - espressif/esp_tinyusb
 - espressif/tinyusb
 - idf
-manifest_hash: 1531255d2c4971b4f6055187d06ea42b43dbdc1f54d04665960605133cda8d1e
+manifest_hash: 85df418f2d3a5e72074e8ca34df4a2f872424ea5dfcf5e8b824d0c5eb8cc8390
 target: esp32s3
 version: 2.0.0
