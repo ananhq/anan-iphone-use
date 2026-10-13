@@ -10,9 +10,10 @@ Connect it to a client agent to add **iPhone Use**: the client observes the scre
 
 ## Demos and setup
 
-| Using Notes | Using Xiaohongshu |
-| --- | --- |
-| [Watch video](https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780) | [Watch video](https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6) |
+| Draw in Notes | Check Xiaohongshu followers | Do Not Disturb and timer |
+| --- | --- | --- |
+| **Prompt:** Open Notes and draw a little dog. | **Prompt:** Open Xiaohongshu and check how many followers I have. | **Prompt:** Turn on Do Not Disturb, then start a 25-minute timer. |
+| <video src="https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/f7dc814c-bf89-4d8d-bdd8-1e7c6a837279" width="260" controls></video> |
 
 **1 · Connect and configure the local network:** connect the iPhone to StopWatch and set up USB Ethernet on the phone: manual IP `192.168.7.2`, mask `255.255.255.0`, no router or DNS, and enable AssistiveTouch. Then pair, import the MCP configuration and enable control as shown below.
 

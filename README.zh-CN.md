@@ -10,9 +10,10 @@
 
 ## 演示与配置
 
-| 操作备忘录 | 操作小红书 |
-| --- | --- |
-| [观看视频](https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780) | [观看视频](https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6) |
+| 备忘录画画 | 查看小红书粉丝 | 勿扰模式与计时器 |
+| --- | --- | --- |
+| **Prompt：** 打开备忘录画一个小狗 | **Prompt：** 打开小红书看下我有多少粉丝 | **Prompt：** 开启勿扰模式，再启动一个 25 分钟计时器 |
+| <video src="https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6" width="260" controls></video> | <video src="https://github.com/user-attachments/assets/f7dc814c-bf89-4d8d-bdd8-1e7c6a837279" width="260" controls></video> |
 
 **1 · 连接与局域网设置：** 连接 iPhone 与 StopWatch，在手机配置 USB 以太网：手动 IP `192.168.7.2`、掩码 `255.255.255.0`，路由器留空、不配 DNS，并开启辅助触控。之后按下图配对、导入 MCP 配置、开启控制。
 
