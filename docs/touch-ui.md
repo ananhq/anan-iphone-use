@@ -5,7 +5,7 @@ English · [简体中文](touch-ui.zh-CN.md)
 The user requested a touch-first UI because the long-press menu and USB/MCP
 names were difficult to operate/understand. They explicitly require Chinese and
 English, switchable on StopWatch. This authorizes native touch/UI implementation,
-not a new flash, phone action, simulator, provider or E2E run. Anan stays unchanged.
+not a new flash, phone action, simulator, provider or E2E run. [Anan](https://anan.sh) stays unchanged.
 
 ## Original touch scope before implementation (historical)
 

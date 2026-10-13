@@ -5,7 +5,7 @@ English · [简体中文](mcp.zh-CN.md)
 Implemented development firmware; compilation/static evidence is separate from
 phone, TLS, display and interoperability acceptance. MCP is the sole current control protocol. [PROTOCOL.md](../PROTOCOL.md) is
 retained unchanged for historical ANAN1 builds; port28766 is removed. This
-document describes the current MCP endpoint. The firmware runs no agent and captures no screen. This repository does not modify Anan.
+document describes the current MCP endpoint. The firmware runs no agent and captures no screen. This repository does not modify [Anan](https://anan.sh).
 
 Anan iPhone Use (`anan-iphone-use`) supplies device-side USB input execution. Client screen observation, inference, planning and user authorization remain separate; see the [client iPhone Use description](client.md). This endpoint has no `observe` tool. The user reports satisfaction with MCP; this does not replace versioned interoperability/stop acceptance evidence. HTTP80 `/mcp` is now implemented alongside optional HTTPS8443. The user reports Anan HTTP support; this firmware does not modify that client.
 

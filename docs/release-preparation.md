@@ -2,10 +2,10 @@
 
 English · [简体中文](release-preparation.zh-CN.md)
 
-Anan iPhone Use (`anan-iphone-use`): this is a local preparation record, not a public release or a completed origin
+Anan iPhone Use (`anan-iphone-use`): this is a release preparation record, not a public release or a completed origin
 audit. The repository currently contains firmware, pinned build inputs,
-bilingual documentation and sanitized migration evidence. The public project
-address is not assigned. Existing license declarations are retained.
+bilingual documentation and sanitized migration evidence. The repository address is
+[ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use), kept private. Existing license declarations are retained.
 
 ## Local baseline sequence
 
@@ -26,7 +26,7 @@ address is not assigned. Existing license declarations are retained.
 | Source origin | `main/usb.c` overlaps the inspected actell USB implementation; exact origin is unresolved. `board.c` register implementation and historical generation/reuse also have recorded gaps. Resolve and record source handling before public distribution |
 | License and notices | Existing Apache-2.0 declarations and third-party notices are present. The combined-project license is GPL-3.0-only; prior per-file terms and third-party notices are retained. See [license and source handling](license-plan.md); attribution alone does not resolve derivation |
 | Baseline | Initial local checkpoint authorized after the user's successful reflash report; full input/stop acceptance and source-origin resolution remain pending |
-| Repository identity | Chosen repository name `anan-iphone-use`, display name Anan iPhone Use; public address unassigned. No local-directory/remote change; assign public commit/tag pins only when publication is authorized |
+| Repository identity | Chosen repository name `anan-iphone-use`, display name Anan iPhone Use; private repository at [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use); assign public commit/tag pins only when public distribution is authorized |
 | Public support claims | Limit support to StopWatch; describe input limitations and actual verified client/OS versions. Generic ESP32, wireless, MCP, display/touch and endurance are not accepted capabilities |
 | Publication | Public repository creation, push and release each require publication authorization |
 

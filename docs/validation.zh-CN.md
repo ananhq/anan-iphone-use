@@ -4,7 +4,7 @@
 
 ## 已定义验收范围
 
-本次授权本地提取、文档、编译和静态检查，不含烧录、手机/HID/模型操作、模拟器/E2E 或发布。编码前定义检查：原运行/构建输入 SHA-256 不变、在 Anan 外独立编译打包、核对目标/偏移/Flash/锁/源码 manifest、检查英中链接/忽略规则、记录来源缺口。Anan 的 A–H 真机场景不自动获得本轮授权。
+本次授权本地提取、文档、编译和静态检查，不含烧录、手机/HID/模型操作、模拟器/E2E 或发布。编码前定义检查：原运行/构建输入 SHA-256 不变、在 [Anan](https://anan.sh) 外独立编译打包、核对目标/偏移/Flash/锁/源码 manifest、检查英中链接/忽略规则、记录来源缺口。Anan 的 A–H 真机场景不自动获得本轮授权。
 
 [source-snapshot.json](../artifacts/migration/source-snapshot.json) 标识原 16 个文件；原 12 个构建输入在提取时全部匹配历史镜像 manifest。运行源码、脚本、锁和协议行为不变。根 CMake 固定原先由 Anan Git 推导的 IDF 应用版本 `ec6bb29-dirty`，这是唯一构建配置调整。因为 package.py 会 hash main/ 所有文件，新增模块 README 会成为额外 manifest 条目，但不会编译进源码。
 

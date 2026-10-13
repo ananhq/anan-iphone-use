@@ -6,7 +6,7 @@ English · [简体中文](README.zh-CN.md)
 
 Connect it to a client agent to add **iPhone Use**: the client observes the screen, decides what to do, calls MCP tools, and checks the result. The firmware executes taps, drags, key presses and ASCII input. It runs no model and provides no phone screenshots.
 
-**Anan is the first client. The current hardware target is M5Stack StopWatch.** Other agents can connect through MCP and provide their own screen observation.
+**This repository is built for M5Stack StopWatch and integrates with [Anan](https://anan.sh).** It also includes the [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md): tell your agent to use `$anan-iphone-use` and describe your agent and ESP32 board to get guided client integration and board adaptation.
 
 ## Demos and setup
 
@@ -52,8 +52,8 @@ After each action, the client should observe again to verify its effect. Tool co
 | --- | --- |
 | Device | M5Stack StopWatch (ESP32-S3) and a USB-C data cable |
 | Phone | USB-C iPhone with AssistiveTouch enabled |
-| Client | Anan, or an HTTP MCP client that can reach the device's USB subnet |
-| Screen observation | Supplied by the client; Anan's system screen sharing requires iOS 27+ |
+| Client | [Anan](https://anan.sh), or an HTTP MCP client that can reach the device's USB subnet |
+| Screen observation | Supplied by the client; [Anan](https://anan.sh)'s system screen sharing requires iOS 27+ |
 
 ## Quick start
 
@@ -62,7 +62,7 @@ git clone https://github.com/ananhq/anan-iphone-use.git
 cd anan-iphone-use
 ```
 
-*This is the planned publication address; cloning is available after the repository is public. You can open an existing local checkout now.*
+*This repository is currently private; cloning requires an authorized GitHub account. You can also use an existing local checkout.*
 
 Open your agent in the repository directory and enter:
 
@@ -94,20 +94,20 @@ Screen observation belongs to the client and is not a device MCP tool. A desktop
 - Portrait, one pointer and US-layout ASCII input only; no direct Chinese text input.
 - Other client interoperability, device regression of the latest MCP-only firmware and endurance remain to be verified. See [validation](docs/validation.md).
 
-## License
-
-The combined project is licensed under **[GPL-3.0-only](LICENSE)**. Binary distribution must include Corresponding Source and required build materials through a compliant GPL distribution method.
-
-Upstream copyright notices and applicable licenses for third-party code and fonts are retained in [NOTICE](NOTICE) and [THIRD_PARTY](THIRD_PARTY.md).
-
 ## Comparison and credits
 
 Thanks to **actell** for the USB NCM/HID source reference, and **esp32-iphone-agent** for exploring iPhone hardware automation.
 
 | Project | Observation and agent | Action interface | iPhone input |
 | --- | --- | --- | --- |
-| Anan iPhone Use + Anan | Phone-side screen sharing and agent | MCP | USB absolute mouse and keyboard |
+| Anan iPhone Use + [Anan](https://anan.sh) | Phone-side screen sharing and agent | MCP | USB absolute mouse and keyboard |
 | [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | Phone-side agent, CoreDevice display stream | CoreDevice | CoreDevice taps and drags |
 | [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | Computer-side AirPlay and Python agent | Wi-Fi TCP | USB relative mouse and keyboard |
 
 actell also retains the USB NCM/HID route referenced here; the table describes its CoreDevice route. esp32-iphone-agent's MIT license and Copyright (c) 2026 Henry Yuan are preserved in the [complete notice](licenses/esp32-iphone-agent-MIT.txt). Exact versions, file origins and modifications are recorded in [THIRD_PARTY](THIRD_PARTY.md).
+
+## License
+
+The combined project is licensed under **[GPL-3.0-only](LICENSE)**. Binary distribution must include Corresponding Source and required build materials through a compliant GPL distribution method.
+
+Upstream copyright notices and applicable licenses for third-party code and fonts are retained in [NOTICE](NOTICE) and [THIRD_PARTY](THIRD_PARTY.md).

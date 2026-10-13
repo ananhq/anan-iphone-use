@@ -4,7 +4,7 @@ English · [简体中文](validation.zh-CN.md)
 
 ## Defined acceptance scope
 
-This migration authorizes local extraction, documentation, compilation and static checks. It does not authorize flashing, phone/HID/model operations, simulator/E2E or publication. Before implementation, the checks were defined as: preserve original runtime/build inputs by SHA-256, independently build/package outside Anan, check target/offset/Flash/lock/source manifest, check bilingual links/ignore rules and record provenance gaps. A–H device scenarios from Anan are not automatically approved here.
+This migration authorizes local extraction, documentation, compilation and static checks. It does not authorize flashing, phone/HID/model operations, simulator/E2E or publication. Before implementation, the checks were defined as: preserve original runtime/build inputs by SHA-256, independently build/package outside [Anan](https://anan.sh), check target/offset/Flash/lock/source manifest, check bilingual links/ignore rules and record provenance gaps. A–H device scenarios from Anan are not automatically approved here.
 
 [source-snapshot.json](../artifacts/migration/source-snapshot.json) identifies the original 16 files; all 12 original build inputs matched the historical image manifest. Runtime source, scripts, lock and wire behavior are unchanged. Root CMake pins the original IDF app version `ec6bb29-dirty`, previously inferred from Anan Git; this is the only build-configuration adjustment. Added module README files are extra manifest entries because package.py hashes all main/ files; they are not compiled sources.
 

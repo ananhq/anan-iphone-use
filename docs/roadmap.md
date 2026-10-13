@@ -2,14 +2,14 @@
 
 English · [简体中文](roadmap.zh-CN.md)
 
-Anan iPhone Use (`anan-iphone-use`) executes iPhone actions on M5Stack StopWatch; clients own observation, inference, planning and authorization. Naming is agreed, while a public address and publication remain unassigned. Naming does not change ANAN1, USB identifiers, tools or historical artifacts. See the [GPL license and source handling](license-plan.md).
+Anan iPhone Use (`anan-iphone-use`) executes iPhone actions on M5Stack StopWatch; clients own observation, inference, planning and authorization. The repository address is [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use), with private visibility; public distribution remains pending. Naming does not change ANAN1, USB identifiers, tools or historical artifacts. See the [GPL license and source handling](license-plan.md).
 
 | Stage | Status / exit |
 | --- | --- |
 | Migration | Local source/docs/build checkpoint `4c6015c`; no public remote or Release |
 | Baseline acceptance | User reported successful reflash and authorized checkpoint; phone input/stop and source-origin resolution remain pending |
 | MCP and required UI | Implemented through candidate `0.4.0-mcp`, compilation/static previews passed; user reports display lighting and MCP satisfaction; scoped touch/persistence/interoperability/stop acceptance remains pending |
-| Plain HTTP MCP | Implemented HTTP80 MCP and same-page pairing/config export; user reports separate Anan HTTP support; user reports the preceding HTTP first-user flow works well; the new MCP-only image remains unverified |
+| Plain HTTP MCP | Implemented HTTP80 MCP and same-page pairing/config export; user reports separate [Anan](https://anan.sh) HTTP support; user reports the preceding HTTP first-user flow works well; the new MCP-only image remains unverified |
 | MCP-only | User-approved removal of ANAN1 port28766/parser/heartbeat and source selection; USB NCM/HID retained, MCP default without input grant |
 | Wireless | Follows MCP; retain USB, first establish BLE absolute-pointer feasibility on iPhone |
 | Further display | Touch/bilingual settings now authorized; animations/model-thinking remain outside scope |

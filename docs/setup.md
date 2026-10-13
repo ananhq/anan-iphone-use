@@ -38,7 +38,7 @@ Require a successful write/hash verification. Short-press power to reset. This M
 | Client | Allow local-network access; import/connect the device MCP configuration; start client screen sharing for observation |
 | Agent | Configure an image-capable model and client task permission; tap Start control on StopWatch for hardware input |
 
-Anan's capture requires iOS 27+. The USB subnet is not an internet gateway; retain the phone's existing Wi-Fi/cellular model connection. HID/Ethernet does not itself require developer mode. Current Anan developer-signed installation does; TestFlight/App Store distribution is not validated by this migration.
+[Anan](https://anan.sh)'s capture requires iOS 27+. The USB subnet is not an internet gateway; retain the phone's existing Wi-Fi/cellular model connection. HID/Ethernet does not itself require developer mode. Current Anan developer-signed installation does; TestFlight/App Store distribution is not validated by this migration.
 
 Start with observe-only, then one small input in an empty test note; observe after every action. Client task permission is separate from the board's volatile MCP grant. Stop via either front button, MCP stop or cable removal. Reconnect explicitly and inspect partial effects; never automatically replay a failed command.
 

@@ -3,7 +3,7 @@
 English · [简体中文](mcp-development.zh-CN.md)
 
 The user authorized MCP first, wireless later, simple button/option setup UI,
-no Anan code changes, and accepted initial iPhone certificate installation/trust.
+no [Anan](https://anan.sh) code changes, and accepted initial iPhone certificate installation/trust.
 They subsequently instructed implementation. Code is now implemented on the
 MCP development branch; no device/interoperability acceptance is claimed.
 Checkpoint `4c6015c` remains recoverable and its provenance/runtime gaps remain.

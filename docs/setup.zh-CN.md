@@ -38,7 +38,7 @@ python -m esptool --chip esp32s3 --port /dev/cu.usbmodemXXXX \
 | 客户端 | 允许局域网权限；导入/连接设备 MCP 配置，开启客户端屏幕共享以观察 |
 | Agent | 配置支持图片的模型和客户端任务许可；在 StopWatch 点“开始控制”授权硬件输入 |
 
-Anan 采屏要求 iOS 27+。USB 子网不是互联网出口，模型仍使用手机原有 Wi-Fi/蜂窝网络。HID/以太网本身不需要开发者模式；当前 Anan 开发签名安装需要，TestFlight/App Store 分发未在本次验收。
+[Anan](https://anan.sh) 采屏要求 iOS 27+。USB 子网不是互联网出口，模型仍使用手机原有 Wi-Fi/蜂窝网络。HID/以太网本身不需要开发者模式；当前 Anan 开发签名安装需要，TestFlight/App Store 分发未在本次验收。
 
 先只观察，再在空白测试笔记做单个小输入，每次动作后观察。客户端任务许可与板上 MCP 授权分开。任一正面按键、MCP stop 或拔线均可中断输入；显式重连并检查局部效果，禁止自动重放失败命令。
 

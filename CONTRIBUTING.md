@@ -4,15 +4,15 @@ English · [简体中文](CONTRIBUTING.zh-CN.md)
 
 Anan iPhone Use (`anan-iphone-use`) maintains device-side iPhone automation firmware for M5Stack StopWatch. Start with the
 [design](docs/design.md), [roadmap](docs/roadmap.md), [validation](docs/validation.md)
-and [source notices](THIRD_PARTY.md). The project is being prepared locally;
-its public repository address and release process are not assigned yet.
+and [source notices](THIRD_PARTY.md). The repository is hosted privately at
+[ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use); public release remains pending.
 
 ## Scope
 
 Agree the problem and acceptance scope with the maintainer before implementing
 an external contribution. Discuss architecture, protocol, dependencies, board
 support and license changes first. Keep phone capture, agents, model connections
-and Anan-specific client code in their owning repositories.
+and [Anan](https://anan.sh)-specific client code in their owning repositories.
 
 MCP is the sole current control protocol; see [endpoint and lifecycle](docs/mcp.md).
 [PROTOCOL.md](PROTOCOL.md) is the retained historical ANAN1 contract, not a

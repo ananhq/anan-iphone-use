@@ -23,7 +23,14 @@ subprocess.run(command, check=True)
 # Credential storage is never packaged; ordinary writes must stop before mcp_kv.
 assert output.stat().st_size <= 0xf00000
 source = pathlib.Path(__file__).parent
-inputs = [path for path in (source / "main").rglob("*") if path.is_file()]
+# Hash the current component's source/configuration/document inputs, not local
+# metadata, credentials or generated outputs that happen to be under main/.
+component_suffixes = {".c", ".h", ".md", ".yml", ".html"}
+inputs = [path for path in (source / "main").rglob("*")
+          if path.is_file()
+          and not any(part.startswith(".") or part == "__pycache__"
+                      for part in path.relative_to(source / "main").parts)
+          and (path.suffix in component_suffixes or path.name == "CMakeLists.txt")]
 inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh", "partitions.csv")]
 source_hashes = {str(path.relative_to(source)): hashlib.sha256(path.read_bytes()).hexdigest()
                  for path in sorted(inputs)}

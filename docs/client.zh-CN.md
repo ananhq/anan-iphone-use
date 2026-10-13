@@ -2,7 +2,7 @@
 
 [English](client.md) · 简体中文
 
-Anan iPhone Use（仓库名 `anan-iphone-use`）是设备端执行器。Anan 是首个客户端，其他 Agent 可按公开 [MCP 端点](mcp.zh-CN.md)接入。当前仅适配 M5Stack StopWatch；客户端负责观察、推理、规划和用户授权，板子负责 USB 鼠标/键盘执行。
+Anan iPhone Use（仓库名 `anan-iphone-use`）是设备端执行器。[Anan](https://anan.sh) 是首个客户端，其他 Agent 可按公开 [MCP 端点](mcp.zh-CN.md)接入。当前仅适配 M5Stack StopWatch；客户端负责观察、推理、规划和用户授权，板子负责 USB 鼠标/键盘执行。
 
 ## 客户端 iPhone Use 能力描述
 

@@ -2,7 +2,7 @@
 
 English · [简体中文](client.zh-CN.md)
 
-Anan iPhone Use (`anan-iphone-use`) is a device-side executor. Anan is the first client; other agents may integrate through the public [MCP endpoint](mcp.md). Only M5Stack StopWatch is currently targeted. The client owns observation, inference, planning and user authorization; the board owns USB mouse/keyboard execution.
+Anan iPhone Use (`anan-iphone-use`) is a device-side executor. [Anan](https://anan.sh) is the first client; other agents may integrate through the public [MCP endpoint](mcp.md). Only M5Stack StopWatch is currently targeted. The client owns observation, inference, planning and user authorization; the board owns USB mouse/keyboard execution.
 
 ## Client iPhone Use description
 

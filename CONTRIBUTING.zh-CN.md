@@ -4,12 +4,12 @@
 
 Anan iPhone Use（`anan-iphone-use`）维护面向 M5Stack StopWatch 的设备端 iPhone 自动化固件。开始前阅读[设计](docs/design.zh-CN.md)、
 [路线图](docs/roadmap.zh-CN.md)、[验证记录](docs/validation.zh-CN.md)和
-[来源声明](THIRD_PARTY.zh-CN.md)。项目目前在本地整理，公开仓库地址与发行流程尚未确定。
+[来源声明](THIRD_PARTY.zh-CN.md)。仓库位于私有的 [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use)，公开发布仍待完成。
 
 ## 范围
 
 外部贡献先与维护者约定问题和验收范围。架构、协议、依赖、板型和许可证变更先讨论。
-手机采屏、Agent、模型连接和 Anan 专用客户端代码保留在各自所属仓库。
+手机采屏、Agent、模型连接和 [Anan](https://anan.sh) 专用客户端代码保留在各自所属仓库。
 
 MCP 是当前唯一控制协议，见[端点与生命周期](docs/mcp.zh-CN.md)。
 [PROTOCOL.md](PROTOCOL.md) 保留历史 ANAN1 契约，当前构建不运行该服务。除非已与客户端明确约定变更，

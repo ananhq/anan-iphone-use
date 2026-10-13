@@ -6,7 +6,7 @@
 
 把它接到客户端 Agent，就能为 Agent 增加 **iPhone Use** 能力：客户端看屏幕、决定下一步，通过 MCP 执行操作，再观察结果。固件负责点击、拖动、按键和 ASCII 输入，不运行模型，也不提供手机截图。
 
-**Anan 是首个客户端，当前硬件适配 M5Stack StopWatch。** 其他 Agent 可通过 MCP 接入，并自行提供屏幕观察能力。
+**本仓库专为 M5Stack StopWatch 开发，已适配 [Anan](https://anan.sh)。** 同时提供 [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md)：直接让 Agent 使用 `$anan-iphone-use`，说明你使用的 Agent 和 ESP32 开发板，即可获得客户端接入与板型适配指导。
 
 ## 演示与配置
 
@@ -52,8 +52,8 @@ flowchart LR
 | --- | --- |
 | 设备 | M5Stack StopWatch（ESP32-S3）与 USB-C 数据线 |
 | 手机 | USB-C iPhone，开启辅助触控（AssistiveTouch） |
-| 客户端 | Anan，或能访问设备 USB 子网的 HTTP MCP 客户端 |
-| 屏幕观察 | 由客户端提供；Anan 的系统屏幕共享需要 iOS 27+ |
+| 客户端 | [Anan](https://anan.sh)，或能访问设备 USB 子网的 HTTP MCP 客户端 |
+| 屏幕观察 | 由客户端提供；[Anan](https://anan.sh) 的系统屏幕共享需要 iOS 27+ |
 
 ## 快速开始
 
@@ -62,7 +62,7 @@ git clone https://github.com/ananhq/anan-iphone-use.git
 cd anan-iphone-use
 ```
 
-*以上是计划发布地址，仓库公开后可用；现有本地仓库可直接打开。*
+*仓库目前为私有，克隆需要具有访问权限的 GitHub 账号；现有本地仓库可直接打开。*
 
 在仓库目录打开你使用的 Agent，输入：
 
@@ -71,7 +71,7 @@ cd anan-iphone-use
 若未自动识别 skill，请先读取 .agents/skills/anan-iphone-use/SKILL.md。
 ```
 
-[anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.zh-CN.md) 会引导 StopWatch 复用固件，其他 ESP32 按实际硬件做最小适配，并处理无屏设备的操作方式。
+[anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) 会引导 StopWatch 复用固件，其他 ESP32 按实际硬件做最小适配，并处理无屏设备的操作方式。
 
 ## MCP 接口
 
@@ -94,20 +94,20 @@ cd anan-iphone-use
 - 只支持竖屏、单指针和 US 键盘布局的 ASCII 输入，不直接输入中文。
 - 其他客户端兼容性、最新仅 MCP 固件的真机回归与持续运行仍需验证，见[验证记录](docs/validation.zh-CN.md)。
 
-## 许可证
-
-项目整体采用 **[GPL-3.0-only](LICENSE)**。发行二进制时须按协议提供对应源码及所需构建材料。
-
-保留上游版权及第三方代码、字体的适用许可，见 [NOTICE](NOTICE) 和 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。
-
 ## 项目对比与致谢
 
 感谢 **actell** 的 USB NCM/HID 源码参考，以及 **esp32-iphone-agent** 对 iPhone 硬件自动化的探索。
 
 | 项目 | 观察与 Agent | 动作接入 | iPhone 输入 |
 | --- | --- | --- | --- |
-| Anan iPhone Use + Anan | 手机内屏幕共享与 Agent | MCP | USB 绝对坐标鼠标与键盘 |
+| Anan iPhone Use + [Anan](https://anan.sh) | 手机内屏幕共享与 Agent | MCP | USB 绝对坐标鼠标与键盘 |
 | [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | 手机内 Agent、CoreDevice 显示流 | CoreDevice | CoreDevice 点击与拖动 |
 | [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | 电脑端 AirPlay 与 Python Agent | Wi-Fi TCP | USB 相对鼠标与键盘 |
 
 actell 另保留本项目参考的 USB NCM/HID 方案，表中列的是其 CoreDevice 方案。esp32-iphone-agent 的 MIT 许可与 Copyright (c) 2026 Henry Yuan 保留于[完整声明](licenses/esp32-iphone-agent-MIT.txt)。准确版本、文件来源和修改记录见 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。
+
+## 许可证
+
+项目整体采用 **[GPL-3.0-only](LICENSE)**。发行二进制时须按协议提供对应源码及所需构建材料。
+
+保留上游版权及第三方代码、字体的适用许可，见 [NOTICE](NOTICE) 和 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。

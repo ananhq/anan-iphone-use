@@ -28,7 +28,7 @@ The user confirms that actell source was referenced and authorized choosing an o
 3. For a binary distribution subject to GPLv3, provide Corresponding Source through a compliant distribution method, including required source and scripts/build materials; provide Installation Information where applicable. See [GPLv3 sections 1, 5 and 6](https://www.gnu.org/licenses/gpl-3.0.html) and the [release checklist](release-preparation.md).
 4. Record the exact distributed source commit, dependency/toolchain versions and image hashes. Complete the linked application/bootloader notice inventory before publishing; exclude credentials, pairing records, private data and generated caches.
 
-The root license decision is applied. No source implementation, existing per-file header, dependency version, historical artifact, publication or cross-repository Anan edit is changed by this licensing/documentation update. Exact derivation and release preparation remain separate work.
+The root license decision is applied. No source implementation, existing per-file header, dependency version, historical artifact, publication or cross-repository [Anan](https://anan.sh) edit is changed by this licensing/documentation update. Exact derivation and release preparation remain separate work.
 
 The MCP-only follow-up removes the local ANAN1 TCP parser/server; it does not
 change the retained USB implementation or resolve its recorded actell origin.

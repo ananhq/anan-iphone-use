@@ -2,7 +2,7 @@
 
 [English](porting.md) · 简体中文
 
-通过 [anan-iphone-use](../.agents/skills/anan-iphone-use/SKILL.zh-CN.md) 引导用户确认硬件、最小适配、烧录与手机配置。**当前只有 M5Stack StopWatch 已实现。** 下文的其他板型与无屏流程是适配要求，不是已有支持。观察、模型和 Agent 留在客户端。
+通过 [anan-iphone-use](../.agents/skills/anan-iphone-use/SKILL.md) 引导用户确认硬件、最小适配、烧录与手机配置。**当前只有 M5Stack StopWatch 已实现。** 下文的其他板型与无屏流程是适配要求，不是已有支持。观察、模型和 Agent 留在客户端。
 
 ## 修改前确认硬件
 
@@ -23,7 +23,7 @@
 | `main/device.c`、`main/ui.c`、`main/ui_layout.c` | 可见帧检查约束配对与控制开启 | 保留 StopWatch 检查；为无屏硬件提供独立实体授权路径 |
 | `main/usb.c`、`main/actions.c`、`main/mcp.c` | USB NCM/HID、输入时序、六个 MCP 工具及会话 | 尽量原样复用；保留释放/停止、不重放和全新显式授权 |
 
-保持工具/会话行为、HID 描述符、USB 标识、手机子网检查稳定。不恢复旧 ANAN1/TCP28766，不顺便加入 Wi-Fi/BLE、截图或 Anan 代码。加入第三方代码前记录准确版本、复用文件、修改及许可。
+保持工具/会话行为、HID 描述符、USB 标识、手机子网检查稳定。不恢复旧 ANAN1/TCP28766，不顺便加入 Wi-Fi/BLE、截图或 [Anan](https://anan.sh) 代码。加入第三方代码前记录准确版本、复用文件、修改及许可。
 
 ## 没有屏幕的设备
 

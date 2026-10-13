@@ -1,18 +1,34 @@
+# ESP-IDF generated outputs; keep reproducible inputs in version control.
 /build/
 /managed_components/
 /sdkconfig
 /sdkconfig.old
+/sdkconfig.old.*
+
+# Compiled/merged outputs, including files copied outside build/.
+*.bin
+*.elf
+*.map
+*.o
+*.a
+
+# Python, editor and macOS caches.
 __pycache__/
+*.py[cod]
 .DS_Store
+._*
 /.idea/
 /.vscode/
-*.pyc
+*.swp
+*.swo
+*~
 
 # Local environments and raw build/device logs.
 .venv/
 venv/
 .cache/
 *.log
+/local/
 
 # Local credentials and device pairing/certificate exports.
 .env
@@ -20,6 +36,9 @@ venv/
 !.env.example
 *.pem
 *.key
+*.crt
+*.cer
+*.der
 *.p12
 *.pfx
 *.mobileconfig

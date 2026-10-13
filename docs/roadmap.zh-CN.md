@@ -2,14 +2,14 @@
 
 [English](roadmap.md) · 简体中文
 
-Anan iPhone Use（`anan-iphone-use`）在 M5Stack StopWatch 上执行 iPhone 动作；客户端负责观察、推理、规划和授权。命名已确定，公开地址与发布尚未指定；不因命名改变 ANAN1、USB 标识、工具或历史产物。见[GPL许可与来源处理](license-plan.zh-CN.md)。
+Anan iPhone Use（`anan-iphone-use`）在 M5Stack StopWatch 上执行 iPhone 动作；客户端负责观察、推理、规划和授权。仓库地址为 [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use)，保持私有，公开发布仍待完成；不因命名改变 ANAN1、USB 标识、工具或历史产物。见[GPL许可与来源处理](license-plan.zh-CN.md)。
 
 | 阶段 | 状态/出口 |
 | --- | --- |
 | 迁移 | 本地源码/文档/编译检查点 `4c6015c`，无公开 remote 或 Release |
 | 基线验收 | 用户反馈重新烧录成功并授权检查点；手机输入/停止及来源核实仍待完成 |
 | MCP 与必要 UI | 已实现至候选 `0.4.0-mcp`，编译/静态预览通过；用户反馈屏幕亮起及 MCP 满意，具体验收中的触摸/记忆/互通/停止仍待完成 |
-| 明文 HTTP MCP | 已实现 HTTP80 MCP 和同页配对/配置导出；用户反馈另一 Anan session 已完成 HTTP 支持，用户反馈上一候选 HTTP 新用户流程已验证良好，新的仅 MCP 镜像仍待真机验证 |
+| 明文 HTTP MCP | 已实现 HTTP80 MCP 和同页配对/配置导出；用户反馈另一 [Anan](https://anan.sh) session 已完成 HTTP 支持，用户反馈上一候选 HTTP 新用户流程已验证良好，新的仅 MCP 镜像仍待真机验证 |
 | 仅 MCP | 按用户要求移除 ANAN1 28766端口/解析/心跳/来源切换；保留 USB NCM/HID，默认 MCP 但不授权输入 |
 | 无线 | MCP 后进行，保留 USB，先验证 iPhone 的 BLE 绝对坐标指针可行性 |
 | 更多显示 | 触屏/双语设置已获授权，动画/模型思考仍不在范围 |

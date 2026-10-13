@@ -23,7 +23,7 @@ Read `AGENTS.md`, [design](design.md), [source notices](../THIRD_PARTY.md) and t
 | `main/device.c`, `main/ui.c`, `main/ui_layout.c` | Visible-frame checks gate pairing and control | Retain StopWatch checks; provide a distinct physical authorization path for headless hardware |
 | `main/usb.c`, `main/actions.c`, `main/mcp.c` | USB NCM/HID, input timing, six MCP tools and sessions | Reuse unchanged where possible; preserve release/stop, no replay and explicit fresh grants |
 
-Treat tool/session behavior, HID descriptors, USB identifiers and phone subnet checks as stable. Do not restore retired ANAN1/TCP28766. Do not add Wi-Fi/BLE, screen capture or Anan code as incidental work. Record exact source versions, reused files, modifications and licenses before adding third-party code.
+Treat tool/session behavior, HID descriptors, USB identifiers and phone subnet checks as stable. Do not restore retired ANAN1/TCP28766. Do not add Wi-Fi/BLE, screen capture or [Anan](https://anan.sh) code as incidental work. Record exact source versions, reused files, modifications and licenses before adding third-party code.
 
 ## Boards without a screen
 

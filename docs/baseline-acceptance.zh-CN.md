@@ -25,7 +25,7 @@ shasum -a 256 build/anan-stopwatch-flash.bin
 
 ## 建议的手动范围
 
-使用解锁、竖屏的 iPhone、现有 Anan 客户端、USB-C 数据线、手动 USB IPv4 和
+使用解锁、竖屏的 iPhone、现有 [Anan](https://anan.sh) 客户端、USB-C 数据线、手动 USB IPv4 和
 AssistiveTouch。在空白合成测试笔记中检查。每项可反馈通过、失败、未执行或结果未知。
 以下是验收建议，不代表已经执行或接受这些场景。
 

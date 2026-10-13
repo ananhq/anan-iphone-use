@@ -23,7 +23,7 @@ Anan iPhone Use（`anan-iphone-use`）：面向 M5Stack StopWatch 的 ESP-IDF C 
 [PROTOCOL.md](../PROTOCOL.md) 保持为未改写的历史 ANAN1 契约。
 旧服务和控制来源切换 UI 已删除，默认进入 MCP，但不自动授权控制。命令、控制授权、请求、连接不持久化；生成的 TLS/配对身份及独立语言偏好持久化。
 保留 USB 描述符及原 MCU 供电保持/5V boost 行为，显示供电单独初始化。
-不含 Wi-Fi/BLE、PSRAM分配、截图服务、模型 provider 或复制的 Anan 客户端。
+不含 Wi-Fi/BLE、PSRAM分配、截图服务、模型 provider 或复制的 [Anan](https://anan.sh) 客户端。
 
 仓库根目录使用固定 ESP-IDF5.5.5 和 `./build.sh` 构建；准确依赖见
 [manifest](idf_component.yml)、[锁文件](../dependencies.lock)、[声明](../THIRD_PARTY.zh-CN.md)。

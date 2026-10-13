@@ -4,7 +4,7 @@
 
 当前是已实现的开发版；编译/静态证据与手机、TLS、显示和互通验收分开。
 MCP 是当前唯一控制协议；[PROTOCOL.md](../PROTOCOL.md)保持为历史 ANAN1 契约，28766端口已移除，本文描述当前 MCP。
-固件不运行 Agent、不采屏；没有修改 Anan。
+固件不运行 Agent、不采屏；没有修改 [Anan](https://anan.sh)。
 
 Anan iPhone Use（`anan-iphone-use`）提供设备端 USB 输入执行；客户端的屏幕观察、推理、规划和用户授权仍分开，见[客户端 iPhone Use 描述](client.zh-CN.md)。本端点没有 `observe` 工具。用户反馈对 MCP 满意，与带版本的互通/停止验收证据分开记录。现已实现 HTTP80 `/mcp`，同时保留可选 HTTPS8443。用户反馈 Anan 已支持 HTTP，本固件仓库不修改该客户端。
 

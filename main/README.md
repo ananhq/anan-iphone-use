@@ -27,7 +27,7 @@ automatic control authorization. No command, control grant, request
 or connection is persisted. Generated TLS/pairing identity and a separate language preference are persisted.
 USB descriptors and the existing MCU hold/5V boost behavior are retained; screen
 power is now initialized separately. No Wi-Fi/BLE, PSRAM allocation,
-screenshot service, model provider or copied Anan client is included.
+screenshot service, model provider or copied [Anan](https://anan.sh) client is included.
 
 Build from the root using pinned ESP-IDF5.5.5 and `./build.sh`; dependencies and
 exact versions are in [manifest](idf_component.yml), [lock](../dependencies.lock)

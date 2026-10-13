@@ -29,7 +29,7 @@ the exact image hash, with the date and relevant board/OS/client versions.
 
 ## Proposed manual scope
 
-Use an unlocked portrait iPhone, the existing Anan client, USB-C data cable,
+Use an unlocked portrait iPhone, the existing [Anan](https://anan.sh) client, USB-C data cable,
 manual USB IPv4 and AssistiveTouch. Use an empty synthetic test note. The user
 can report pass, fail, not run or outcome unknown for each row. These scenarios
 are a proposal, not a claim that they have been executed or accepted.

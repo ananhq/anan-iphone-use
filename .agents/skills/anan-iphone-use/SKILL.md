@@ -6,8 +6,6 @@ license: GPL-3.0-only
 
 # Anan iPhone Use
 
-English · [简体中文](SKILL.zh-CN.md)
-
 Guide the user from their actual board to a connected iPhone MCP client. Use the user's language, small steps and concrete commands. Reuse the StopWatch implementation; port other boards with the smallest confirmed changes. Firmware executes USB input; the client owns observation, reasoning, planning and task permission.
 
 ## Establish the starting point
@@ -34,7 +32,7 @@ Read [phone setup](../../../docs/setup.md) and [MCP setup](../../../docs/mcp.md)
 
 1. **Move the cable from the computer to the unlocked iPhone.** Connect iPhone ↔ device using the confirmed native USB/data connector. On iPhone, open the newly appearing USB Ethernet interface in Settings and set manual IPv4 **192.168.7.2**, mask **255.255.255.0**, router empty and no DNS. The board is **192.168.7.1**. This is a USB local network, not Wi-Fi setup or an internet gateway; retain Wi-Fi/cellular for the client's model connection. If the interface does not appear, resolve cable/reset/USB enumeration before pairing.
 2. Enable Settings → Accessibility → Touch → AssistiveTouch. Use portrait orientation and US hardware keyboard layout. This firmware types ASCII, not Chinese/Unicode.
-3. Guide installation/opening of the chosen **phone client** through its currently verified official distribution route. If no route is known, ask for it instead of inventing an App Store/TestFlight link or building/modifying the client. Allow local-network permission. Anan supports HTTP MCP; other clients must support the transport, Bearer headers and JSON import/configuration. Verify their actual UI/documentation rather than inventing menu names.
+3. Guide installation/opening of the chosen **phone client** through its currently verified official distribution route. If no route is known, ask for it instead of inventing an App Store/TestFlight link or building/modifying the client. Allow local-network permission. [Anan](https://anan.sh) supports HTTP MCP; other clients must support the transport, Bearer headers and JSON import/configuration. Verify their actual UI/documentation rather than inventing menu names.
 4. On StopWatch tap **Settings → Connect MCP app**. In phone Safari open **http://192.168.7.1**, tap Start pairing, compare the six-digit code and confirm on StopWatch. The setup window lasts ten minutes. HTTP needs **no downloaded certificate, profile or trust settings**. HTTPS is optional, not the default onboarding path.
 5. After confirmation the same page generates MCP JSON. Have the user copy it or download the JSON and import into their phone client. It includes **http://192.168.7.1/mcp** and the device's Bearer header. Keep the token/configuration on the user's phone; do not ask them to paste it into agent chat or commit it. For HTTP clipboard failure, select/copy manually or use the download fallback. Do not handwrite or guess a token.
 6. Tap **Imported, go back → Start control** on StopWatch. For a ported/headless board, use its separately implemented fresh physical enable. Enable the client's task control and screen sharing separately; neither pairing nor MCP discovery grants hardware input. StopWatch touch, either front button, `stop` or unplugging revokes control; headless users need their board-specific physical stop instruction.
