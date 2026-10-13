@@ -6,15 +6,13 @@
 
 把它接到客户端 Agent，就能为 Agent 增加 **iPhone Use** 能力：客户端看屏幕、决定下一步，通过 MCP 执行操作，再观察结果。固件负责点击、拖动、按键和 ASCII 输入，不运行模型，也不提供手机截图。
 
-**本仓库专为 M5Stack StopWatch 开发，已适配 [Anan](https://anan.sh)。** 同时提供 [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md)：直接让 Agent 使用 `$anan-iphone-use`，说明你使用的 Agent 和 ESP32 开发板，即可获得客户端接入与板型适配指导。
+**本仓库专为 M5Stack StopWatch 开发，已适配 [Anan](https://anan.sh)（一个纯客户端 Agent，即将开源）。** 同时提供 [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md)：直接让 Agent 使用 `$anan-iphone-use`，说明你使用的 Agent 和 ESP32 开发板，即可获得客户端接入与板型适配指导。
 
 ## 演示与配置
 
 | 操作备忘录 | 操作小红书 |
 | --- | --- |
-| 视频链接待补充 | 视频链接待补充 |
-
-<!-- Replace the video placeholders above with the supplied demo links. -->
+| [观看视频](https://github.com/user-attachments/assets/33d7dd87-b4b1-479e-a7a7-0841db6cd780) | [观看视频](https://github.com/user-attachments/assets/1da03439-f745-4556-b9c4-40b6d5ac10b6) |
 
 **1 · 连接与局域网设置：** 连接 iPhone 与 StopWatch，在手机配置 USB 以太网：手动 IP `192.168.7.2`、掩码 `255.255.255.0`，路由器留空、不配 DNS，并开启辅助触控。之后按下图配对、导入 MCP 配置、开启控制。
 
