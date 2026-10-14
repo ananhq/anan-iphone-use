@@ -42,9 +42,15 @@ size_t ui_layout(const ui_model *m, ui_widget w[UI_WIDGET_LIMIT]) {
     if (m->page == UI_HOME) {
         text(w, &n, 55, "StopWatch", 3, INK);
         text(w, &n, 96,
+             m->input_mode==INPUT_BLE ? tr(m,m->input_online ? "蓝牙输入已连接" : "请在手机配对蓝牙",
+                                          m->input_online ? "BLE input connected" : "Pair Bluetooth on phone") :
              tr(m, m->usb_online ? "USB已连接" : "请连接USB线",
                 m->usb_online ? "USB connected" : "Connect USB cable"),
-             2, m->usb_online ? GREEN : MUTED);
+             2, m->input_online ? GREEN : MUTED);
+        snprintf(line,sizeof(line),m->wifi_connected ? "Wi-Fi: %s" : "%s",
+                 m->wifi_connected ? m->wifi_address : tr(m,m->wifi_configured ? "Wi-Fi连接中" : "USB网页配置Wi-Fi",
+                                                                              m->wifi_configured ? "Wi-Fi connecting" : "Set Wi-Fi on USB page"));
+        text(w,&n,128,line,2,MUTED);
         text(w, &n, 168, tr(m, "MCP控制", "MCP control"), 3, INK);
         if (m->control_granted) {
             snprintf(line, sizeof(line), "%s", tr(m, "控制已开启", "Control enabled"));
@@ -55,13 +61,14 @@ size_t ui_layout(const ui_model *m, ui_widget w[UI_WIDGET_LIMIT]) {
         text(w, &n, 240, line, 2, MUTED);
         ui_action main_action;
         const char *label;
-        bool enabled = m->usb_online;
+        bool enabled = m->input_online;
         if (m->control_granted || m->input_busy) {
             main_action = UI_STOP;
             label = tr(m, "停止控制", "Stop control");
         } else if (!m->identity_ready || !m->mcp_ready) {
             main_action = UI_SETUP_OPEN;
             label = tr(m, "连接MCP应用", "Connect MCP app");
+            enabled=m->usb_online || m->wifi_connected || m->setup_ap;
         } else {
             main_action = UI_START;
             label = tr(m, "开始控制", "Start control");
@@ -79,11 +86,23 @@ size_t ui_layout(const ui_model *m, ui_widget w[UI_WIDGET_LIMIT]) {
         text(w, &n, 98, "Language / 语言", 2, MUTED);
         button(w, &n, 73, 134, 154, 56, "简体中文", UI_ZH_SELECT, true, m->language == UI_ZH, CARD);
         button(w, &n, 239, 134, 154, 56, "English", UI_EN_SELECT, true, m->language == UI_EN, CARD);
-        button(w, &n, 73, 218, 320, 60, tr(m, "连接MCP应用", "Connect MCP app"), UI_SETUP_OPEN,
-               m->usb_online, false, CARD);
-        button(w, &n, 97, 298, 272, 54, tr(m, "重置配对", "Reset pairing"), UI_RESET_OPEN, true,
+        button(w,&n,73,207,320,50,tr(m,"输入 / 网络","Input / network"),UI_INPUT_OPEN,true,false,CARD);
+        button(w, &n, 73, 269, 320, 50, tr(m, "连接MCP应用", "Connect MCP app"), UI_SETUP_OPEN,
+               m->usb_online || m->wifi_connected || m->setup_ap, false, CARD);
+        button(w, &n, 97, 331, 272, 44, tr(m, "重置配对", "Reset pairing"), UI_RESET_OPEN, true,
                false, CARD);
-        button(w, &n, 122, 372, 222, 48, tr(m, "返回", "Back"), UI_BACK, true, false, CARD);
+        button(w, &n, 122, 389, 222, 42, tr(m, "返回", "Back"), UI_BACK, true, false, CARD);
+    } else if (m->page==UI_INPUT) {
+        text(w,&n,58,tr(m,"输入 / 网络","Input / network"),2,INK);
+        text(w,&n,102,tr(m,"选择手机输入方式","Select phone input"),2,MUTED);
+        button(w,&n,73,144,154,56,"USB",UI_USB_SELECT,!m->setup_ap,m->input_mode==INPUT_USB,CARD);
+        button(w,&n,239,144,154,56,"BLE",UI_BLE_SELECT,m->ble_ready&&!m->setup_ap,m->input_mode==INPUT_BLE,CARD);
+        text(w,&n,215,"BLE: Anan StopWatch",2,MUTED);
+        text(w,&n,248,tr(m,"手机开启AssistiveTouch","Enable AssistiveTouch"),2,MUTED);
+        button(w,&n,97,285,272,52,tr(m,"按住2秒重置蓝牙","Hold 2s: reset BLE"),
+               UI_BLE_RESET_HOLD,m->ble_ready,false,CARD);
+        button(w,&n,97,344,272,40,tr(m,"无线配网 / 管理Wi-Fi","Wi-Fi setup / manage"),UI_WIFI_SETUP_OPEN,true,false,CARD);
+        button(w,&n,122,390,222,42,tr(m,"返回","Back"),UI_BACK,true,false,CARD);
     } else if (m->page == UI_PAIRING) {
         if (m->pairing == UI_PAIR_PENDING) {
             text(w, &n, 65, tr(m, "确认配对", "Pair device"), 3, INK);
@@ -95,7 +114,7 @@ size_t ui_layout(const ui_model *m, ui_widget w[UI_WIDGET_LIMIT]) {
             text(w, &n, 65, tr(m, "继续在手机配置", "Continue on phone"), 2, INK);
             text(w, &n, 128, tr(m, "手机复制MCP配置", "Copy MCP config on phone"), 2, MUTED);
             text(w, &n, 166, tr(m, "导出配置到Anan", "Import config into Anan"), 2, MUTED);
-            text(w, &n, 204, tr(m, "手机完成后再返回", "Return after importing"), 2, MUTED);
+            text(w, &n, 204, tr(m, m->setup_ap?"复制后返回关闭热点":"手机完成后再返回",m->setup_ap?"Copy, return to close Wi-Fi":"Return after importing"), 2, MUTED);
             button(w, &n, 73, 295, 320, 62, tr(m, "已导入 返回", "Imported, go back"),
                    UI_SETUP_DONE, true, false, ACCENT);
         } else if (m->pairing == UI_PAIR_WORKING) {
@@ -103,11 +122,20 @@ size_t ui_layout(const ui_model *m, ui_widget w[UI_WIDGET_LIMIT]) {
             text(w, &n, 190, tr(m, "正在准备设备配对", "Preparing device pairing"), 2, MUTED);
             text(w, &n, 233, tr(m, "请稍候", "Please wait"), 2, MUTED);
         } else {
-            text(w, &n, 65, tr(m, "连接MCP应用", "Connect MCP app"), 2, INK);
-            text(w, &n, 125, tr(m, "手机Safari打开", "Open Safari on phone"), 2, MUTED);
-            text(w, &n, 167, "http://192.168.7.1", 2, ACCENT);
-            text(w, &n, 222, tr(m, "手机点击开始配对", "Start pairing on phone"), 2, MUTED);
-            text(w, &n, 262, tr(m, "再在设备确认验证码", "Then confirm matching code"), 2, MUTED);
+            text(w, &n, 65, m->setup_ap?m->ap_name:tr(m, "连接MCP应用", "Connect MCP app"), 2, INK);
+            if(m->setup_ap){
+                text(w,&n,98,tr(m,"手机扫码连接热点","Scan to join Wi-Fi"),2,MUTED);
+                w[n++]=(ui_widget){.rect={130,125,205,205},.qr=true};
+                snprintf(line,sizeof(line),"%s: %s",tr(m,"密码","Password"),m->ap_password);
+                text(w,&n,338,line,1,ACCENT);
+                text(w,&n,358,"http://192.168.4.1",2,INK);
+            }else{
+                text(w,&n,125,tr(m,"手机Safari打开","Open Safari on phone"),2,MUTED);
+                snprintf(line,sizeof(line),"http://%s",m->usb_online?"192.168.7.1":m->wifi_address);
+                text(w,&n,167,line,2,ACCENT);
+                text(w,&n,222,tr(m,"手机点击开始配对","Start pairing on phone"),2,MUTED);
+                text(w,&n,262,tr(m,"再在设备确认验证码","Then confirm matching code"),2,MUTED);
+            }
             if (m->pairing == UI_PAIR_FAILED || m->pairing == UI_PAIR_EXPIRED)
                 button(w, &n, 97, 310, 272, 48, tr(m, "重新开始", "Restart setup"), UI_SETUP_OPEN,
                        true, false, ACCENT);

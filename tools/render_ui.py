@@ -30,12 +30,20 @@ def cjk_size(scale):return 18 if scale==1 else 28 if scale>=3 else 24
 scenes=[('home-mcp',0,0,0,0),('home-active',0,0,0,1),('settings',1,0,0,0),
         ('pair-start',2,0,1,0),('pair-confirm',2,1,1,0),('pair-working',2,2,1,0),('pair-ready',2,3,1,0),
         ('pair-expired',2,5,1,0),('reset',3,0,0,0),('reset-working',4,0,0,0)]
+scenes += [('input-usb',5,0,0,0),('input-ble',5,0,0,0),('home-wireless',0,0,0,0),('pair-wireless',2,0,1,0),('pair-hotspot',2,0,1,0),('hotspot-ready',2,3,1,0)]
+qr_exe=out/'qr-export'
+subprocess.run(['cc','-std=c11','-D_POSIX_C_SOURCE=200809L','-I',str(root/'main'),str(root/'tools/wireless_acceptance/wifi-qr.c'),str(root/'main/wifi_qr.c'),str(root/'main/vendor/qrcodegen.c'),'-o',str(qr_exe)],check=True)
+subprocess.run([str(qr_exe),str(out/'synthetic-wifi-qr.pgm')],check=True)
+qr_image=Image.open(out/'synthetic-wifi-qr.pgm').convert('RGBA')
 records=[]
 for language in [0,1]:
  for name,page,pair,mode,control_granted in scenes:
-    widgets=json.loads(subprocess.check_output([str(exe),str(language),str(page),str(pair),str(mode),str(control_granted)]))
+    widgets=json.loads(subprocess.check_output([str(exe),str(language),str(page),str(pair),str(mode),str(control_granted),str(2 if name in ['pair-hotspot','hotspot-ready'] else int(name in ['input-ble','home-wireless','pair-wireless']))]))
     image=Image.new('RGBA',(466,466),rgb(0x0882));draw=ImageDraw.Draw(image);pixels=image.load()
     for w in widgets:
+        if w.get('qr'):
+            image.paste(qr_image,((466-qr_image.width)//2,w['y']))
+            continue
         if w['button']:
             box=(w['x'],w['y'],w['x']+w['w']-1,w['y']+w['h']-1)
             draw.rounded_rectangle(box,radius=14,fill=rgb(w['bg']),outline=rgb(0xfe89) if w['selected'] else None,width=2)
@@ -60,7 +68,7 @@ for language in [0,1]:
     filename=('zh' if language==0 else 'en')+'-'+name+'.png';image.save(out/filename)
     records.append({'file':filename,'widgets':widgets})
 (out/'layouts.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
-gallery=Image.new('RGB',(4*486,6*516),(24,28,34));g=ImageDraw.Draw(gallery)
+gallery=Image.new('RGB',(4*486,((len(records)+3)//4)*516),(24,28,34));g=ImageDraw.Draw(gallery)
 for i,record in enumerate(records):
     x=(i%4)*486+10;y=(i//4)*516+30;im=Image.open(out/record['file']);gallery.paste(im,(x,y),im);g.text((x,y-20),record['file'],fill='white')
 gallery.save(out/'gallery.png')

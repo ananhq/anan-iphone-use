@@ -7,7 +7,8 @@
 | 主题 | 文档 |
 | --- | --- |
 | 项目概览 | [项目](../README.zh-CN.md) |
-| 构建、烧录与手机配置 | [配置与恢复](setup.zh-CN.md)、[MCP 配对与端点](mcp.zh-CN.md) |
+| 构建、烧录与手机配置 | [配置与恢复](setup.zh-CN.md)、[保留绑定的升级](flashing.zh-CN.md)、[MCP 配对与端点](mcp.zh-CN.md) |
+| Wi-Fi MCP 与实验性 BLE 输入 | [Wi-Fi MCP 与实验性 BLE 输入](wireless.zh-CN.md) |
 | 客户端接入 | [MCP 参数与会话](client.zh-CN.md) |
 | Agent 引导安装与板型适配 | [anan-iphone-use skill](../.agents/skills/anan-iphone-use/SKILL.md)、[最小化板型适配](porting.zh-CN.md) |
 
@@ -31,3 +32,7 @@
 | 已退役协议 | [历史 ANAN1 契约](../PROTOCOL.md) |
 
 [PROTOCOL.md](../PROTOCOL.md) 是未改写的历史 ANAN1 协议/状态契约；当前固件仅运行 MCP，不提供28766服务。验证记录区分源码、编译、用户反馈与设备执行；MCP/中英触屏 UI 已有开发实现，编译/静态预览及用户反馈与具体验收分开记录，见[配置与端点](mcp.zh-CN.md)。
+
+[无线配网验收](wireless-setup-development.zh-CN.md)定义固定域名、网络记忆及临时热点阶段。
+
+[工具发现说明](tool-discovery.zh-CN.md)记录任务关键词、可选整组浏览及保留的 schema/授权边界。

@@ -2,6 +2,8 @@
 
 [English](setup.md) · 简体中文
 
+候选 **0.7.2-wifi-qr** 增加扫码临时热点配网、修正仅 IPv4 时的 mDNS 探测、五个 Wi-Fi 网络记忆及 USB/Wi-Fi 共用的 `http://stopwatch.local/mcp` HTTP 端点。BLE 输入仍为实验性。保留数字 USB 配置入口和可选 USB HTTPS，见[当前无线流程与限制](wireless.zh-CN.md)；下文早期阶段说明适用于原范围。
+
 ## 电脑上构建一次
 
 使用 StopWatch 原生 Type-C 口和数据线。递归安装官方 ESP-IDF **v5.5.5**，执行 `install.sh esp32s3` 后 source `export.sh`，确保 CMake ≥3.22 / Ninja；其他 IDF/Arduino 环境不属于该构建。首次按锁文件获取 esp_tinyusb 2.2.0 / TinyUSB 0.21.0~2。
@@ -11,7 +13,7 @@
 shasum -a 256 build/anan-stopwatch-flash.bin
 ```
 
-与 `build/anan-stopwatch-manifest.json` 校对哈希；其中记录源码、依赖锁哈希、镜像大小与验证标记。镜像合并引导程序、分区和应用。目标 ESP32-S3、**16MB**、合并写入地址 **0x0**，不要把合并镜像写到应用偏移。尚无公开 Release 二进制，请本地构建；历史与迁移镜像哈希在[验证记录](validation.zh-CN.md)中分开记录。
+与 `build/anan-stopwatch-manifest.json` 校对哈希；其中记录源码、依赖锁哈希、镜像大小与验证标记。镜像合并引导程序、分区和应用，目标 ESP32-S3、**16MB**，镜像起始地址为 **0x0**。使用下方烧录辅助脚本，它会跳过蓝牙 NVS 拆分写入；不要把合并镜像写到应用偏移，也不要从 `0x0` 连续写入。尚无公开 Release 二进制，请本地构建；历史与迁移镜像哈希在[验证记录](validation.zh-CN.md)中分开记录。
 
 ## 确认目标后才烧录
 
@@ -20,10 +22,16 @@ shasum -a 256 build/anan-stopwatch-flash.bin
 ```sh
 ./flash.sh /dev/cu.usbmodemXXXX
 # 已进入下载模式，但正常复位无法连接时：
-python -m esptool --chip esp32s3 --port /dev/cu.usbmodemXXXX \
-  --baud 460800 --before no_reset write_flash --flash_size 16MB \
-  0x0 build/anan-stopwatch-flash.bin
+python flash.py /dev/cu.usbmodemXXXX build/anan-stopwatch-flash.bin --before no_reset
 ```
+
+使用已安装 esptool 的 Python 环境。可通过
+`PYTHON=/path/to/python ./flash.sh <串口> <合并镜像.bin>` 明确选择解释器，或使用该
+Python 运行 `flash.py`。辅助脚本核验固定 StopWatch 分区布局，写入
+`0x0–0x8fff` 和从 `0xf000` 开始的镜像部分，保留默认 `nvs`
+（`0x9000–0xefff`）及 `mcp_kv`。首次安装使用同一命令。旧的连续
+`esptool write_flash ... 0x0 <合并镜像>` 命令会清掉 BLE 绑定；已被擦除的绑定需要
+重新配对一次。见[升级范围与证据](flashing.zh-CN.md)。
 
 确认写入与哈希校验成功，再短按电源复位。MCP 开发版会初始化简单状态/菜单屏幕，黑屏不再是其预期 UI。烧录替换出厂固件，恢复时使用官方 M5Burner 中对应 StopWatch 的出厂包和说明。脚本不修改 eFuse、不启用 Secure Boot。本次迁移不烧录设备。
 

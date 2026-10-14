@@ -49,11 +49,15 @@ Connect it to a client agent to add **iPhone Use**: the client observes the scre
 
 ## How it works
 
+Candidate **0.7.3-discovery** adds Wi-Fi MCP, BLE input, temporary hotspot QR setup and five saved networks while retaining USB. HTTP configuration uses **`http://stopwatch.local/mcp`** for USB and Wi-Fi. Build/offline checks pass; the new setup flow still needs device acceptance. See [wireless setup and limits](docs/wireless.md).
+
+Tool descriptions include concise English/Chinese task words such as opening apps, typing, browsing and drawing. For multi-step control, the service suggests first browsing its seven-tool overview; full parameters are read as needed. See [tool discovery](docs/tool-discovery.md).
+
 ```mermaid
 flowchart LR
     Phone["iPhone"] -->|"Screen sharing"| Agent["Client agent, such as Anan<br/>Observe · Reason · Plan"]
     Agent -->|"MCP actions"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP server"]
-    Device -->|"USB mouse / keyboard"| Phone
+    Device -->|"USB / experimental BLE mouse and keyboard"| Phone
 ```
 
 After each action, the client should observe again to verify its effect. Tool completion means input was sent, not that the intended operation succeeded.
@@ -64,7 +68,7 @@ After each action, the client should observe again to verify its effect. Tool co
 | --- | --- |
 | Device | M5Stack StopWatch (ESP32-S3) and a USB-C data cable |
 | Phone | USB-C iPhone with AssistiveTouch enabled |
-| Client | [Anan](https://anan.sh), or an HTTP MCP client that can reach the device's USB subnet |
+| Client | [Anan](https://anan.sh), or an HTTP MCP client that can reach the USB subnet or configured Wi-Fi LAN |
 | Screen observation | Supplied by the client; [Anan](https://anan.sh)'s system screen sharing requires iOS 27+ |
 
 ## Quick start
@@ -82,6 +86,8 @@ If the skill is not discovered, first read .agents/skills/anan-iphone-use/SKILL.
 ```
 
 The [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) reuses StopWatch firmware or minimally adapts another ESP32 for its actual hardware, including controls for boards without screens.
+
+For StopWatch firmware updates, use `flash.sh` or `flash.py` to preserve BLE pairing and Wi-Fi/MCP settings. See [flashing instructions](docs/setup.md).
 
 ## MCP interface
 
@@ -101,7 +107,7 @@ Coordinates are portrait-normalized **0…1**; times are in milliseconds. Screen
 
 ## Current limitations
 
-- M5Stack StopWatch over wired USB is the current target. Wi-Fi/BLE is not implemented.
+- M5Stack StopWatch remains the target. Wi-Fi MCP and BLE input are implemented as a device-unverified candidate; initial Wi-Fi setup can use USB or a temporary device hotspot.
 - Portrait, one pointer and US-layout ASCII input only; no direct Chinese text input.
 - Other client interoperability, device regression of the latest MCP-only firmware and endurance remain to be verified. See [validation](docs/validation.md).
 

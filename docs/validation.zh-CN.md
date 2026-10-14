@@ -96,3 +96,36 @@ Agent 未执行新的烧录、证书删除、板上重置、HTTP 手机互通或
 候选 `0.5.1-mcp` 在 `tools/list` 展示七项，将长按/双击归入 `tap`、保持拖动/连续路径归入 `drag`、命名键盘/Consumer 按键归入 `press_key`。固件保留隐藏旧名称和旧拖动参数，客户端仍需刷新发现；本地缓存可能拒绝旧名称或新参数。默认点击和无保持的两点拖动保留旧时序。说明保持简短，公共规则同时放入服务描述与 initialize instructions；只读核对的 Anan 客户端读取服务描述，不依赖它读取 instructions。
 
 预先定义的合并场景通过离线模拟；七项 schema/完整按键枚举、旧执行器/USB/板级供电/授权/停止/依赖不变与中英文文档检查通过。完整锁定IDF编译与打包结果记录于[当前记录](../artifacts/hid/build-check.json)；前一轮记录保留在[扩展记录](../artifacts/hid/expansion-build-check.json)。未烧录或执行手机、客户端连接、provider/E2E；合并后 Anan 发现/调用与真机行为仍未验证。
+
+## 无线候选
+
+候选 `0.6.0-wireless` 增加 Wi-Fi station HTTP MCP、实验性 BLE HID、显式输入
+选择和首次 USB 配网。固定 IDF 编译/打包、USB 发送/描述符保留检查、七项 schema
+对照、实施前定义的离线路由/报告场景、既有 HID 场景、网页脚本语法及 28 个双语
+静态布局通过。主机模拟不证明报告锁线程行为、射频/手机交付。见[预定义范围](wireless-development.zh-CN.md)、
+[配置](wireless.zh-CN.md)、[脱敏构建记录](../artifacts/wireless/build-check.json)。
+没有烧录、蓝牙/Wi-Fi 设备探测、手机输入、客户端/provider 或 E2E 执行。
+
+## Wi-Fi 扫描候选
+
+候选 `0.6.1-wifi-scan` 增加配对后仅 USB 的异步扫描、有界去重名称、扫描/点选/
+手填配网和开放网络密码处理，实施前定义验收。固定 IDF 编译/打包、既有离线
+HID/路由/报告场景，以及合成网页选择、恶意 SSID 纯文本、手填/开放网络及失败
+恢复检查通过。没有真实 Wi-Fi 扫描、烧录、手机操作或 E2E。见[扫描记录](../artifacts/wireless/scan-build-check.json)，
+射频超时/共存及恢复连接行为仍未实测。
+
+## 无线配网候选
+
+候选 `0.7.0-wireless-setup` 增加临时 WPA2 SoftAP/DHCP 配网、五网络存储及 v1 迁移/轮换连接，并通过既有锁定 lwIP responder 在 USB/Wi-Fi 提供统一 HTTP 域名。[验收范围](wireless-setup-development.zh-CN.md)及存储/Host/Origin/网页场景在实现前定义。锁定 IDF 编译/打包、既有 HID/路由/报告场景、迁移/容量/删除及准确 Origin 检查、USB/热点合成扫描网页、JavaScript 语法、32 个静态双语布局、保留七个 schema/USB HID 发送器及 manifest 检查通过。USB 增加 IGMP，sdkconfig 预留一个 mDNS client 槽位。不升级依赖或更改项目许可，并保留新增 Verisure BSD 通知。
+
+[脱敏记录](../artifacts/wireless/setup-build-check.json)标明 flashed/deviceVerified 为 false。本轮未探测串口/射频、操作手机、连接真实客户端/模型、运行模拟器或 E2E。用户反馈前一无线流程成功，不代表本候选 DHCP/mDNS、AP+STA 扫描、多网络时序、射频共存、运行内存、控制/停止及耐久性已验收，保留数字地址恢复入口。
+
+候选 `0.7.2-wifi-qr` 跟进用户 `.local` 打不开的反馈，修正已从源码复现的锁定 lwIP 定时器在仅 IPv4 网卡上强制等待 IPv6 探测的问题；增加屏幕 Wi-Fi 二维码，保留随机 WPA2 密码和物理配对。定时器回归与二维码场景均先于修改定义。SDK 编译/打包、既有离线场景、独立二维码及完整圆屏静态预览解码通过，见[记录](../artifacts/wireless/qr-build-check.json)。Agent 未烧录、探测射频/串口、使用手机相机/加入网络、连接真实客户端/模型或执行 E2E，IPv4 重名处理及新的手机 `.local` 成功仍待实机验证。
+
+## 面向任务的发现元数据
+
+候选 `0.7.3-discovery` 仅修改七个工具描述、initialize 简介/instructions 及版本，加入双语用途词和可选整组概览建议。验收先在[工具发现](tool-discovery.zh-CN.md)定义。内嵌 JSON、名称/顺序/schema/annotations 精确保留、MCP 除两处元数据语句外等价、输入/HID/射频/存储/依赖保留、既有离线 HID 场景、锁定 IDF 编译/打包与 manifest/链接检查通过。工具描述从 1,373 增至 1,525 字符，服务简介 463 字符，低于已检查 Anan 的 500 字符上限；这是字符数，不是测得的模型 token 数。见[记录](../artifacts/discovery/build-check.json)。本范围不修改客户端、新增单元测试、烧录或执行设备/真实模型/E2E。搜索/模型采用及实际打开 App 效果仍未验证，元数据建议不加载 schema 或授权输入。
+
+## 保留绑定的烧录辅助脚本
+
+用户反馈重新烧录后重连失败。[预定义范围](flashing.zh-CN.md)增加第一方电脑端辅助脚本，将现有合并镜像绕过默认 BLE `nvs` 拆分写入；分区布局、固件及 BLE 安全配置不变。预定义离线扇区写入场景、镜像/布局拒绝、失败传递及语法检查通过。现有候选重新打包刷新源码哈希，二进制 SHA-256 不变，见[记录](../artifacts/flashing/check.json)。未重新编译固件、访问设备或验证 iPhone 实际重连；此前被擦除的绑定需重新配对一次。

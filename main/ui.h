@@ -4,8 +4,9 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "device.h"
+#include "bridge.h"
 typedef enum { UI_ZH, UI_EN } ui_language;
-typedef enum { UI_HOME, UI_SETTINGS, UI_PAIRING, UI_RESET, UI_RESETTING } ui_page;
+typedef enum { UI_HOME, UI_SETTINGS, UI_PAIRING, UI_RESET, UI_RESETTING, UI_INPUT } ui_page;
 typedef enum {
     UI_PAIR_IDLE,
     UI_PAIR_PENDING,
@@ -26,7 +27,12 @@ typedef enum {
     UI_RESET_OPEN,
     UI_RESET_HOLD,
     UI_ZH_SELECT,
-    UI_EN_SELECT
+    UI_EN_SELECT,
+    UI_INPUT_OPEN,
+    UI_USB_SELECT,
+    UI_BLE_SELECT,
+    UI_BLE_RESET_HOLD,
+    UI_WIFI_SETUP_OPEN
 } ui_action;
 typedef struct {
     ui_page page;
@@ -35,6 +41,11 @@ typedef struct {
     ui_pair_state pairing;
     bool usb_online, identity_ready, mcp_ready, touch_ready, input_busy;
     bool control_granted;
+    input_mode_t input_mode;
+    bool input_online, ble_connected, ble_ready, wifi_configured, wifi_connected;
+    char wifi_address[16];
+    bool setup_ap;
+    char ap_name[33], ap_password[13];
     uint32_t revision;
     ui_action focus;
     char code[7], fingerprint[17];
@@ -48,7 +59,7 @@ typedef struct {
     uint16_t foreground, background;
     unsigned scale;
     ui_action action;
-    bool button, enabled, selected;
+    bool button, enabled, selected, qr;
 } ui_widget;
 #define UI_WIDGET_LIMIT 20
 size_t ui_layout(const ui_model *model, ui_widget widgets[UI_WIDGET_LIMIT]);

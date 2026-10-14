@@ -14,6 +14,7 @@ bool bridge_scroll(uint16_t x,uint16_t y,int8_t v,int8_t h){event*e=record('w');
 bool bridge_key(uint8_t m,uint8_t k){event*e=record('k');e->key=k;e->mods=m;return true;}
 bool bridge_consumer(uint16_t u){event*e=record('c');e->usage=u;return true;}
 bool bridge_usb_online(void){return true;}
+bool bridge_input_online(void){return true;}
 void bridge_release(void){bridge_mouse(0,0,0);bridge_key(0,0);bridge_consumer(0);}
 #include "actions.c"
 static bool guard(uint32_t epoch,void*ctx){(void)epoch;(void)ctx;return fake_ms<cutoff;}

@@ -2,21 +2,25 @@
 
 [English](mcp.md) · 简体中文
 
+候选 **0.7.2-wifi-qr** 增加扫码临时热点配网、修正仅 IPv4 时的 mDNS 探测、五个 Wi-Fi 网络记忆及 USB/Wi-Fi 共用的 `http://stopwatch.local/mcp` HTTP 端点。BLE 输入仍为实验性。保留数字 USB 配置入口和可选 USB HTTPS，见[当前无线流程与限制](wireless.zh-CN.md)；下文早期阶段说明适用于原范围。
+
 当前是已实现的开发版；编译/静态证据与手机、TLS、显示和互通验收分开。
 MCP 是当前唯一控制协议；[PROTOCOL.md](../PROTOCOL.md)保持为历史 ANAN1 契约，28766端口已移除，本文描述当前 MCP。
 固件不运行 Agent、不采屏；没有修改 [Anan](https://anan.sh)。
 
 Anan iPhone Use（`anan-iphone-use`）提供设备端 USB 输入执行；客户端的屏幕观察、推理、规划和用户授权仍分开，见[客户端 iPhone Use 描述](client.zh-CN.md)。本端点没有 `observe` 工具。用户反馈对 MCP 满意，与带版本的互通/停止验收证据分开记录。现已实现 HTTP80 `/mcp`，同时保留可选 HTTPS8443。用户反馈 Anan 已支持 HTTP，本固件仓库不修改该客户端。
 
-## 首次配置：HTTP，无需安装证书
+## USB 配置：HTTP，无需安装证书
+
+无线首次配置按[设备热点流程](wireless.zh-CN.md)操作。
 
 1. 用数据线连接解锁的 iPhone 与 M5Stack StopWatch。USB 以太网配置为 `192.168.7.2/24`，无网关/DNS，并开启辅助触控，见[配置说明](setup.zh-CN.md)。
 2. StopWatch 点“设置 → 连接MCP应用”；中英文语言选择会记住。
 3. Safari 打开 `http://192.168.7.1`，点“开始配对”，核对六位数字，在 StopWatch 点“确认配对”。配置窗口十分钟后过期。
-4. 确认后，同一网页自动生成 MCP JSON；复制或下载后导入 Anan 或兼容 HTTP MCP 的客户端。导出端点为 `http://192.168.7.1/mcp`，带设备独立 Bearer 请求头。无需安装描述文件或开启系统证书信任。
+4. 确认后，同一网页自动生成 MCP JSON；复制或下载后导入 Anan 或兼容 HTTP MCP 的客户端。当前导出端点为 `http://stopwatch.local/mcp`，`http://192.168.7.1/mcp` 保留为数字地址回退，带设备独立 Bearer 请求头。无需安装描述文件或开启系统证书信任。
 5. StopWatch 点“已导入 返回”，再点“开始控制”。控制持续至停止/拔线/重启或其他已记录撤销事件。发现工具/读取状态不授权输入；控制时触屏或按任一正面实体键停止，同次接触不会再启用。
 
-明文 HTTP 不提供 TLS 加密，仍限定原有准确 USB 地址/Host/Origin。HTTPS 保留在网页折叠的可选区域：HTTPS 配置页导出 `https://192.168.7.1:8443/mcp`，仍需原有证书安装/信任。两种传输共用七个展示工具、会话和 HID 执行器；HTTP 控制不再依赖 HTTPS 启动成功。
+明文 HTTP 不提供 TLS 加密；USB 保留准确设备/手机地址检查，HTTP Host/Origin 允许数字设备地址或固定域名，Origin 必须匹配。STA/热点限制见[无线配置](wireless.zh-CN.md)。HTTPS 保留在网页折叠的可选区域：HTTPS 配置页导出 `https://192.168.7.1:8443/mcp`，仍需原有证书安装/信任。两种传输共用七个展示工具、会话和 HID 执行器；HTTP 控制不再依赖 HTTPS 启动成功。
 
 网页只在标签页 session storage 保留临时配对凭据；配置/token 留在页面/下载中，不放入 local storage。HTTP 下安全上下文剪贴板 API 不可用时使用浏览器复制备用方式，仍可选中文本复制或下载 JSON。实际 Safari 复制行为待真机检查。关闭、过期或重新配对后，重进“连接MCP应用”再开始。配置导出要求物理确认、有效十分钟窗口及临时 HttpOnly、SameSite Strict 设置 Cookie。重新物理配对可导出现有 token。
 
@@ -30,7 +34,7 @@ Anan iPhone Use（`anan-iphone-use`）提供设备端 USB 输入执行；客户�
 
 身份仍在板上生成，保存在 `0xf00000` 的独立 `mcp_kv` NVS 分区，正常合并镜像不含身份数据，普通升级保留。整片擦除、工厂恢复或不同分区布局可能移除它。重置只清除身份命名空间，不清除语言；命令/动作/授权不持久化。
 
-原 ECC P-256 CA/服务端证书生成及续签路径保留，用于可选 HTTPS 和兼容；HTTP 不要求手机安装或信任此 CA。不增加 Wi-Fi、云、OAuth、mDNS 或共用签名私钥。身份仍为普通 NVS 存储，本阶段不加入 Flash 加密/Secure Boot。
+原 ECC P-256 CA/服务端证书生成及续签路径保留，用于可选 HTTPS 和兼容；HTTP 不要求手机安装或信任此 CA。原 HTTP 阶段不加入射频或发现；当前候选按上文增加 Wi-Fi/mDNS，仍不加入云、OAuth 或共用签名私钥。身份仍为普通 NVS 存储，本阶段不加入 Flash 加密/Secure Boot。
 
 ## 地址和工具
 

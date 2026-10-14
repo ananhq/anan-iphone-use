@@ -8,6 +8,8 @@
 #include "touch.h"
 #include "ui.h"
 #include "ui_preferences.h"
+#include "wireless.h"
+#include "input_backends.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -26,7 +28,7 @@ uint32_t device_generation(void) { return atomic_load(&generation); }
 bool device_control_granted(void) { return atomic_load(&control_granted); }
 bool device_control_allowed(void) {
     return device_mode() == DEVICE_MCP && atomic_load(&screen_ok) && device_control_granted() &&
-           bridge_usb_online() && !board_stop_pressed();
+           bridge_input_online() && !wireless_snapshot().setup_ap && !board_stop_pressed();
 }
 void device_stop(void) {
     portENTER_CRITICAL(&permission_lock);
@@ -55,6 +57,7 @@ static void setup(void) {
 }
 static void home(void) {
     device_stop();
+    wireless_setup_stop();
     mcp_close_setup();
     atomic_store(&mode, DEVICE_MCP);
     set_page(UI_HOME);
@@ -67,7 +70,7 @@ static void activate(ui_action action, bool held, uint32_t expected_revision) {
         portENTER_CRITICAL(&permission_lock);
         if (expected_revision == atomic_load(&ui_revision) && atomic_load(&screen_ok) &&
             atomic_load(&page) == UI_HOME && device_mode() == DEVICE_MCP && identity_ready() &&
-            mcp_ready() && bridge_usb_online() && !board_stop_pressed() && !actions_busy()) {
+            mcp_ready() && bridge_input_online() && !wireless_snapshot().setup_ap && !board_stop_pressed() && !actions_busy()) {
             atomic_fetch_add(&generation, 1);
             atomic_store(&control_granted, true);
             atomic_fetch_add(&ui_revision, 1);
@@ -84,6 +87,28 @@ static void activate(ui_action action, bool held, uint32_t expected_revision) {
         break;
     case UI_SETUP_OPEN:
         setup();
+        break;
+    case UI_INPUT_OPEN:
+        device_stop();
+        set_page(UI_INPUT);
+        break;
+    case UI_WIFI_SETUP_OPEN:
+        device_stop();
+        if(wireless_setup_start()==ESP_OK)setup();
+        break;
+    case UI_USB_SELECT:
+    case UI_BLE_SELECT:
+        device_stop();
+        if(wireless_snapshot().setup_ap)break;
+        if (bridge_select_input(action==UI_BLE_SELECT ? INPUT_BLE : INPUT_USB))
+            atomic_fetch_add(&ui_revision,1);
+        break;
+    case UI_BLE_RESET_HOLD:
+        if (held && atomic_load(&page)==UI_INPUT) {
+            device_stop();
+            if (!actions_busy()) ble_input_forget();
+            atomic_fetch_add(&ui_revision,1);
+        }
         break;
     case UI_SETUP_DONE:
         home();
@@ -133,6 +158,10 @@ static ui_model model(void) {
                   .language = atomic_load(&language),
                   .mode = device_mode(),
                   .usb_online = bridge_usb_online(),
+                  .input_mode = bridge_input_mode(),
+                  .input_online = bridge_input_online(),
+                  .ble_connected = ble_input_connected(),
+                  .ble_ready = ble_input_ready(),
                   .identity_ready = identity_ready(),
                   .mcp_ready = mcp_ready(),
                   .touch_ready = touch_ready() && touch_error() == 0,
@@ -140,6 +169,12 @@ static ui_model model(void) {
                   .control_granted = device_control_granted(),
                   .revision = atomic_load(&ui_revision),
                   .focus = atomic_load(&focus)};
+    wireless_state network=wireless_snapshot();
+    m.wifi_configured=network.configured;
+    m.wifi_connected=network.connected;
+    m.setup_ap=network.setup_ap;
+    wireless_setup_credentials(m.ap_name,sizeof(m.ap_name),m.ap_password,sizeof(m.ap_password));
+    wireless_address(m.wifi_address,sizeof(m.wifi_address));
     if (m.page == UI_PAIRING)
         m.pairing = (ui_pair_state)mcp_pair_snapshot(m.code, sizeof(m.code), m.fingerprint,
                                                      sizeof(m.fingerprint));
@@ -153,7 +188,11 @@ static bool current(const ui_model *shown) {
 static bool same_controls(const ui_model *a, const ui_model *b) {
     return a->revision == b->revision && a->page == b->page && a->mode == b->mode &&
            a->language == b->language && a->pairing == b->pairing &&
-           a->usb_online == b->usb_online && a->identity_ready == b->identity_ready &&
+           a->usb_online == b->usb_online && a->input_mode==b->input_mode &&
+           a->input_online==b->input_online && a->ble_ready==b->ble_ready &&
+           a->wifi_connected==b->wifi_connected && !strcmp(a->wifi_address,b->wifi_address) &&
+           a->setup_ap==b->setup_ap && !strcmp(a->ap_name,b->ap_name) &&
+           a->identity_ready == b->identity_ready &&
            a->mcp_ready == b->mcp_ready && !strcmp(a->code, b->code);
 }
 static void buttons(void *unused) {
@@ -181,14 +220,15 @@ static void buttons(void *unused) {
         if ((a || b) && !last_a && !last_b) {
             pressed = now;
         }
-        if (device_mode() == DEVICE_MCP && (!bridge_usb_online() || !atomic_load(&screen_ok)) &&
+        if (device_mode() == DEVICE_MCP && (!bridge_input_online() || !atomic_load(&screen_ok)) &&
             device_control_granted())
             device_stop();
         ui_model shown = {0};
         bool visible = ui_displayed(&shown) && current(&shown);
-        if (!consumed && visible && b && !a && shown.focus == UI_RESET_HOLD && pressed &&
+        if (!consumed && visible && b && !a &&
+            (shown.focus == UI_RESET_HOLD || shown.focus == UI_BLE_RESET_HOLD) && pressed &&
             (uint32_t)(now - pressed) >= 2000) {
-            activate(UI_RESET_HOLD, true, shown.revision);
+            activate(shown.focus, true, shown.revision);
             consumed = true;
         } else if (!consumed && visible && a && !b && pressed && (uint32_t)(now - pressed) >= 700) {
             activate(UI_SETTINGS_OPEN, false, shown.revision);
@@ -233,7 +273,7 @@ static void touch_input(void *unused) {
         } else if (!point.pressed) {
             if (down && !consumed && !blocked && ui_displayed(&shown) && current(&shown) &&
                 same_controls(&shown, &pressed_model) && ui_hit(&shown, last_x, last_y) == target &&
-                target != UI_RESET_HOLD)
+                target != UI_RESET_HOLD && target != UI_BLE_RESET_HOLD)
                 activate(target, false, shown.revision);
             down = false;
             consumed = false;
@@ -259,7 +299,8 @@ static void touch_input(void *unused) {
                     !same_controls(&shown, &pressed_model) ||
                     ui_hit(&shown, point.x, point.y) != target)
                     consumed = true;
-                else if (target == UI_RESET_HOLD && (uint32_t)(now_ms() - started) >= 2000) {
+                else if ((target == UI_RESET_HOLD || target == UI_BLE_RESET_HOLD) &&
+                         (uint32_t)(now_ms() - started) >= 2000) {
                     activate(target, true, shown.revision);
                     consumed = true;
                 }
@@ -279,8 +320,18 @@ static void screen(void *unused) {
         ESP_LOGW("touch", "touch unavailable; physical key navigation remains active");
     ui_model previous = {0};
     bool have_previous = false;
+    bool initial_network_checked=false;
+    bool previous_ap=false;
     ui_language saved = atomic_load(&language);
+    input_mode_t saved_input=bridge_input_mode();
     for (;;) {
+        wireless_state network=wireless_snapshot();
+        if(network.ready&&!initial_network_checked){
+            initial_network_checked=true;
+            if(!network.configured){device_stop();if(wireless_setup_start()==ESP_OK)setup();}
+        }
+        if(previous_ap&&!network.setup_ap&&device_mode()==DEVICE_SETUP)home();
+        previous_ap=network.setup_ap;
         if (atomic_load(&page) == UI_RESETTING && atomic_load(&setup_result)) {
             if (atomic_load(&setup_result) == 1)
                 setup();
@@ -299,6 +350,10 @@ static void screen(void *unused) {
                 ESP_LOGW("ui", "language preference could not be saved");
             saved = m.language;
         }
+        if (m.input_mode!=saved_input) {
+            if (!ui_input_save(m.input_mode)) ESP_LOGW("ui","input preference could not be saved");
+            saved_input=m.input_mode;
+        }
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
@@ -306,6 +361,7 @@ void device_init(void) {
     atomic_store(&mode, DEVICE_MCP);
     ui_init();
     atomic_store(&language, ui_language_load());
+    bridge_select_input(ui_input_load());
     configASSERT(xTaskCreate(buttons, "device-buttons", 4096, NULL, 6, NULL) == pdPASS);
     configASSERT(xTaskCreate(screen, "device-screen", 8192, NULL, 1, NULL) == pdPASS);
 }

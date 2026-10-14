@@ -8,7 +8,7 @@ English · [简体中文](repository.zh-CN.md)
 | --- | --- |
 | Root `README*`, `CONTRIBUTING*`, `AGENTS.md` | Project entry, contribution process and repository instructions |
 | Root `CMakeLists.txt`, `sdkconfig.defaults`, `partitions.csv`, `dependencies.lock` | Reproducible ESP-IDF build configuration and pinned dependencies; keep tracked |
-| Root `build.sh`, `flash.sh`, `package.py` | Existing build, explicit flash and packaging entrypoints; keep their paths stable for setup instructions |
+| Root `build.sh`, `flash.sh`, `flash.py`, `package.py` | Build, explicit flash and packaging entrypoints; flash helpers skip BLE NVS during upgrades |
 | `main/` | Firmware component, headers and embedded `web/setup.html`; see [module responsibilities](../main/README.md) |
 | `docs/` | Bilingual user guides, development decisions and acceptance procedures; start at the [document index](README.md) |
 | `docs/images/setup/` | Selected synthetic UI illustrations used by the project README |

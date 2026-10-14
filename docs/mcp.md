@@ -2,6 +2,8 @@
 
 English · [简体中文](mcp.zh-CN.md)
 
+Candidate **0.7.2-wifi-qr** adds QR-assisted temporary hotspot setup, corrected IPv4-only mDNS probing, five saved Wi-Fi networks and a shared `http://stopwatch.local/mcp` HTTP endpoint over USB/Wi-Fi. BLE input remains experimental. Existing numeric USB setup and optional USB HTTPS remain available. See [current wireless setup and limits](wireless.md); the following earlier-stage details apply to their original scope.
+
 Implemented development firmware; compilation/static evidence is separate from
 phone, TLS, display and interoperability acceptance. MCP is the sole current control protocol. [PROTOCOL.md](../PROTOCOL.md) is
 retained unchanged for historical ANAN1 builds; port28766 is removed. This
@@ -9,15 +11,17 @@ document describes the current MCP endpoint. The firmware runs no agent and capt
 
 Anan iPhone Use (`anan-iphone-use`) supplies device-side USB input execution. Client screen observation, inference, planning and user authorization remain separate; see the [client iPhone Use description](client.md). This endpoint has no `observe` tool. The user reports satisfaction with MCP; this does not replace versioned interoperability/stop acceptance evidence. HTTP80 `/mcp` is now implemented alongside optional HTTPS8443. The user reports Anan HTTP support; this firmware does not modify that client.
 
-## First setup: HTTP, no certificate installation
+## USB setup: HTTP, no certificate installation
+
+For wireless first setup, follow [the device-hotspot flow](wireless.md#first-setup-without-a-phone-cable).
 
 1. Connect the unlocked iPhone to M5Stack StopWatch. Configure USB Ethernet as `192.168.7.2/24`, with no gateway/DNS, and enable AssistiveTouch; see [setup](setup.md).
 2. On StopWatch tap Settings → Connect MCP app. Chinese/English selection is remembered.
 3. In Safari open `http://192.168.7.1`, tap Start pairing, compare the six-digit code and tap Confirm pairing on StopWatch. The setup window lasts ten minutes.
-4. After confirmation, the same page generates MCP JSON automatically. Copy or download it and import into Anan or another HTTP-compatible MCP client. The exported endpoint is `http://192.168.7.1/mcp`, with a per-device Bearer header. No profile installation or system certificate trust is required.
+4. After confirmation, the same page generates MCP JSON automatically. Copy or download it and import into Anan or another HTTP-compatible MCP client. The current exported endpoint is `http://stopwatch.local/mcp`; `http://192.168.7.1/mcp` remains a numeric fallback, with a per-device Bearer header. No profile installation or system certificate trust is required.
 5. On StopWatch tap Imported, go back, then Start control. Control stays enabled until stop/detach/reboot or another documented revocation event. Discovery/status do not enable input. Touch during control or either front button stops and consumes that contact.
 
-Plain HTTP has no TLS encryption and is restricted to the existing exact USB addresses/Host/Origin. HTTPS remains optional under the collapsed page section; it exports `https://192.168.7.1:8443/mcp` from the HTTPS configuration page and retains the prior certificate/trust requirements. Both transports share the same seven advertised tools, sessions and HID executor. HTTPS startup is no longer a prerequisite for HTTP control.
+Plain HTTP has no TLS encryption. USB retains the exact device/phone address checks; current HTTP Host/Origin accepts its numeric address or the fixed hostname with a matching Origin. STA/hotspot restrictions are in [wireless setup](wireless.md). HTTPS remains optional under the collapsed page section; it exports `https://192.168.7.1:8443/mcp` from the HTTPS configuration page and retains the prior certificate/trust requirements. Both transports share the same seven advertised tools, sessions and HID executor. HTTPS startup is no longer a prerequisite for HTTP control.
 
 The page retains only its temporary pairing proof in tab session storage; configuration/token stays in the page/download, not local storage. On HTTP, copying uses a browser fallback when the secure-context clipboard API is unavailable; select/copy or JSON download remains available. Actual Safari clipboard behavior is a device check. After closing/expiry/restart, reopen Connect MCP app and start again. Config export requires physical confirmation, a valid ten-minute setup window and the temporary HttpOnly, SameSite Strict setup cookie. A fresh physical setup may export an existing token.
 
@@ -27,20 +31,20 @@ The page retains only its temporary pairing proof in tab session storage; config
 2. On iPhone open Settings → General → VPN & Device Management, select only **StopWatch Local CA** and Remove Profile. Enter the iPhone passcode if requested. Do not remove unrelated profiles. See [Apple profile guidance](https://support.apple.com/guide/iphone/install-or-remove-configuration-profiles-iph6c493b19/ios).
 3. Delete the old StopWatch HTTPS connection from the client's MCP settings and close the old setup browser tab. Old downloaded profile/config files can be deleted separately.
 4. On StopWatch open Settings → Reset pairing, then hold the red confirmation button for two seconds. This clears identity/CA/token and interrupts control; it preserves language preference. Do not reset all iPhone network settings.
-5. Repeat the HTTP first-setup steps above. Check that imported JSON uses `http://192.168.7.1/mcp`, not HTTPS8443. A client connection/status check is separate from real phone input verification.
+5. Repeat the HTTP first-setup steps above. Check that imported JSON uses the current shared `http://stopwatch.local/mcp` endpoint rather than the previous HTTPS connection. A client connection/status check is separate from real phone input verification.
 
 Identity remains board-generated in the dedicated `mcp_kv` NVS partition at `0xf00000`, outside normal merged images. Ordinary upgrades preserve it; whole-chip erase, factory recovery or a different partition layout can remove it. Reset clears only the identity namespace, not language; no commands/actions/grants persist.
 
-The existing ECC P-256 CA/server certificate generation is retained for optional HTTPS and compatibility, including its renewal path. HTTP does not require the phone to trust or install that CA. No Wi-Fi, cloud, OAuth, mDNS or shared signing key is added. Storage remains ordinary NVS; Flash encryption/Secure Boot are outside this slice.
+The existing ECC P-256 CA/server certificate generation is retained for optional HTTPS and compatibility, including its renewal path. HTTP does not require the phone to trust or install that CA. The original HTTP slice added no radio or discovery. The current candidate adds Wi-Fi/mDNS as described above; no cloud, OAuth or shared signing key is added. Storage remains ordinary NVS; Flash encryption/Secure Boot are outside this slice.
 
 ## Endpoint and tools
 
-`http://192.168.7.1/mcp` and optional `https://192.168.7.1:8443/mcp` implement MCP **2025-11-25** Streamable HTTP,
+`http://stopwatch.local/mcp` (USB/Wi-Fi), numeric USB/LAN fallback, and optional `https://192.168.7.1:8443/mcp` implement MCP **2025-11-25** Streamable HTTP,
 JSON POST responses, authenticated GET 405, DELETE session termination, and
 202 empty notification responses. There is no SSE replay, task extension,
-resources, prompts, sampling, screenshot or automatic input retry. The initial
-implementation is reachable from the attached phone only; a desktop/cloud MCP
-client needs another network path, which is outside this wired slice.
+resources, prompts, sampling, screenshot or automatic input retry. The original wired implementation was phone-local. The current candidate also
+accepts a same-subnet Wi-Fi client; a cloud client still needs an explicit route.
+The temporary setup hotspot rejects MCP input.
 
 | Tool | Required arguments | Meaning |
 | --- | --- | --- |
@@ -94,7 +98,7 @@ from `0.4.0-mcp`. Native phone observation is client-owned; the inspected Anan
 observe readiness does not require the old input connection. From `0.5.0-mcp`, the Consumer descriptor/report ID 3 is appended; original mouse/keyboard IDs and legacy HID timing are retained. Current `device_status.mode` is `mcp` or
 `setup`; there is no `usb` legacy control mode.
 
-Both services require local USB IP `192.168.7.1`, peer `192.168.7.2`, exact Host
+The original USB-only services require local USB IP `192.168.7.1`, peer `192.168.7.2`, exact Host
 and, when supplied, same-origin Origin. No CORS access is granted. HTTP serves setup/config export and the authenticated MCP endpoint. Body size is 4096 bytes, JSON nesting ≤16;
 headers ≤2048 bytes, receive/send waits two seconds. These are bounded local
 services, not a public internet endpoint. Requests, secrets and device identities
@@ -122,7 +126,7 @@ source-based startup correction, not a verified device fix.
 
 On that candidate, open `http://192.168.7.1/status` from the attached phone to
 read `firmwareVersion`, `displayStage`, `displayError` and `usbOnline`. It is a
-USB-only, no-store, read-only diagnostic endpoint without identities or secrets;
+no-store, read-only diagnostic endpoint on USB/STA/setup hotspot without identities or secrets;
 it cannot enable or send input. The setup page also shows this information.
 An error identifies IO-expander discovery/configuration, screen power, DMA
 allocation, SPI/panel initialization or pixel transfer. A `ready` state confirms

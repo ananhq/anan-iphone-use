@@ -1,0 +1,51 @@
+{
+  "scope": "StopWatch host flash helper preserves default BLE NVS",
+  "acceptance": [
+    "docs/flashing.md",
+    "docs/flashing.zh-CN.md"
+  ],
+  "checks": {
+    "predefinedOfflineScenarios": true,
+    "shellPythonSyntax": true,
+    "existingMergedImageValidation": true,
+    "manifestSourceHashes": true,
+    "documentLocalLinks": true
+  },
+  "image": {
+    "candidate": "0.7.3-discovery",
+    "bytes": 1440512,
+    "sha256": "0d7ad834e9d949b05f7fed7af3025111c2ed4d14564d6cc3282b75eea090d904",
+    "binaryUnchanged": true
+  },
+  "preservedRanges": [
+    {
+      "partition": "nvs",
+      "start": "0x9000",
+      "endExclusive": "0xf000"
+    },
+    {
+      "partition": "mcp_kv",
+      "start": "0xf00000",
+      "endExclusive": "0xf10000"
+    }
+  ],
+  "sources": {
+    "flash.py": "227b2c4418df7c3bcf5feef0a52e8638829526bc18c630e5951f0562b4d02ae3",
+    "flash.sh": "2450f963d4af85ef9fc97c9bee9dcd27f7cdf14866278892d7f6d1fed7dff0c4",
+    "package.py": "79638b0d352955c4fc851c5bc8eef05301969a2d4deb6c36f967167ab95bad15",
+    "tools/check_flashing.py": "77e2ef5593780b555a7c336ed282260cb872dc3b278c7a44c7e17054b3b4c4a0"
+  },
+  "validation": {
+    "repackaged": true,
+    "firmwareRebuilt": false,
+    "flashed": false,
+    "deviceVerified": false,
+    "serialRadioProbed": false,
+    "phoneReconnectVerified": false
+  },
+  "limits": [
+    "Offline esptool interception and synthetic flash only",
+    "Previously erased bonds require one new pairing",
+    "Continuous merged-image writes at 0x0 still erase default NVS"
+  ]
+}

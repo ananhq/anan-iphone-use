@@ -115,3 +115,42 @@ No flash, phone input, provider, client connection or E2E was executed. Consumer
 Candidate `0.5.1-mcp` advertises seven tools, merging stationary gestures into `tap`, held drags/continuous paths into `drag` and named keyboard/Consumer keys into `press_key`. Firmware retains hidden legacy names and old drag arguments; clients must refresh discovery and may locally reject old names or new parameters. Default tap and unheld two-point drag retain prior timing. Descriptions are concise; shared rules appear in both server description and initialize instructions. Read-only inspection found Anan consumes the server description, so the design does not depend on its consuming instructions.
 
 Predefined consolidation scenarios passed with simulated reports/time; seven schemas/full key enums, unchanged executor/USB/power/grants/stop/dependencies and bilingual documentation checks passed. Full pinned-IDF compile/package outcomes are in the [current record](../artifacts/hid/build-check.json); the prior [expansion record](../artifacts/hid/expansion-build-check.json) is preserved. No flash, phone actions, client connection, provider or E2E ran; merged Anan discovery/calls and device behavior remain unverified.
+
+## Wireless candidate
+
+Candidate `0.6.0-wireless` adds Wi-Fi station HTTP MCP and experimental BLE HID,
+explicit input selection and USB-first Wi-Fi configuration. Pinned-IDF compile,
+package, unchanged USB sender/descriptor checks, seven-schema comparison,
+predefined offline routing/payload scenarios, existing HID scenarios, browser
+script syntax and 28 bilingual static layouts passed. Report mutex behavior and
+radio/phone delivery are not established by host simulation. See
+[predefined scope](wireless-development.md), [setup](wireless.md) and
+[sanitized build record](../artifacts/wireless/build-check.json). No flash,
+Bluetooth/Wi-Fi device probe, phone input, client/provider or E2E was executed.
+
+## Wi-Fi scan candidate
+
+Candidate `0.6.1-wifi-scan` adds paired USB-only asynchronous scans, bounded and
+deduplicated names, scan/select/manual setup and open-network password handling.
+Acceptance was defined before implementation. Pinned-IDF compilation/package,
+existing offline HID/routing/report scenarios and synthetic browser selection,
+literal hostile SSIDs, manual/open-network and failure recovery checks passed.
+No real Wi-Fi scan, flash, phone action or E2E was executed. See
+[scan record](../artifacts/wireless/scan-build-check.json). Radio timeout/coexistence
+and reconnect behavior remain device-unverified.
+
+## Wireless setup candidate
+
+Candidate `0.7.0-wireless-setup` adds temporary WPA2 SoftAP/DHCP configuration, five-network storage with v1 migration and retry cycling, and one fixed HTTP hostname on USB/Wi-Fi through the already pinned lwIP responder. [Acceptance](wireless-setup-development.md) and storage/authority/browser scenarios were defined before implementation. Pinned-IDF compilation/package, existing HID/routing/report scenarios, migration/capacity/removal and exact-Origin fixtures, USB/hotspot synthetic scan UI, JavaScript syntax, 32 static bilingual layouts, preserved seven schemas/USB HID sender bodies and manifest checks passed. USB now adds IGMP; sdkconfig reserves one mDNS client slot. No dependency upgrade or project license change; the additional Verisure BSD notice is retained.
+
+The [sanitized record](../artifacts/wireless/setup-build-check.json) marks flashed/deviceVerified false. No serial/radio probe, phone input, live client/provider, simulator or E2E was executed. The user reported the prior wireless flow working; it does not establish this candidate's DHCP/mDNS, AP+STA scanning, multi-network timing, radio coexistence, runtime heap, grant/stop or endurance acceptance. Numeric recovery paths remain.
+
+Candidate `0.7.2-wifi-qr` follows the user's failed `.local` report with a source-reproduced fix for the pinned lwIP timer's mandatory IPv6 probe on IPv4-only netifs, and adds a screen Wi-Fi QR while retaining random WPA2 credentials and physical pairing. Timer regression and QR scenarios were defined before the changes. SDK compile/package, existing offline scenarios, independent QR and full static round-screen decoding passed; [record](../artifacts/wireless/qr-build-check.json). No agent-executed flash, radio/serial probe, phone camera/joining, live client/provider or E2E ran. IPv4 name-conflict behavior and new phone `.local` success remain device-unverified.
+
+## Task-oriented discovery metadata
+
+Candidate `0.7.3-discovery` changes only seven tool descriptions, initialize description/instructions and version, with bilingual usage terms and optional full-group overview guidance. Acceptance was defined first in [tool discovery](tool-discovery.md). Embedded JSON, exact name/order/schema/annotation preservation, MCP code equivalence outside its two metadata statements, preserved input/HID/radio/storage/dependencies, existing offline HID scenarios, pinned-IDF compile/package and manifest/link checks passed. Tool descriptions increased from 1,373 to 1,525 characters; server description is 463 characters, below the inspected Anan 500-character limit. These are character counts, not measured model tokens. See [record](../artifacts/discovery/build-check.json). No client code, new unit tests, flash, device/provider or E2E execution. Search/model adoption and real app-opening outcomes remain unverified; metadata guidance does not load schemas or grant input.
+
+## Bond-preserving flash helper
+
+The user reports reconnection failure after reflashing. The [predefined scope](flashing.md) adds a first-party host helper that splits existing merged images around default BLE `nvs`; partition layout, firmware and BLE security remain unchanged. Predefined offline sector-write scenarios, image/layout rejection, failure propagation and syntax checks passed. The existing candidate was repackaged with refreshed source hashes and identical binary SHA-256. See [record](../artifacts/flashing/check.json). No firmware recompilation, device access or actual iPhone reconnection verification ran; previously erased bonds require one new pairing.

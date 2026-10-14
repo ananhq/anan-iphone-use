@@ -10,6 +10,11 @@
 #include "identity.h"
 #include "cJSON.h"
 #include "esp_http_server.h"
+#include "wireless.h"
+#include "network_authority.h"
+#include "discovery.h"
+#include "input_backends.h"
+#include <errno.h>
 #include "esp_https_server.h"
 #include "esp_timer.h"
 #include "esp_app_desc.h"
@@ -34,7 +39,8 @@
 #define VERSION "2025-11-25"
 typedef struct {
     char id[33];
-    bool initialized;
+    bool initialized, wifi;
+    uint32_t network_generation;
     uint32_t touched;
     unsigned input_ids_count;
     unsigned char input_ids[INPUT_IDS_LIMIT][32];
@@ -45,7 +51,9 @@ typedef struct {
     char session_id[33];
     uint32_t generation, device_generation, deadline;
     atomic_bool cancelled;
-    bool success;
+    bool success, wifi;
+    uint32_t network_generation;
+    int socket;
     action_kind input_kind;
     uint16_t completed_units, total_units;
     SemaphoreHandle_t done;
@@ -65,6 +73,7 @@ static session sessions[SESSION_LIMIT];
 static input_request *active;
 static char owner[33];
 static uint32_t owner_generation;
+static bool owner_wifi;
 static uint32_t setup_until, setup_generation;
 static char setup_nonce[33], setup_code[7];
 static time_t setup_time;
@@ -173,18 +182,55 @@ static const char *usb_scope_error(httpd_req_t *r, bool secure) {
     if (getpeername(fd, (struct sockaddr *)&peer, &len) ||
         !socket_address_matches(&peer, len, inet_addr("192.168.7.2")))
         return "USB phone address 192.168.7.2 required";
-    char value[160];
-    if (!header(r, "Host", value, sizeof(value)) ||
-        (secure ? strcmp(value, "192.168.7.1:8443")
-                : (strcmp(value, "192.168.7.1") && strcmp(value, "192.168.7.1:80"))))
-        return secure ? "Host must be 192.168.7.1:8443"
-                      : "Host must be 192.168.7.1 or 192.168.7.1:80";
-    size_t origin_len = httpd_req_get_hdr_value_len(r, "Origin");
-    if (origin_len && (!header(r, "Origin", value, sizeof(value)) ||
-                       (secure ? strcmp(value, "https://192.168.7.1:8443")
-                               : (strcmp(value, "http://192.168.7.1") &&
-                                  strcmp(value, "http://192.168.7.1:80")))))
-        return "Same-origin USB request required";
+    char host[160],origin[160];
+    if(!header(r,"Host",host,sizeof(host)))return "Host required";
+    bool has_origin=httpd_req_get_hdr_value_len(r,"Origin")!=0;
+    if(has_origin&&!header(r,"Origin",origin,sizeof(origin)))return "Origin invalid";
+    if(!network_authority(host,has_origin?origin:NULL,"192.168.7.1",secure,!discovery_conflict()))
+        return "USB Host/Origin mismatch";
+    return NULL;
+}
+static uint32_t socket_ipv4(const struct sockaddr_storage *address, socklen_t length) {
+    if (address->ss_family==AF_INET && length>=sizeof(struct sockaddr_in))
+        return ((const struct sockaddr_in *)address)->sin_addr.s_addr;
+#if LWIP_IPV6
+    if (address->ss_family==AF_INET6 && length>=sizeof(struct sockaddr_in6)) {
+        const struct in6_addr *ip=&((const struct sockaddr_in6 *)address)->sin6_addr;
+        uint32_t value=0;
+        if (IN6_IS_ADDR_V4MAPPED(ip)) memcpy(&value,ip->s6_addr+12,4);
+        return value;
+    }
+#endif
+    return 0;
+}
+static bool ap_request(httpd_req_t *r);
+static bool wifi_request(httpd_req_t *r) {
+    struct sockaddr_storage local={0}; socklen_t length=sizeof(local);
+    return !getsockname(httpd_req_to_sockfd(r),(struct sockaddr *)&local,&length) &&
+           socket_ipv4(&local,length)!=inet_addr("192.168.7.1");
+}
+static const char *request_scope_error(httpd_req_t *r,bool secure) {
+    if (!wifi_request(r)) return usb_scope_error(r,secure);
+    if (secure) return "HTTPS is available on USB only";
+    wireless_state network=wireless_snapshot();
+    int fd=httpd_req_to_sockfd(r);
+    struct sockaddr_storage local={0},peer={0};socklen_t length=sizeof(local);
+    if(getsockname(fd,(struct sockaddr *)&local,&length))return "Local device address required";
+    uint32_t address=socket_ipv4(&local,length),mask=network.netmask;
+    bool ap=network.setup_ap&&address==network.ap_address;
+    if(ap)mask=inet_addr("255.255.255.0");
+    else if(!network.connected||!network.address||address!=network.address||!mask)return "Wi-Fi unavailable";
+    length=sizeof(peer);
+    if(getpeername(fd,(struct sockaddr *)&peer,&length))return "Local Wi-Fi peer required";
+    uint32_t remote=socket_ipv4(&peer,length);
+    if(!remote||remote==address||(remote&mask)!=(address&mask)||(remote&~mask)==0||(remote&~mask)==~mask)
+        return "Same-subnet Wi-Fi peer required";
+    char ip[16],host[160],origin[160];
+    snprintf(ip,sizeof(ip),"%s",inet_ntoa((struct in_addr){.s_addr=address}));
+    if(!header(r,"Host",host,sizeof(host)))return "Host required";
+    bool has_origin=httpd_req_get_hdr_value_len(r,"Origin")!=0;
+    if(has_origin&&!header(r,"Origin",origin,sizeof(origin)))return "Origin invalid";
+    if(!network_authority(host,has_origin?origin:NULL,ip,false,!discovery_conflict()))return "Wi-Fi Host/Origin mismatch";
     return NULL;
 }
 static bool bearer(httpd_req_t *r) {
@@ -340,6 +386,14 @@ void mcp_stop_input(void) {
     atomic_fetch_add(&input_generation, 1);
     actions_request_release();
 }
+void mcp_network_lost(void) {
+    if (!lock) return;
+    xSemaphoreTake(lock,portMAX_DELAY);
+    bool owned=owner_wifi && owner[0] && owner_generation==device_generation();
+    if (active && active->wifi) atomic_store(&active->cancelled,true);
+    xSemaphoreGive(lock);
+    if (owned) device_stop();
+}
 bool mcp_ready(void) {
     return !atomic_load(&identity_busy) &&
            (atomic_load(&http_running) || atomic_load(&https_running));
@@ -348,6 +402,15 @@ bool mcp_https_ready(void) { return atomic_load(&https_running); }
 static bool input_alive(uint32_t unused, void *context) {
     (void)unused;
     input_request *p = context;
+    if (p->wifi) {
+        wireless_state network=wireless_snapshot();
+        unsigned char byte;
+        int received=recv(p->socket,&byte,1,MSG_PEEK|MSG_DONTWAIT);
+        if (!network.connected || network.generation!=p->network_generation || received==0 ||
+            (received<0 && errno!=EAGAIN && errno!=EWOULDBLOCK && errno!=EINTR)) {
+            device_stop(); return false;
+        }
+    }
     return !atomic_load(&p->cancelled) && p->generation == atomic_load(&input_generation) &&
            p->device_generation == device_generation() && device_control_allowed() &&
            within(p->deadline);
@@ -476,6 +539,9 @@ static esp_err_t dispatch_input(httpd_req_t *r, const cJSON *id, const char *sid
         return tool_result(r, id, false, "Input rejected: resources unavailable.", NULL);
     }
     p->generation = atomic_load(&input_generation);
+    p->wifi = wifi_request(r);
+    p->network_generation = wireless_snapshot().generation;
+    p->socket = httpd_req_to_sockfd(r);
     p->device_generation = gen;
     p->deadline = now_ms() + 8000;
     p->input_kind = a->kind;
@@ -484,6 +550,7 @@ static esp_err_t dispatch_input(httpd_req_t *r, const cJSON *id, const char *sid
     active = p;
     snprintf(owner, sizeof(owner), "%s", sid);
     owner_generation = gen;
+    owner_wifi = p->wifi;
     if (xTaskCreate(respond_input, "mcp-result", 6144, p, 3, NULL) != pdPASS) {
         active = NULL;
         actions_unreserve();
@@ -514,6 +581,14 @@ static esp_err_t handle_call(httpd_req_t *r, const cJSON *id, const char *sid,
         cJSON *data = cJSON_CreateObject();
         cJSON_AddStringToObject(data, "mode", device_mode() == DEVICE_MCP ? "mcp" : "setup");
         cJSON_AddBoolToObject(data, "usbOnline", bridge_usb_online());
+        cJSON_AddStringToObject(data,"inputTransport",bridge_input_name());
+        cJSON_AddBoolToObject(data,"inputOnline",bridge_input_online());
+        cJSON_AddBoolToObject(data,"bleConnected",ble_input_connected());
+        cJSON_AddBoolToObject(data,"bleReady",ble_input_online());
+        wireless_state network=wireless_snapshot();
+        cJSON_AddBoolToObject(data,"wifiConnected",network.connected);
+        char address[16]; wireless_address(address,sizeof(address));
+        cJSON_AddStringToObject(data,"wifiAddress",address);
         cJSON_AddBoolToObject(data, "inputBusy", actions_busy());
         bool enabled = device_control_allowed();
         cJSON_AddBoolToObject(data, "controlEnabled", enabled);
@@ -553,7 +628,8 @@ static esp_err_t handle_call(httpd_req_t *r, const cJSON *id, const char *sid,
 }
 static esp_err_t mcp_handler(httpd_req_t *r) {
     bool secure = r->user_ctx != NULL;
-    const char *scope_error = usb_scope_error(r, secure);
+    if(ap_request(r))return http_error(r,"403 Forbidden","Setup hotspot is configuration-only");
+    const char *scope_error = request_scope_error(r, secure);
     if (scope_error)
         return http_error(r, "403 Forbidden", scope_error);
     if (!bearer(r)) {
@@ -569,12 +645,13 @@ static esp_err_t mcp_handler(httpd_req_t *r) {
     if (r->method == HTTP_DELETE) {
         xSemaphoreTake(lock, portMAX_DELAY);
         session *s = has_sid ? find_session(sid) : NULL;
-        bool found = s != NULL;
-        if (s)
+        bool found = s != NULL && s->wifi==wifi_request(r) &&
+                     (!s->wifi || s->network_generation==wireless_snapshot().generation);
+        if (found)
             memset(s, 0, sizeof(*s));
-        if (active && !strcmp(active->session_id, sid))
+        if (found && active && !strcmp(active->session_id, sid))
             atomic_store(&active->cancelled, true);
-        bool owned = owner[0] && !strcmp(owner, sid);
+        bool owned = found && owner[0] && !strcmp(owner, sid);
         xSemaphoreGive(lock);
         if (owned)
             device_stop();
@@ -619,6 +696,8 @@ static esp_err_t mcp_handler(httpd_req_t *r) {
             if (s && identity_random_hex(s->id, 16)) {
                 s->touched = now_ms();
                 s->initialized = false;
+                s->wifi=wifi_request(r);
+                s->network_generation=wireless_snapshot().generation;
                 snprintf(sid, sizeof(sid), "%s", s->id);
             } else
                 s = NULL;
@@ -635,15 +714,19 @@ static esp_err_t mcp_handler(httpd_req_t *r) {
                 cJSON_AddStringToObject(info, "name", "stopwatch");
                 cJSON_AddStringToObject(info, "version", esp_app_get_description()->version);
                 cJSON_AddStringToObject(info, "description",
-                                        "iPhone USB input: tap, drag/draw, keys, ASCII and scroll. Physical MCP enable required; "
-                                        "each call releases input. Client observes results; no UI tree. No automatic replay. "
-                                        "No custom phone bindings; Full Keyboard Access optional, not assumed.");
+                                        "iPhone USB/BLE HID: open apps via icons/Spotlight, navigate, type ASCII, edit, draw, scroll and medi"
+                                        "a keys. 打开应用 搜索 输入 绘图 滚动. Seven complementary tools. When the overview is not visible, consider brow"
+                                        "sing this group with tool_search: empty query, exact client group, limit=10. Read selected schemas b"
+                                        "efore calls. Physical enable required. Client observes; no UI tree or guaranteed app success. No aut"
+                                        "omatic replay. BLE experimental; Full Keyboard Access optional.");
                 cJSON_AddStringToObject(data, "instructions",
-                                        "Input requires StopWatch MCP mode and physical enable. "
-                                        "Coordinates: portrait 0..1, origin top-left. Each call releases held input. "
-                                        "HID completion is not app success; observe separately. Interrupted/lost replies may have "
-                                        "partial effects; never replay automatically. No custom phone bindings; Full Keyboard Access "
-                                        "is optional, not assumed. Refresh tools after firmware updates.");
+                                        "Input requires StopWatch MCP mode and physical enable. Coordinates: portrait 0..1, origin top-left. "
+                                        "Each call releases held input. HID completion is not app success; observe separately. Interrupted/lo"
+                                        "st replies may have partial effects; never replay automatically. No custom phone bindings; Full Keyb"
+                                        "oard Access is optional, not assumed. Refresh tools after firmware updates. For multi-step control, "
+                                        "consider browsing the whole tool group if its overview is not visible: tool_search with empty query,"
+                                        " exact client group and limit=10; follow nextOffset if needed. Search summaries are not full schemas"
+                                        "; describe selected tools before calls.");
                 result = rpc_result(r, id, data);
             }
         }
@@ -653,8 +736,10 @@ static esp_err_t mcp_handler(httpd_req_t *r) {
                           !strcmp(version, VERSION);
         xSemaphoreTake(lock, portMAX_DELAY);
         session *s = has_sid ? find_session(sid) : NULL;
-        bool valid = s != NULL, initialized = s && s->initialized;
-        if (s && version_ok) {
+        bool valid = s != NULL && s->wifi==wifi_request(r) &&
+                     (!s->wifi || s->network_generation==wireless_snapshot().generation);
+        bool initialized = valid && s->initialized;
+        if (valid && version_ok) {
             s->touched = now_ms();
             if (!strcmp(method->valuestring, "notifications/initialized") && !id &&
                 metadata_only(params))
@@ -759,7 +844,7 @@ bool mcp_reset_identity(void) {
     return xQueueSend(identity_jobs, &job, 0) == pdTRUE;
 }
 static esp_err_t diagnostic_handler(httpd_req_t *r) {
-    const char *scope_error = usb_scope_error(r, false);
+    const char *scope_error = request_scope_error(r, false);
     if (scope_error)
         return http_error(r, "403 Forbidden", scope_error);
     // Read-only startup diagnostics: no identities, inputs or pairing secrets.
@@ -773,11 +858,24 @@ static esp_err_t diagnostic_handler(httpd_req_t *r) {
     cJSON_AddBoolToObject(data, "usbOnline", bridge_usb_online());
     cJSON_AddBoolToObject(data, "httpMCPReady", atomic_load(&http_running));
     cJSON_AddBoolToObject(data, "httpsMCPReady", mcp_https_ready());
+    cJSON_AddStringToObject(data,"inputTransport",bridge_input_name());
+    cJSON_AddBoolToObject(data,"bleConnected",ble_input_connected());
+    cJSON_AddBoolToObject(data,"bleReady",ble_input_online());
+    cJSON_AddNumberToObject(data,"bleError",ble_input_error());
+    wireless_state network=wireless_snapshot();
+    cJSON_AddBoolToObject(data,"setupAP",network.setup_ap);
+    cJSON_AddStringToObject(data,"mcpHost","stopwatch.local");
+    cJSON_AddBoolToObject(data,"hostnameConflict",discovery_conflict());
+    cJSON_AddBoolToObject(data,"wifiConfigured",network.configured);
+    cJSON_AddBoolToObject(data,"wifiConnected",network.connected);
+    cJSON_AddNumberToObject(data,"wifiError",network.error);
+    char address[16]; wireless_address(address,sizeof(address));
+    cJSON_AddStringToObject(data,"wifiAddress",address);
     return send_json(r, "200 OK", data);
 }
 static esp_err_t page_handler(httpd_req_t *r) {
     bool secure = r->user_ctx != NULL;
-    const char *scope_error = usb_scope_error(r, secure);
+    const char *scope_error = request_scope_error(r, secure);
     if (scope_error)
         return http_error(r, "403 Forbidden", scope_error);
     response_headers(r);
@@ -791,7 +889,7 @@ static esp_err_t page_handler(httpd_req_t *r) {
                            setup_html_end - setup_html_start - 1);
 }
 static esp_err_t enrollment_handler(httpd_req_t *r) {
-    const char *scope_error = usb_scope_error(r, false);
+    const char *scope_error = request_scope_error(r, false);
     if (scope_error)
         return http_error(r, "403 Forbidden", scope_error);
     cJSON *body = read_json(r);
@@ -864,14 +962,24 @@ static esp_err_t enrollment_handler(httpd_req_t *r) {
 }
 static esp_err_t config_handler(httpd_req_t *r) {
     bool secure = r->user_ctx != NULL;
-    const char *scope_error = usb_scope_error(r, secure);
+    const char *scope_error = request_scope_error(r, secure);
     if (scope_error)
         return http_error(r, "403 Forbidden", scope_error);
     cJSON *args = read_json(r);
-    bool empty = empty_object(args) && args;
+    const char *keys[]={"network"};
+    const cJSON *selection=field(args,"network");
+    bool empty=args && object_keys(args,keys,1) &&
+               (!selection || string_is(selection,"usb") || string_is(selection,"wifi"));
+    bool wifi=selection ? string_is(selection,"wifi") : wifi_request(r);
     cJSON_Delete(args);
     if (!empty)
-        return http_error(r, "400 Bad Request", "Empty JSON object required");
+        return http_error(r, "400 Bad Request", "Optional network must be usb or wifi");
+    char address[32];
+    if(!secure){
+        if(discovery_conflict())return http_error(r,"409 Conflict","stopwatch.local name conflict; keep the numeric setup address and use only one StopWatch on this LAN");
+        if(wifi&&!wireless_snapshot().configured)return http_error(r,"409 Conflict","Save Wi-Fi first");
+        snprintf(address,sizeof(address),"stopwatch.local");
+    }else snprintf(address,sizeof(address),"192.168.7.1");
     xSemaphoreTake(lock, portMAX_DELAY);
     bool allowed = setup_valid_locked() && pair_state == PAIR_READY &&
                    !atomic_load(&identity_busy) && identity_ready() && setup_cookie(r);
@@ -881,8 +989,9 @@ static esp_err_t config_handler(httpd_req_t *r) {
         cJSON *servers = cJSON_AddObjectToObject(config, "mcpServers");
         cJSON *server = cJSON_AddObjectToObject(servers, "stopwatch");
         cJSON_AddStringToObject(server, "type", "http");
-        cJSON_AddStringToObject(server, "url",
-                                secure ? "https://192.168.7.1:8443/mcp" : "http://192.168.7.1/mcp");
+        char endpoint[64];
+        snprintf(endpoint,sizeof(endpoint),secure && !wifi ? "https://%s:8443/mcp" : "http://%s/mcp",address);
+        cJSON_AddStringToObject(server,"url",endpoint);
         cJSON *headers = cJSON_AddObjectToObject(server, "headers");
         char token[80];
         snprintf(token, sizeof(token), "Bearer %s", identity_token());
@@ -893,6 +1002,87 @@ static esp_err_t config_handler(httpd_req_t *r) {
     return allowed ? send_json(r, "200 OK", config)
                    : http_error(r, "403 Forbidden",
                                 "Setup expired; pair from the initial phone setup page again");
+}
+static bool ap_request(httpd_req_t *r){
+    struct sockaddr_storage local={0};socklen_t length=sizeof(local);
+    wireless_state network=wireless_snapshot();
+    return network.setup_ap&&!getsockname(httpd_req_to_sockfd(r),(struct sockaddr *)&local,&length)&&socket_ipv4(&local,length)==network.ap_address;
+}
+static const char *setup_transport_error(httpd_req_t *r){
+    const char *error=request_scope_error(r,false);
+    if(error)return error;
+    return wifi_request(r)&&!ap_request(r)?"Use USB or the device setup hotspot to manage Wi-Fi":NULL;
+}
+static esp_err_t wifi_networks_handler(httpd_req_t *r){
+    const char *error=setup_transport_error(r);if(error)return http_error(r,"403 Forbidden",error);
+    xSemaphoreTake(lock,portMAX_DELAY);
+    bool allowed=setup_valid_locked()&&pair_state==PAIR_READY&&!atomic_load(&identity_busy)&&identity_ready()&&setup_cookie(r);
+    xSemaphoreGive(lock);
+    if(!allowed)return http_error(r,"403 Forbidden","Physical pairing required");
+    if(r->method==HTTP_POST){
+        cJSON *body=read_json(r);const char *keys[]={"forget"};const cJSON *name=field(body,"forget");
+        if(!body||!object_keys(body,keys,1)||!cJSON_IsString(name)||!name->valuestring[0]){cJSON_Delete(body);return http_error(r,"400 Bad Request","Network name required");}
+        esp_err_t result=wireless_forget(name->valuestring);cJSON_Delete(body);
+        if(result!=ESP_OK)return http_error(r,"409 Conflict","Network could not be removed");
+    }
+    char names[5][33];unsigned count=wireless_saved_names(names);
+    cJSON *reply=cJSON_CreateObject();cJSON *list=cJSON_AddArrayToObject(reply,"networks");
+    for(unsigned i=0;i<count;i++){cJSON *item=cJSON_CreateObject();cJSON_AddStringToObject(item,"ssid",names[i]);cJSON_AddItemToArray(list,item);}
+    cJSON_AddNumberToObject(reply,"limit",5);return send_json(r,"200 OK",reply);
+}
+static esp_err_t wifi_config_handler(httpd_req_t *r) {
+    const char *scope_error=setup_transport_error(r);
+    if (scope_error) return http_error(r,"403 Forbidden",scope_error);
+    cJSON *body=read_json(r);
+    const char *keys[]={"ssid","password"};
+    const cJSON *ssid=field(body,"ssid"),*password=field(body,"password");
+    if (!body || !object_keys(body,keys,2) || !cJSON_IsString(ssid) || !cJSON_IsString(password)) {
+        cJSON_Delete(body); return http_error(r,"400 Bad Request","SSID and password required");
+    }
+    xSemaphoreTake(lock,portMAX_DELAY);
+    bool allowed=setup_valid_locked() && pair_state==PAIR_READY &&
+                 !atomic_load(&identity_busy) && identity_ready() && setup_cookie(r);
+    xSemaphoreGive(lock);
+    esp_err_t result=allowed ? wireless_configure(ssid->valuestring,password->valuestring) : ESP_ERR_INVALID_STATE;
+    mbedtls_platform_zeroize(password->valuestring,strlen(password->valuestring));
+    cJSON_Delete(body);
+    if (!allowed) return http_error(r,"403 Forbidden","Confirm physical MCP setup on the device first");
+    if(result==ESP_ERR_NO_MEM)return http_error(r,"409 Conflict","Up to five networks can be saved; remove a saved network first");
+    if (result!=ESP_OK) return http_error(r,"400 Bad Request","Wi-Fi settings could not be applied; check SSID/password and device status");
+    cJSON *reply=cJSON_CreateObject(); cJSON_AddBoolToObject(reply,"saved",true);
+    return send_json(r,"200 OK",reply);
+}
+static esp_err_t wifi_scan_handler(httpd_req_t *r) {
+    const char *scope_error=setup_transport_error(r);
+    if (scope_error) return http_error(r,"403 Forbidden",scope_error);
+    xSemaphoreTake(lock,portMAX_DELAY);
+    bool allowed=setup_valid_locked() && pair_state==PAIR_READY &&
+                 !atomic_load(&identity_busy) && identity_ready() && setup_cookie(r);
+    xSemaphoreGive(lock);
+    if (!allowed) return http_error(r,"403 Forbidden","Confirm physical MCP setup on the device first");
+    if (r->method==HTTP_POST) {
+        cJSON *body=read_json(r);
+        bool valid=body && empty_object(body); cJSON_Delete(body);
+        if (!valid) return http_error(r,"400 Bad Request","Empty JSON object required");
+        esp_err_t result=wireless_scan_begin();
+        if (result!=ESP_OK) return http_error(r,"409 Conflict","Wi-Fi busy or unavailable; try again after configuration finishes");
+        cJSON *reply=cJSON_CreateObject(); cJSON_AddStringToObject(reply,"state","scanning");
+        return send_json(r,"200 OK",reply);
+    }
+    wireless_scan_result scan; wireless_scan_snapshot(&scan);
+    cJSON *reply=cJSON_CreateObject();
+    cJSON_AddStringToObject(reply,"state",scan.busy ? "scanning" : !scan.done ? "idle" : scan.error ? "failed" : "ready");
+    cJSON_AddNumberToObject(reply,"error",scan.error);
+    cJSON *networks=cJSON_AddArrayToObject(reply,"networks");
+    if (!scan.busy && scan.done && !scan.error) for (unsigned i=0;i<scan.count;++i) {
+        const wireless_network *network=&scan.networks[i];
+        cJSON *item=cJSON_CreateObject();
+        cJSON_AddStringToObject(item,"ssid",network->ssid);
+        cJSON_AddNumberToObject(item,"rssi",network->rssi);
+        cJSON_AddBoolToObject(item,"open",network->open);
+        cJSON_AddItemToArray(networks,item);
+    }
+    return send_json(r,"200 OK",reply);
 }
 static esp_err_t profile_handler(httpd_req_t *r) {
     const char *scope_error = usb_scope_error(r, false);
@@ -1044,7 +1234,7 @@ void mcp_init(void) {
     config.ctrl_port = 32768;
     config.stack_size = 8192;
     config.max_open_sockets = 4;
-    config.max_uri_handlers = 9;
+    config.max_uri_handlers = 14;
     config.lru_purge_enable = true;
     config.recv_wait_timeout = 2;
     config.send_wait_timeout = 2;
@@ -1056,6 +1246,11 @@ void mcp_init(void) {
             register_uri(http_server, "/enroll/status", HTTP_POST, enrollment_handler) &&
             register_uri(http_server, "/certificate.mobileconfig", HTTP_GET, profile_handler) &&
             register_uri(http_server, "/config", HTTP_POST, config_handler) &&
+            register_uri(http_server, "/wifi", HTTP_POST, wifi_config_handler) &&
+            register_uri(http_server, "/wifi/networks", HTTP_GET, wifi_networks_handler) &&
+            register_uri(http_server, "/wifi/networks", HTTP_POST, wifi_networks_handler) &&
+            register_uri(http_server, "/wifi/scan", HTTP_POST, wifi_scan_handler) &&
+            register_uri(http_server, "/wifi/scan", HTTP_GET, wifi_scan_handler) &&
             register_uri(http_server, "/mcp", HTTP_POST, mcp_handler) &&
             register_uri(http_server, "/mcp", HTTP_GET, mcp_handler) &&
             register_uri(http_server, "/mcp", HTTP_DELETE, mcp_handler);

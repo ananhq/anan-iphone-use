@@ -116,3 +116,43 @@ applicable toolchain notices if redistributing those development tools.
 Candidate `0.5.0-mcp` adds first-party bounded parsing/execution, schemas and offline acceptance fixtures. The fixtures were authored before implementation and simulate reports/time, not device acceptance. USB code now uses the existing locked TinyUSB `0.21.0~2` Consumer descriptor/API; no upstream implementation was copied or dependency upgraded. Numeric Consumer usages follow Apple Accessory Design Guidelines 2026-09-21, chapter14 table14-3 (including 0x029D, absent as a named enum in this SDK); [research](docs/hid-capabilities.md) records the PDF hash. Existing original USB/board provenance gaps and license notices remain. Mouse/keyboard IDs and USB configuration are retained with Consumer ID3 appended.
 
 Candidate `0.5.1-mcp` consolidates tool discovery and first-party parsing, retaining the executor and USB code. The added consolidation acceptance scenarios preceded this implementation. No external code, dependencies or licenses changed; prior provenance gaps remain.
+
+## Wireless candidate additions
+
+Candidate `0.6.0-wireless` activates components within the existing ESP-IDF
+v5.5.5 lock; no SDK upgrade, Arduino library, upstream application code or
+vendor HID demo is imported. `input.c`, `ble_input.c`, `ble_reports.c/h` and
+`wireless.c/h` are first-party implementations using SDK APIs. BLE reports use
+the already pinned TinyUSB descriptor macros; USB descriptors/sender bodies are
+retained with backend symbol renaming. No project license change.
+
+| Activated component | Exact source | Notices |
+| --- | --- | --- |
+| NimBLE | IDF submodule `685675c0128deafdd201c9eb82e61d227364646c` | [complete LICENSE](licenses/NimBLE-LICENSE.txt), [NOTICE](licenses/NimBLE-NOTICE.txt), [BSD notices](licenses/NimBLE-BSD-NOTICES.txt) |
+| TinyCrypt / micro-ecc | NimBLE `ext/tinycrypt`, and IDF `components/bt/common/tinycrypt` at the pinned SDK commit | [complete BSD notice](licenses/TinyCrypt-BSD.txt); linked-file headers retain their terms |
+| Wi-Fi radio | `22bb3517b08760ed43b889013f8a122db0d46da0` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| PHY | `59c1234e929212aec0fdda75769b759951235536` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| Coexistence | `79e618f033e926d134decc6d95bb1b1850bd032c` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| S3 Bluetooth controller (c3-family library) | `0a08c4b32f3666003080b662a1a61794da24ff0f` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+
+All four radio LICENSE files match the already retained Apache-2.0 file
+(SHA-256 `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`).
+The SDK's radio libraries are precompiled components; this is not an assertion
+that their implementation sources are available. NimBLE LICENSE lists additional
+platform-specific material; the S3 binary is not a Nordic/babblesim target.
+Binary publication still needs its final linked-file notice inventory.
+
+[xhoantran/iphone-use](https://github.com/xhoantran/iphone-use/tree/bc0fe36e78ec5a3af095c813574e3a8b7bbea4dd)
+was consulted for BLE absolute positioning followed by relative-button input.
+No Swift files or report bytes were copied. No AirPlay/client code is added.
+Existing USB provenance gaps are unchanged. See [wireless scope](docs/wireless-development.md).
+
+The `0.6.1-wifi-scan` slice adds first-party scan orchestration and setup-page
+selection using the same pinned `esp_wifi.h` API. No source files are imported,
+and dependencies, report descriptors and licenses are unchanged.
+
+Candidate `0.7.0-wireless-setup` adds first-party network-storage/HTTP-authority/discovery adapters. CMake activates `src/apps/mdns/mdns.c`, `mdns_out.c` and `mdns_domain.c` from the already pinned lwIP submodule `fd432e4ee2cfb7f7f1c7eb7227e0173412e7b84e`, unchanged and not vendored. Their Copyright (c) 2015 Verisure Innovation AB BSD headers are preserved in the [complete mDNS notice](licenses/lwIP-mDNS-BSD.txt), alongside the existing [lwIP notice](licenses/lwIP-BSD.txt). The global responder definition and SDK client-data slot preserve a consistent netif ABI. No new dependency, SDK upgrade, upstream application import or license change. SoftAP/DHCP use the existing pinned SDK components.
+
+Candidate `0.7.1-mdns` compiles an attributed build-generated adaptation of the same pinned `src/apps/mdns/mdns.c` (original SHA-256 `2bd12a3bb8b3c8830c56c2b5c3b8073ab5f71654171602210f63cf6dafc8d5e9`). Root CMake checks the exact hash and changes only the IPv6 probe condition: skip that family when link-local address slot 0 is invalid, retaining IPv4 probing/conflict checks. The SDK checkout remains unchanged; generated source stays in ignored build/. The original Verisure headers and [complete BSD notice](licenses/lwIP-mDNS-BSD.txt) are retained. No SDK/dependency upgrade or project license change.
+
+The hotspot QR slice vendors only Nayuki `c/qrcodegen.c` and `c/qrcodegen.h`, unmodified, from **v1.8.0**, commit `7ad95cedd8464a87f82221283612732ae4f3f305`, [upstream](https://github.com/nayuki/QR-Code-generator/tree/7ad95cedd8464a87f82221283612732ae4f3f305/c), under MIT, Copyright (c) Project Nayuki. Their complete license headers and the [MIT notice](licenses/Nayuki-QR-MIT.txt) are retained; first-party adapters/rendering are separate. Source SHA-256: C `300eff07ee25baaa7578f20284411638154716379437391e7e689c0e6ce81403`, header `e82df4bff37d18b5863b9e7486fe6bda1b6cda8c3b9ecebfec473907265cb589`. No SDK upgrade or project license change. ZXing-C++ 2.3.0 is an optional independent offline decoder used only for synthetic validation, not linked or vendored.

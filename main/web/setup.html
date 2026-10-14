@@ -10,6 +10,7 @@ button,a.button{display:block;width:100%;box-sizing:border-box;margin:16px 0;pad
 button:disabled{opacity:.45}#language{width:auto;margin-left:auto;padding:9px 14px;background:#263746;color:#eef5ff;font-size:14px}
 code{word-break:break-all}textarea,pre{width:100%;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:10px;border:1px solid #405063;background:#172431;color:#eef5ff;padding:14px;font-size:13px}
 textarea{min-height:220px}[hidden]{display:none!important}.muted{font-size:14px}#status{padding:12px 0}
+input,select{display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border:1px solid #405063;border-radius:10px;background:#172431;color:#eef5ff;font-size:16px}
 </style>
 <main>
 <button id="language">English</button>
@@ -21,7 +22,23 @@ textarea{min-height:220px}[hidden]{display:none!important}.muted{font-size:14px}
 <div id="pair" hidden><p data-i18n="match">核对设备与这里的数字一致，再在设备点“确认配对”：</p><pre id="code"></pre></div>
 </section>
 <section id="configuration" hidden>
+<section id="wifiSetup" hidden>
+<h2 data-i18n="wifiTitle">连接 Wi-Fi</h2>
+<p data-i18n="wifiHint">首次通过 USB 配置 2.4 GHz Wi-Fi。手机、电脑和设备加入同一局域网。无线输入在设备“设置 → 输入 / 网络”选择 BLE，并在手机配对 Anan StopWatch。</p>
+<button id="scanWifi" data-i18n="scanWifi">扫描附近 Wi-Fi</button>
+<p id="scanStatus" class="muted" role="status"></p>
+<label for="wifiNetworks" data-i18n="scanLabel">选择 2.4 GHz 网络</label><select id="wifiNetworks" disabled><option value="" data-i18n="scanChoose">扫描后选择网络</option></select>
+<label for="ssid" data-i18n="ssidLabel">Wi-Fi 名称（也可手动填写）</label><input id="ssid" maxlength="32" autocomplete="off" spellcheck="false">
+<label for="wifiPassword" data-i18n="passwordLabel">Wi-Fi 密码</label><input id="wifiPassword" type="password" maxlength="64" autocomplete="new-password">
+<button id="saveWifi" data-i18n="saveWifi">保存 Wi-Fi</button>
+<label for="savedNetworks" data-i18n="savedLabel">已保存的网络（最多 5 个）</label><select id="savedNetworks"></select>
+<button id="forgetNetwork" data-i18n="forgetNetwork">删除选中网络</button>
+<button id="forgetWifi" data-i18n="forgetWifi">忘记全部 Wi-Fi</button>
+</section>
+<p id="networkInfo" class="muted"></p>
 <p data-i18n="importStep">复制配置，粘贴到 Anan 的 MCP 配置导入页，或其他支持 HTTP MCP 的客户端。</p>
+<label for="network" data-i18n="networkLabel">MCP 连接方式</label>
+<select id="network"><option value="usb">USB</option><option value="wifi">Wi-Fi</option></select>
 <button id="export" data-i18n="export">生成 MCP 配置</button>
 <div id="result" hidden>
 <textarea id="config" readonly aria-label="MCP configuration"></textarea>
@@ -41,16 +58,52 @@ const $=id=>document.getElementById(id), status=t=>$('status').textContent=t;
 const translations={
 zh:{title:'连接 StopWatch',intro:'在 StopWatch 点“设置 → 连接MCP应用”。手机保持通过数据线连接，无需安装证书。',begin:'开始配对',match:'核对设备与这里的数字一致，再在设备点“确认配对”：',optionalTLS:'可选：使用 HTTPS',trust:'仅使用 HTTPS 时需要：下载并安装证书，再在“通用 → 关于本机 → 证书信任设置”启用完全信任。',certificate:'下载设备证书',secureLink:'打开 HTTPS 配置页',importStep:'复制配置，粘贴到 Anan 的 MCP 配置导入页，或其他支持 HTTP MCP 的客户端。',export:'生成 MCP 配置',copy:'复制配置',download:'下载 JSON',finish:'手机导入后，在设备点“已导入 返回”，再点“开始控制”。控制会保持开启直到停止、拔线或重启。触屏或按实体键可停止。屏幕观察由客户端提供。',waiting:'等待设备确认…',ready:'配对已确认',failed:'配对失败，请重新配对',private:'配置已准备好，请复制或下载后导入客户端',retry:'请在设备重新进入“连接MCP应用”，再打开本页',copied:'已复制',manualCopy:'请长按选中内容复制，或下载 JSON',requestFailed:'请求失败，请检查设备配对页面',unavailable:'无法读取设备状态',firmware:'固件',display:'显示',error:'错误'},
 en:{title:'Connect StopWatch',intro:'On StopWatch tap Settings → Connect MCP app. Keep your phone connected by USB. No certificate installation is needed.',begin:'Start pairing',match:'Match this code with the device, then tap Confirm pairing on StopWatch:',optionalTLS:'Optional: use HTTPS',trust:'Only for HTTPS: install the certificate profile, then enable full trust under General → About → Certificate Trust Settings.',certificate:'Download certificate profile',secureLink:'Open HTTPS configuration',importStep:'Copy the configuration into Anan MCP import, or another compatible HTTP MCP client.',export:'Generate MCP configuration',copy:'Copy configuration',download:'Download JSON',finish:'After importing on your phone, tap Imported, go back on StopWatch, then Start control. Control stays enabled until stopped, unplugged or rebooted. Touch the screen or press a button to stop. Your client supplies screen observation.',waiting:'Waiting for device confirmation…',ready:'Pairing confirmed',failed:'Pairing failed. Please pair again.',private:'Configuration ready. Copy or download it and import into your client.',retry:'Reopen Connect MCP app on the device, then reload this page.',copied:'Copied',manualCopy:'Select and copy the text, or download JSON.',requestFailed:'Request failed. Check the pairing screen on StopWatch.',unavailable:'Device status unavailable',firmware:'Firmware',display:'Display',error:'Error'}};
+Object.assign(translations.zh,{intro:'在设备点“设置 → 连接MCP应用”。通过 USB 或同一局域网打开本页；首次 Wi-Fi 配网使用 USB，无需安装证书。',wifiTitle:'连接 Wi-Fi',wifiHint:'首次通过 USB 配置 2.4 GHz Wi-Fi。手机、电脑和设备加入同一局域网。无线输入在设备“设置 → 输入 / 网络”选择 BLE，并在手机配对 Anan StopWatch。',ssidLabel:'Wi-Fi 名称',passwordLabel:'Wi-Fi 密码',saveWifi:'保存 Wi-Fi',forgetWifi:'忘记 Wi-Fi',networkLabel:'MCP 连接方式',wifiSaved:'已保存，等待 Wi-Fi 连接；连接后选择 Wi-Fi 并重新生成配置。',wifiForgot:'已忘记 Wi-Fi',wifiWaiting:'Wi-Fi 未连接，请检查网络和密码',finish:'导入后，在设备点“已导入 返回”，再点“开始控制”。BLE 输入需先在手机配对 Anan StopWatch 并开启 AssistiveTouch。断连、停止或重启会关闭控制，重连不重放动作。屏幕观察由客户端提供。'});
+Object.assign(translations.en,{intro:'On the device tap Settings → Connect MCP app. Open this page over USB or the same LAN. First Wi-Fi setup uses USB; no certificate is needed.',wifiTitle:'Connect Wi-Fi',wifiHint:'Use USB once to save a 2.4 GHz Wi-Fi network. Keep the phone, computer and device on the same LAN. For wireless input select BLE under Settings → Input / network, then pair Anan StopWatch on the phone.',ssidLabel:'Wi-Fi name',passwordLabel:'Wi-Fi password',saveWifi:'Save Wi-Fi',forgetWifi:'Forget Wi-Fi',networkLabel:'MCP connection',wifiSaved:'Saved. Wait for Wi-Fi, select Wi-Fi below and generate the configuration again.',wifiForgot:'Wi-Fi forgotten',wifiWaiting:'Wi-Fi disconnected; check network and password.',finish:'After importing, tap Imported, go back, then Start control on the device. BLE input needs phone pairing with Anan StopWatch and AssistiveTouch enabled. Disconnection, stop or reboot disables control; reconnect never replays input. Your client supplies observation.'});
+Object.assign(translations.zh,{scanWifi:'扫描附近 Wi-Fi',scanLabel:'选择 2.4 GHz 网络',scanChoose:'扫描后选择网络',scanWorking:'正在扫描，请稍候…',scanReady:'请选择网络，再粘贴密码；隐藏网络可手动填写。',scanEmpty:'未找到可用网络，可重新扫描或手动填写名称。',scanFailed:'扫描失败，请重试或手动填写网络名称。',scanTimeout:'扫描尚未完成，请稍后重试或手动填写。',scanOpen:'无需密码',ssidLabel:'Wi-Fi 名称（也可手动填写）',passwordLabel:'Wi-Fi 密码（粘贴一次即可）'});
+Object.assign(translations.en,{scanWifi:'Scan nearby Wi-Fi',scanLabel:'Choose a 2.4 GHz network',scanChoose:'Scan to choose a network',scanWorking:'Scanning, please wait…',scanReady:'Choose a network, then paste its password. Enter hidden networks manually.',scanEmpty:'No usable networks found. Scan again or enter the name manually.',scanFailed:'Scan failed. Try again or enter the network manually.',scanTimeout:'Scan is not finished. Try again shortly or enter the name manually.',scanOpen:'No password',ssidLabel:'Wi-Fi name (manual entry available)',passwordLabel:'Wi-Fi password (paste once)'});
+Object.assign(translations.zh,{intro:'通过 USB、同一局域网或设备配网热点打开本页。在设备核对并确认配对；无需安装证书。',wifiHint:'连接设备热点或 USB 后，扫描选择 2.4 GHz Wi-Fi，粘贴一次密码。最多记住 5 个网络；以后自动尝试已保存的网络。热点不会提供互联网，关闭热点前先复制 MCP 配置。',savedLabel:'已保存的网络（最多 5 个）',forgetNetwork:'删除选中网络',forgetWifi:'忘记全部 Wi-Fi',wifiSaved:'已保存，正在尝试连接。请先复制固定域名 MCP 配置，再在设备返回关闭热点，手机重新加入日常 Wi-Fi。',networkLabel:'MCP 连接（USB / Wi-Fi 共用固定域名）',finish:'先复制配置，在设备点“已导入 返回”关闭配网热点。手机回到日常 Wi-Fi 后导入。USB 和 Wi-Fi 共用 stopwatch.local，无需因 IP 改变重新导入。无线输入仍需选择 BLE、手机配对并开启 AssistiveTouch，再在设备开始控制。'});
+Object.assign(translations.en,{intro:'Open over USB, your LAN or the device setup hotspot. Match and confirm pairing on the device. No certificate is needed.',wifiHint:'From USB or the setup hotspot, scan and select 2.4 GHz Wi-Fi, then paste its password once. Remember up to five networks, tried automatically later. The setup hotspot has no Internet; copy the MCP configuration before closing it.',savedLabel:'Saved networks (up to five)',forgetNetwork:'Remove selected network',forgetWifi:'Forget all Wi-Fi',wifiSaved:'Saved; connecting. Copy the fixed-hostname MCP configuration before returning on the device to close its hotspot, then rejoin your usual Wi-Fi.',networkLabel:'MCP connection (USB / Wi-Fi share one hostname)',finish:'Copy the configuration first, then tap Imported, go back on the device to close its hotspot. Rejoin your usual Wi-Fi and import. USB and Wi-Fi share stopwatch.local; IP changes do not require importing again. For wireless input select BLE, pair on your phone and enable AssistiveTouch, then Start control on the device.'});
 let lang=localStorage.getItem('swLanguage')||'zh',nonce='',timer,exportURL;
 function tr(key){return translations[lang][key];}
 function setLanguage(value){lang=value==='en'?'en':'zh';document.documentElement.lang=lang==='zh'?'zh-CN':'en';document.title=tr('title');document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=tr(e.dataset.i18n));$('language').textContent=lang==='zh'?'English':'简体中文';}
 $('language').onclick=()=>{setLanguage(lang==='zh'?'en':'zh');localStorage.setItem('swLanguage',lang);};setLanguage(lang);
-const secure=location.protocol==='https:';$('plain').hidden=secure;$('configuration').hidden=!secure;$('optionalTLS').hidden=secure;
-async function deviceInfo(){try{const r=await fetch('/status',{cache:'no-store'}),j=await r.json();if(!localStorage.getItem('swLanguage'))setLanguage(j.language);$('deviceInfo').textContent=tr('firmware')+' '+j.firmwareVersion+' · '+tr('display')+' '+j.displayStage+(j.displayError?' · '+tr('error')+' '+j.displayError:'');}catch(e){$('deviceInfo').textContent=tr('unavailable');}setTimeout(deviceInfo,2000);}if(!secure)deviceInfo();
+const secure=location.protocol==='https:',usb=location.hostname==='192.168.7.1',ap=location.hostname==='192.168.4.1';$('plain').hidden=secure;$('configuration').hidden=!secure;$('optionalTLS').hidden=secure||!usb;$('wifiSetup').hidden=secure||(!usb&&!ap);$('network').value=usb?'usb':'wifi';$('network').querySelector('[value="usb"]').disabled=!usb;
+async function deviceInfo(){try{const r=await fetch('/status',{cache:'no-store'}),j=await r.json();if(!localStorage.getItem('swLanguage'))setLanguage(j.language);$('deviceInfo').textContent=tr('firmware')+' '+j.firmwareVersion+' · '+tr('display')+' '+j.displayStage+(j.displayError?' · '+tr('error')+' '+j.displayError:'');$('networkInfo').textContent=j.wifiConnected?'MCP: http://stopwatch.local/mcp · Wi-Fi: '+j.wifiAddress:tr('wifiWaiting');$('network').querySelector('[value="wifi"]').disabled=!j.wifiConfigured&&!j.setupAP; if(j.setupAP){$('wifiSetup').hidden=false;$('network').value='wifi';}}catch(e){$('deviceInfo').textContent=tr('unavailable');}setTimeout(deviceInfo,2000);}if(!secure)deviceInfo();
 async function post(path,data){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),cache:'no-store',credentials:'same-origin'});const j=await r.json();if(!r.ok)throw Error(j.error||tr('requestFailed'));return j;}
-async function exportConfig(){try{const j=await post('/config',{}),text=JSON.stringify(j,null,2);$('config').value=text;$('result').hidden=false;if(exportURL)URL.revokeObjectURL(exportURL);exportURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));$('download').href=exportURL;$('download').download='stopwatch-mcp.json';status(tr('private'));}catch(e){status(e.message+' '+tr('retry'));}}
+async function exportConfig(){try{const j=await post('/config',{network:$('network').value}),text=JSON.stringify(j,null,2);$('config').value=text;$('result').hidden=false;if(exportURL)URL.revokeObjectURL(exportURL);exportURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));$('download').href=exportURL;$('download').download='stopwatch-mcp.json';status(tr('private'));}catch(e){status(e.message+' '+tr('retry'));}}
+$('network').onchange=()=>{$('result').hidden=true;};
+let scannedNetworks=[];
+async function scanNetworks(){
+ const controls=['scanWifi','saveWifi','forgetWifi','forgetNetwork'];controls.forEach(id=>$(id).disabled=true);$('wifiNetworks').disabled=true;$('scanStatus').textContent=tr('scanWorking');
+ try{
+  await post('/wifi/scan',{});
+  let ready=false;
+  for(let attempt=0;attempt<24;attempt++){
+   await new Promise(resolve=>setTimeout(resolve,500));
+   const response=await fetch('/wifi/scan',{cache:'no-store',credentials:'same-origin'}),result=await response.json();
+   if(!response.ok||result.state==='failed')throw Error(tr('scanFailed'));
+   if(result.state!=='ready')continue;
+   scannedNetworks=result.networks;const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=tr('scanChoose');placeholder.dataset.i18n='scanChoose';$('wifiNetworks').replaceChildren(placeholder);
+   scannedNetworks.forEach(network=>{const option=document.createElement('option');option.value=network.ssid;option.textContent=network.ssid+(network.open?' · '+tr('scanOpen'):'');$('wifiNetworks').appendChild(option);});
+   $('wifiNetworks').disabled=!scannedNetworks.length;$('scanStatus').textContent=tr(scannedNetworks.length?'scanReady':'scanEmpty');ready=true;break;
+  }
+  if(!ready)throw Error(tr('scanTimeout'));
+ }catch(error){$('scanStatus').textContent=error.message;}
+ finally{controls.forEach(id=>$(id).disabled=false);}
+}
+$('scanWifi').onclick=scanNetworks;
+$('wifiNetworks').onchange=()=>{const selected=scannedNetworks.find(n=>n.ssid===$('wifiNetworks').value);if(!selected)return;$('ssid').value=selected.ssid;$('wifiPassword').value='';$('wifiPassword').disabled=selected.open;if(!selected.open)$('wifiPassword').focus();};
+$('ssid').oninput=()=>{$('wifiNetworks').value='';$('wifiPassword').disabled=false;};
+$('saveWifi').onclick=async()=>{try{$('saveWifi').disabled=true;await post('/wifi',{ssid:$('ssid').value,password:$('wifiPassword').value});$('wifiPassword').value='';status(tr('wifiSaved'));await savedNetworks();}catch(e){status(e.message);}finally{$('saveWifi').disabled=false;}};
+$('forgetWifi').onclick=async()=>{try{$('forgetWifi').disabled=true;await post('/wifi',{ssid:'',password:''});$('wifiPassword').value='';$('network').value='usb';$('result').hidden=true;status(tr('wifiForgot'));await savedNetworks();}catch(e){status(e.message);}finally{$('forgetWifi').disabled=false;}};
+async function savedNetworks(){
+ if(secure||$('wifiSetup').hidden)return;
+ try{const r=await fetch('/wifi/networks',{cache:'no-store',credentials:'same-origin'}),j=await r.json();if(!r.ok)throw Error(j.error);$('savedNetworks').replaceChildren();j.networks.forEach(n=>{const o=document.createElement('option');o.value=n.ssid;o.textContent=n.ssid;$('savedNetworks').appendChild(o);});$('forgetNetwork').disabled=!j.networks.length;}catch(e){status(e.message);}
+}
+$('forgetNetwork').onclick=async()=>{if(!$('savedNetworks').value)return;try{await post('/wifi/networks',{forget:$('savedNetworks').value});await savedNetworks();}catch(e){status(e.message);}};
 $('begin').onclick=async()=>{try{$('begin').disabled=true;const j=await post('/enroll/start',{time:Math.floor(Date.now()/1000)});nonce=j.nonce;sessionStorage.setItem('swPair',JSON.stringify({nonce,code:j.code}));$('code').textContent=j.code;$('pair').hidden=false;status(tr('waiting'));clearTimeout(timer);poll();}catch(e){status(e.message);$('begin').disabled=false;}};
-async function poll(){try{const j=await post('/enroll/status',{nonce});if(j.state==='ready'){$('plain').hidden=true;$('configuration').hidden=false;$('fingerprint').textContent=j.fingerprint;status(tr('ready'));await exportConfig();return;}if(j.state==='failed')throw Error(tr('failed'));timer=setTimeout(poll,1500);}catch(e){status(e.message+' '+tr('retry'));$('begin').disabled=false;}}
+async function poll(){try{const j=await post('/enroll/status',{nonce});if(j.state==='ready'){$('plain').hidden=true;$('configuration').hidden=false;$('fingerprint').textContent=j.fingerprint;status(tr('ready'));await savedNetworks();await exportConfig();return;}if(j.state==='failed')throw Error(tr('failed'));timer=setTimeout(poll,1500);}catch(e){status(e.message+' '+tr('retry'));$('begin').disabled=false;}}
 $('export').onclick=exportConfig;
 $('copy').onclick=async()=>{try{if(!navigator.clipboard)throw Error('clipboard unavailable');await navigator.clipboard.writeText($('config').value);status(tr('copied'));}catch(e){$('config').focus();$('config').select();$('config').setSelectionRange(0,$('config').value.length);let copied=false;try{copied=document.execCommand('copy');}catch(ignore){}status(tr(copied?'copied':'manualCopy'));}};
 if(!secure){try{const saved=JSON.parse(sessionStorage.getItem('swPair')||'null');if(saved&&/^[0-9a-f]{32}$/.test(saved.nonce)&&/^[0-9]{6}$/.test(saved.code)){nonce=saved.nonce;$('code').textContent=saved.code;$('pair').hidden=false;$('begin').disabled=true;poll();}}catch(e){sessionStorage.removeItem('swPair');}}

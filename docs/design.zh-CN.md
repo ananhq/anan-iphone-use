@@ -2,6 +2,8 @@
 
 [English](design.md) · 简体中文
 
+候选 **0.7.2-wifi-qr** 增加扫码临时热点配网、修正仅 IPv4 时的 mDNS 探测、五个 Wi-Fi 网络记忆及 USB/Wi-Fi 共用的 `http://stopwatch.local/mcp` HTTP 端点。BLE 输入仍为实验性。保留数字 USB 配置入口和可选 USB HTTPS，见[当前无线流程与限制](wireless.zh-CN.md)；下文早期阶段说明适用于原范围。
+
 ## 为什么使用 StopWatch
 
 Anan iPhone Use（仓库名 `anan-iphone-use`）主打设备端执行的 iPhone 自动化。客户端负责屏幕观察、模型推理、任务规划和用户授权；ESP32-S3 固件将决策转换为 USB 鼠标和键盘输入，不运行模型、不提供手机截图。[Anan](https://anan.sh) 是首个客户端，其他 Agent 可按公开协议接入，但需自己的观察能力和明确网络路径。当前仅适配 M5Stack StopWatch，其他硬件按[迁移指南](porting.zh-CN.md)扩展。StopWatch 具备 ESP32-S3 原生 USB、电源管理及两个停止按键，MCP 开发分支现实现中英触屏 UI、实体停止/导航备用，触摸硬件验收仍待完成。新增通路及验收边界见[设备 MCP](mcp.zh-CN.md)。这不是 USB 触摸屏实现：手机收到的是绝对坐标 HID **鼠标**，需要 AssistiveTouch。

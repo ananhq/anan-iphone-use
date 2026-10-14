@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "ui_font.h"
 #include "display.h"
+#include "wifi_qr.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include <string.h>
@@ -12,6 +13,7 @@ typedef struct {
     ui_widget widgets[UI_WIDGET_LIMIT];
     size_t count;
     ui_action focus;
+    wifi_qr qr;
 } scene;
 void ui_init(void) {
     front_lock = xSemaphoreCreateMutex();
@@ -116,6 +118,17 @@ static void paint(uint16_t *pixels, int strip_y, void *context) {
         pixels[i] = 0x8208; // swapped RGB565 background 0x0882
     for (size_t i = 0; i < s->count; ++i) {
         const ui_widget *w = &s->widgets[i];
+        if(w->qr) {
+            unsigned side=wifi_qr_size(&s->qr);
+            if(side) {
+                unsigned size=(side+8)*5;
+                int left=(466-(int)size)/2,top=w->rect.y;
+                for(int y=strip_y;y<strip_y+16&&y<top+(int)size;y++)
+                    if(y>=top)for(int x=left;x<left+(int)size;x++)
+                        pixel(pixels,strip_y,x,y,wifi_qr_module(&s->qr,(x-left)/5-4,(y-top)/5-4)?0x0000:0xffff);
+            }
+            continue;
+        }
         if (w->button) {
             ui_rect inner = {w->rect.x + 2, w->rect.y + 2, w->rect.w - 4, w->rect.h - 4};
             for (int y = strip_y; y < strip_y + 16 && y < 466; ++y)
@@ -132,6 +145,7 @@ static void paint(uint16_t *pixels, int strip_y, void *context) {
 bool ui_present(const ui_model *m) {
     scene s = {.focus = m->focus};
     s.count = ui_layout(m, s.widgets);
+    if(m->setup_ap)wifi_qr_make(&s.qr,m->ap_name,m->ap_password);
     bool ok = display_paint(paint, &s);
     xSemaphoreTake(front_lock, portMAX_DELAY);
     front_valid = ok;

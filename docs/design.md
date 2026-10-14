@@ -2,6 +2,8 @@
 
 English · [简体中文](design.zh-CN.md)
 
+Candidate **0.7.2-wifi-qr** adds QR-assisted temporary hotspot setup, corrected IPv4-only mDNS probing, five saved Wi-Fi networks and a shared `http://stopwatch.local/mcp` HTTP endpoint over USB/Wi-Fi. BLE input remains experimental. Existing numeric USB setup and optional USB HTTPS remain available. See [current wireless setup and limits](wireless.md); the following earlier-stage details apply to their original scope.
+
 ## Why this device
 
 Anan iPhone Use (`anan-iphone-use`) focuses on device-side execution of iPhone automation. The client owns screen observation, model inference, task planning and user authorization; ESP32-S3 firmware converts decisions into USB mouse and keyboard input. It runs no model and supplies no phone screenshots. [Anan](https://anan.sh) is the first client; other agents can use the public protocols with their own observation and an explicit network path. Only M5Stack StopWatch is currently targeted; other hardware needs the [porting guide](porting.md). StopWatch offers native ESP32-S3 USB, power management and two stop buttons. The MCP development branch now implements a touch-first Chinese/English device UI with physical stop/navigation fallback; hardware touch acceptance remains pending. See [device MCP](mcp.md) for the new route and acceptance boundary. It is not a USB touchscreen implementation: the phone receives an absolute HID **mouse**, with AssistiveTouch.

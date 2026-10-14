@@ -7,7 +7,8 @@ English · [简体中文](README.zh-CN.md)
 | Topic | Document |
 | --- | --- |
 | Project overview | [Project](../README.md) |
-| Build, flash and phone configuration | [Setup and recovery](setup.md), [MCP pairing and endpoint](mcp.md) |
+| Build, flash and phone configuration | [Setup and recovery](setup.md), [bond-preserving updates](flashing.md), [MCP pairing and endpoint](mcp.md) |
+| Wi-Fi MCP and experimental BLE input | [Wi-Fi MCP and experimental BLE input](wireless.md) |
 | Client integration | [MCP parameters and sessions](client.md) |
 | Agent-guided installation and board adaptation | [anan-iphone-use skill](../.agents/skills/anan-iphone-use/SKILL.md), [minimal board porting](porting.md) |
 
@@ -31,3 +32,7 @@ English · [简体中文](README.zh-CN.md)
 | Retired protocol | [Historical ANAN1 contract](../PROTOCOL.md) |
 
 [PROTOCOL.md](../PROTOCOL.md) is the unchanged historical ANAN1 protocol/state definition; current firmware runs only MCP and no port28766 service. Validation records distinguish source, compilation, user reports and device execution. MCP and Chinese/English touch-first UI are implemented development code; compilation/static previews and user reports are separate from scoped device acceptance. See [MCP setup and endpoint](mcp.md).
+
+[Wireless setup acceptance](wireless-setup-development.md) defines the fixed-hostname, network-memory and temporary-hotspot slice.
+
+[Tool discovery guidance](tool-discovery.md) describes task keywords, optional whole-group browsing and unchanged schema/authorization boundaries.

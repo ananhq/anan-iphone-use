@@ -6,6 +6,8 @@ Candidate `0.5.1-mcp` advertises seven tools through MCP `tools/list`. It merges
 
 Keep the existing AssistiveTouch, USB Ethernet, pairing/import and physical Start setup. Full Keyboard Access is optional, neither enabled nor detected by firmware. Tab/arrow behavior depends on the App and existing settings.
 
+Candidate `0.7.3-discovery` updates descriptions only with English/Chinese task vocabulary for app-opening workflows, browsing, input/editing and drawing. The seven schemas and execution remain unchanged. The service softly recommends browsing the complete group before multi-step planning when its overview is not visible. See [discovery guidance](tool-discovery.md).
+
 ## Choose an operation
 
 | Tool | Arguments | Purpose |

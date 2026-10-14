@@ -31,7 +31,7 @@ inputs = [path for path in (source / "main").rglob("*")
           and not any(part.startswith(".") or part == "__pycache__"
                       for part in path.relative_to(source / "main").parts)
           and (path.suffix in component_suffixes or path.name == "CMakeLists.txt")]
-inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh", "partitions.csv")]
+inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh", "flash.py", "partitions.csv")]
 source_hashes = {str(path.relative_to(source)): hashlib.sha256(path.read_bytes()).hexdigest()
                  for path in sorted(inputs)}
 manifest = {"protocol": "MCP", "mcp": {"version": "2025-11-25", "transport": "HTTP/HTTPS Streamable HTTP"}, "board": "M5Stack StopWatch ESP32-S3 16MB",

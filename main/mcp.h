@@ -4,6 +4,7 @@
 #include <stddef.h>
 void mcp_init(void);
 void mcp_stop_input(void);
+void mcp_network_lost(void);
 void mcp_open_setup(void);
 void mcp_close_setup(void);
 bool mcp_setup_pending(char *code, size_t size);

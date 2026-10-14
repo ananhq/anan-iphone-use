@@ -202,7 +202,7 @@ static void action_worker(void *arg) {
             next.done(&next.a, result, next.context);
             current_context = NULL;
             current_guard = NULL;
-        } else if (released != atomic_load(&release_serial) && bridge_usb_online()) {
+        } else if (released != atomic_load(&release_serial) && bridge_input_online()) {
             bridge_release();
             released = atomic_load(&release_serial);
         }

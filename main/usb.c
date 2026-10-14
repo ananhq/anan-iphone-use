@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "bridge.h"
+#include "input_backends.h"
 #include "tinyusb.h"
 #include "tinyusb_default_config.h"
 #include "tinyusb_net.h"
@@ -51,7 +52,7 @@ static void device_event(tinyusb_event_t *event, void *arg) {
 }
 bool bridge_usb_online(void) { return atomic_load(&online); }
 
-// Only the action worker calls these, so each report has one completion owner.
+// Input dispatch serializes senders, so each report has one completion owner.
 static bool report_ready(void) {
     int64_t until = esp_timer_get_time() + 200000;
     while (bridge_usb_online() && !tud_hid_ready() && esp_timer_get_time() < until) vTaskDelay(pdMS_TO_TICKS(2));
@@ -62,26 +63,26 @@ static bool report_completed(unsigned before) {
     while (bridge_usb_online() && atomic_load(&completed) == before && esp_timer_get_time() < until) vTaskDelay(pdMS_TO_TICKS(2));
     return bridge_usb_online() && atomic_load(&completed) != before;
 }
-bool bridge_mouse(uint8_t buttons, uint16_t x, uint16_t y) {
+bool usb_mouse(uint8_t buttons, uint16_t x, uint16_t y) {
     if (!report_ready()) return false;
     unsigned before = atomic_load(&completed);
     pointer_x = x; pointer_y = y;
     return tud_hid_n_abs_mouse_report(0, 1, buttons, x >> 1, y >> 1, 0, 0) && report_completed(before);
 }
-bool bridge_key(uint8_t modifiers, uint8_t key) {
+bool usb_key(uint8_t modifiers, uint8_t key) {
     if (!report_ready()) return false;
     unsigned before = atomic_load(&completed);
     uint8_t keys[6] = {key};
     return tud_hid_n_keyboard_report(0, 2, modifiers, keys) && report_completed(before);
 }
-bool bridge_scroll(uint16_t x, uint16_t y, int8_t vertical, int8_t horizontal) {
+bool usb_scroll(uint16_t x, uint16_t y, int8_t vertical, int8_t horizontal) {
     if (!report_ready()) return false;
     unsigned before = atomic_load(&completed);
     pointer_x = x; pointer_y = y;
     return tud_hid_n_abs_mouse_report(0, 1, 0, x >> 1, y >> 1, vertical, horizontal) &&
            report_completed(before);
 }
-bool bridge_consumer(uint16_t usage) {
+bool usb_consumer(uint16_t usage) {
     if (!report_ready()) return false;
     unsigned before = atomic_load(&completed);
     // Remember uncertain presses too: cleanup must attempt a zero report.
@@ -90,11 +91,11 @@ bool bridge_consumer(uint16_t usage) {
     if (sent && !usage) consumer_held = false;
     return sent;
 }
-void bridge_release(void) {
-    bridge_mouse(0, pointer_x, pointer_y);
-    bridge_key(0, 0);
+void usb_release(void) {
+    usb_mouse(0, pointer_x, pointer_y);
+    usb_key(0, 0);
     // Legacy actions send no additional report unless a Consumer press needs release.
-    if (consumer_held) bridge_consumer(0);
+    if (consumer_held) usb_consumer(0);
 }
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) { (void)instance; return reports; }
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t id, hid_report_type_t type, uint8_t *buffer, uint16_t len) {
@@ -121,7 +122,7 @@ static err_t configure_network(struct netif *net) {
     net->name[0] = 's'; net->name[1] = 'w'; net->mtu = 1500;
     net->hwaddr_len = 6; memcpy(net->hwaddr, mac, sizeof(mac));
     net->output = etharp_output; net->linkoutput = output_packet;
-    net->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
+    net->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET | NETIF_FLAG_IGMP;
     return ERR_OK;
 }
 static void add_network(void *arg) {

@@ -8,7 +8,7 @@
 | --- | --- |
 | 根目录 `README*`、`CONTRIBUTING*`、`AGENTS.md` | 项目入口、贡献流程与仓库约束 |
 | 根目录 `CMakeLists.txt`、`sdkconfig.defaults`、`partitions.csv`、`dependencies.lock` | 可复现的 ESP-IDF 构建配置与固定依赖，保留跟踪 |
-| 根目录 `build.sh`、`flash.sh`、`package.py` | 现有构建、显式烧录与打包入口，保留路径以兼容配置说明 |
+| 根目录 `build.sh`、`flash.sh`、`flash.py`、`package.py` | 构建、显式烧录与打包入口；烧录辅助脚本在升级时跳过 BLE NVS |
 | `main/` | 固件组件、头文件与嵌入页面 `web/setup.html`，见[模块职责](../main/README.zh-CN.md) |
 | `docs/` | 双语使用指南、开发决策与验收流程，从[文档导航](README.zh-CN.md)进入 |
 | `docs/images/setup/` | 项目 README 使用的精选合成 UI 示意图 |

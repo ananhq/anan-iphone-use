@@ -100,3 +100,37 @@ ASCII 字形/绘制/布局/手势代码保留首方声明，整体 GPL-3.0-only 
 候选 `0.5.0-mcp` 新增第一方有界解析/执行、schema 与离线验收场景；场景在实施前编写，模拟报告/时间，不代表真机验收。USB 使用既有锁定 TinyUSB `0.21.0~2` 的 Consumer 模板/API，没有复制上游实现或升级依赖。Consumer 数值依据 Apple 2026-09-21 配件指南第14章表14-3（包括 SDK 无命名枚举的0x029D），[调研](docs/hid-capabilities.zh-CN.md)记录PDF哈希。原 USB/板级来源缺口与许可声明继续保留；原鼠标/键盘ID及USB配置保留，追加Consumer ID3。
 
 候选 `0.5.1-mcp` 合并工具发现与第一方参数解析，保留执行器及USB代码。新增合并验收场景在本轮实现前编写。不引入外部代码、不改变依赖或许可；旧来源缺口仍保留。
+
+## 无线候选新增内容
+
+候选 `0.6.0-wireless` 启用现有 ESP-IDF v5.5.5 锁内组件；不升级 SDK、不导入
+Arduino 库、上游应用代码或厂商 HID demo。`input.c`、`ble_input.c`、
+`ble_reports.c/h`、`wireless.c/h` 为使用 SDK API 的第一方实现。BLE 使用既有
+TinyUSB 描述符宏；USB 描述符/发送函数体只作后端符号重命名，不改变项目许可。
+
+| 启用组件 | 准确来源 | 声明 |
+| --- | --- | --- |
+| NimBLE | IDF 子模块 `685675c0128deafdd201c9eb82e61d227364646c` | [完整 LICENSE](licenses/NimBLE-LICENSE.txt)、[NOTICE](licenses/NimBLE-NOTICE.txt)、[BSD 声明](licenses/NimBLE-BSD-NOTICES.txt) |
+| TinyCrypt / micro-ecc | NimBLE `ext/tinycrypt` 与锁定 SDK 的 `components/bt/common/tinycrypt` | [完整 BSD 声明](licenses/TinyCrypt-BSD.txt)，保留链接文件实际条款 |
+| Wi-Fi 射频 | `22bb3517b08760ed43b889013f8a122db0d46da0` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| PHY | `59c1234e929212aec0fdda75769b759951235536` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| 共存 | `79e618f033e926d134decc6d95bb1b1850bd032c` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+| S3 蓝牙控制器（c3-family 库） | `0a08c4b32f3666003080b662a1a61794da24ff0f` | [Apache-2.0](licenses/ESP-IDF-Apache-2.0.txt) |
+
+四个射频 LICENSE 与已保留 Apache-2.0 文件完全一致，SHA-256 为
+`cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`。SDK
+射频库为预编译组件，不声称其实现源码可得。NimBLE LICENSE 还列出平台特定
+材料，S3 镜像不是 Nordic/babblesim 目标；发布二进制仍需最终链接文件声明清单。
+
+参考 [xhoantran/iphone-use](https://github.com/xhoantran/iphone-use/tree/bc0fe36e78ec5a3af095c813574e3a8b7bbea4dd)
+的 BLE 绝对定位后发送相对鼠标按键思路，不复制 Swift 文件或报告字节，不引入
+AirPlay/客户端代码。原 USB 来源缺口保持未解决。见[无线范围](docs/wireless-development.zh-CN.md)。
+
+`0.6.1-wifi-scan` 使用同一锁定 `esp_wifi.h` API 增加第一方扫描调度与配网选择
+界面，不导入外部源码，不改变依赖、报告描述符或许可。
+
+候选 `0.7.0-wireless-setup` 增加第一方网络存储、HTTP Host/Origin 和发现适配器。CMake 启用已锁定 lwIP 子模块 `fd432e4ee2cfb7f7f1c7eb7227e0173412e7b84e` 内的 `src/apps/mdns/mdns.c`、`mdns_out.c`、`mdns_domain.c`，不修改或复制到仓库；其 Copyright (c) 2015 Verisure Innovation AB BSD 文件头保留于[完整 mDNS 通知](licenses/lwIP-mDNS-BSD.txt)，与既有 [lwIP 通知](licenses/lwIP-BSD.txt)并列保留。全局 responder 定义及 SDK client-data 槽位保证 netif ABI 一致。不增加新依赖、升级 SDK、引入上游应用或更改许可证，SoftAP/DHCP 使用既有锁定 SDK 组件。
+
+候选 `0.7.1-mdns` 编译同一锁定 `src/apps/mdns/mdns.c` 的具名构建生成适配版本，原文件 SHA-256 `2bd12a3bb8b3c8830c56c2b5c3b8073ab5f71654171602210f63cf6dafc8d5e9`。根 CMake 核对精确哈希，仅改变 IPv6 探测条件：link-local 地址槽 0 无效时跳过该地址族，保留 IPv4 探测/冲突检查。SDK 检出保持不变，生成源码留在忽略的 build/；保留原 Verisure 文件头及[完整 BSD 通知](licenses/lwIP-mDNS-BSD.txt)，不升级 SDK/依赖或改变项目许可。
+
+热点二维码仅原样引入 Nayuki **v1.8.0** 的 `c/qrcodegen.c`、`c/qrcodegen.h`，提交 `7ad95cedd8464a87f82221283612732ae4f3f305`，[上游](https://github.com/nayuki/QR-Code-generator/tree/7ad95cedd8464a87f82221283612732ae4f3f305/c)，MIT，Copyright (c) Project Nayuki。保留完整许可文件头与 [MIT 通知](licenses/Nayuki-QR-MIT.txt)，第一方适配/绘制独立。SHA-256：C `300eff07ee25baaa7578f20284411638154716379437391e7e689c0e6ce81403`，头文件 `e82df4bff37d18b5863b9e7486fe6bda1b6cda8c3b9ecebfec473907265cb589`。不升级 SDK 或改变项目许可。ZXing-C++ 2.3.0 仅为可选独立离线解码检查工具，使用合成数据，不链接或复制进固件。

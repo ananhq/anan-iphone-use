@@ -8,5 +8,4 @@ fi
 serial_port="$1"
 flash_image="${2:-$firmware_dir/build/anan-stopwatch-flash.bin}"
 [[ -f "$flash_image" ]] || { echo "Missing image: $flash_image" >&2; exit 1; }
-echo "Writing StopWatch firmware through explicit port: $serial_port"
-python -m esptool --chip esp32s3 --port "$serial_port" --baud 460800 write_flash --flash_size 16MB 0x0 "$flash_image"
+"${PYTHON:-python}" "$firmware_dir/flash.py" "$serial_port" "$flash_image"
