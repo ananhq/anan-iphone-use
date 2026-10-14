@@ -2,11 +2,11 @@
 
 [English](README.md) · 简体中文
 
-**运行在 ESP32-S3 上的 MCP Server，通过 USB 鼠标和键盘操作真实 iPhone。**
+**为 M5Stack StopWatch（ESP32-S3）开发的 iPhone MCP Server，通过 USB 或蓝牙鼠标和键盘控制 iPhone。**
 
-把它接到客户端 Agent，就能为 Agent 增加 **iPhone Use** 能力：客户端看屏幕、决定下一步，通过 MCP 执行操作，再观察结果。固件负责点击、拖动、按键和 ASCII 输入，不运行模型，也不提供手机截图。
+客户端负责观察屏幕、决定下一步和验证结果；StopWatch 执行点击、拖动、滚动和键盘输入。固件不运行模型，也不提供手机截图。
 
-**本仓库专为 M5Stack StopWatch 开发，已适配 [Anan](https://anan.sh)（一个纯客户端 Agent，即将开源）。** 同时提供 [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md)：直接让 Agent 使用 `$anan-iphone-use`，说明你使用的 Agent 和 ESP32 开发板，即可获得客户端接入与板型适配指导。
+已适配 **[Anan](https://anan.sh)（一个纯客户端 Agent，即将开源）**，也欢迎其他 MCP Agent 和 ESP32 设备；[anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) 提供配置和具体板型的适配指导。
 
 ## 演示与配置
 
@@ -28,35 +28,38 @@
 </tr>
 </table>
 
-**1 · 连接与局域网设置：** 连接 iPhone 与 StopWatch，在手机配置 USB 以太网：手动 IP `192.168.7.2`、掩码 `255.255.255.0`，路由器留空、不配 DNS，并开启辅助触控。之后按下图配对、导入 MCP 配置、开启控制。
+烧录后，可选择连接方式：
+
+- **无线：** 扫码加入 StopWatch 热点，打开 `http://192.168.4.1`，确认 MCP 配对后选择自己的 2.4 GHz Wi-Fi。退出配网前复制 MCP 配置；手机回到原 Wi-Fi 后导入，再在设备选择 BLE 输入，并在 iPhone 配对 **Anan StopWatch**。
+- **有线：** 连接 StopWatch 与 iPhone，配置 USB 以太网（IP `192.168.7.2`、掩码 `255.255.255.0`，无路由器/DNS），打开 `http://192.168.7.1` 配对并导入 MCP。
+
+两种方式均需开启辅助触控，再在 StopWatch 点“开始控制”。下图展示无线配置，[完整配置与恢复](docs/wireless.zh-CN.md)涵盖两种方式。
 
 <table>
 <tr>
-<th>2 · 进入连接设置</th>
-<th>3 · 核对并确认配对</th>
-<th>4 · 手机复制 JSON 并导入</th>
-<th>5 · 返回，开启控制</th>
+<th>1 · 扫码加入配置热点</th>
+<th>2 · 核对 MCP 配对</th>
+<th>3 · 退出前复制配置</th>
+<th>4 · 配对 BLE，开始控制</th>
 </tr>
 <tr>
-<td><img src="docs/images/setup/zh-settings.png" width="200" alt="StopWatch 设置页：连接MCP应用"></td>
+<td><img src="docs/images/setup/zh-pair-hotspot.png" width="200" alt="StopWatch 配置热点：Wi-Fi 二维码与网页地址"></td>
 <td><img src="docs/images/setup/zh-pair-confirm.png" width="200" alt="StopWatch 配对确认页：核对手机验证码"></td>
-<td><img src="docs/images/setup/zh-pair-ready.png" width="200" alt="StopWatch 配对完成页：手机复制配置，导入后返回"></td>
-<td><img src="docs/images/setup/zh-home-active.png" width="200" alt="StopWatch 首页：控制已开启，可随时停止"></td>
+<td><img src="docs/images/setup/zh-hotspot-ready.png" width="200" alt="复制 MCP 配置后返回，关闭配置热点"></td>
+<td><img src="docs/images/setup/zh-home-wireless.png" width="200" alt="StopWatch 首页：Wi-Fi 与 BLE 已连接，可开启控制"></td>
 </tr>
 </table>
 
-*配置界面示意：由[当前固件布局](tools/render_ui.py)静态渲染，非真机截图；`123456` 是示例验证码。手机 Safari 打开 `http://192.168.7.1` 完成配对与配置导出，无需证书。完整流程由下方 skill 引导。*
+*由[固件布局](tools/render_ui.py)静态渲染的示意图，非真机截图。验证码、Wi-Fi 密码和 IP 均为合成示例；MCP 配对与蓝牙配对是两回事。*
 
 ## 工作原理
 
-候选 **0.7.3-discovery** 保留 USB，增加 Wi-Fi MCP、BLE 输入、扫码连接临时配网热点和五个网络记忆。USB/Wi-Fi 的 HTTP 配置统一使用 **`http://stopwatch.local/mcp`**。编译/离线检查通过，新配网流程仍待实机验收。见[无线配置与限制](docs/wireless.zh-CN.md)。
-
-工具描述包含打开应用、输入、浏览和绘图等简短中英文任务词。多步控制时，服务建议先了解七个工具的完整概览，再按需读取参数，见[工具发现说明](docs/tool-discovery.zh-CN.md)。
+手机或电脑上的 Agent 通过 USB 网络或 Wi-Fi 访问 StopWatch 的 MCP；StopWatch 通过 USB 或实验性 BLE 向 iPhone 发送输入。网络连接与输入方式独立，因此也可以通过 Wi-Fi MCP 控制有线连接的手机。
 
 ```mermaid
 flowchart LR
     Phone["iPhone"] -->|"屏幕共享"| Agent["客户端 Agent（如 Anan）<br/>观察屏幕 · 推理 · 规划"]
-    Agent -->|"MCP 动作"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP Server"]
+    Agent -->|"USB 网络 / Wi-Fi MCP"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP Server"]
     Device -->|"USB / 实验性 BLE 鼠标和键盘"| Phone
 ```
 
@@ -66,9 +69,9 @@ flowchart LR
 
 | 项目 | 要求 |
 | --- | --- |
-| 设备 | M5Stack StopWatch（ESP32-S3）与 USB-C 数据线 |
-| 手机 | USB-C iPhone，开启辅助触控（AssistiveTouch） |
-| 客户端 | [Anan](https://anan.sh)，或能访问 USB 子网/已配置 Wi-Fi 局域网的 HTTP MCP 客户端 |
+| 设备 | M5Stack StopWatch（ESP32-S3）；首次烧录需电脑与数据线 |
+| 手机 | iPhone，开启辅助触控（AssistiveTouch）；USB 输入需要 USB-C 连接 |
+| 客户端 | [Anan](https://anan.sh)，或手机/电脑上能访问 USB 子网、Wi-Fi 局域网的 HTTP MCP 客户端 |
 | 屏幕观察 | 由客户端提供；[Anan](https://anan.sh) 的系统屏幕共享需要 iOS 27+ |
 
 ## 快速开始
@@ -85,13 +88,11 @@ cd anan-iphone-use
 若未自动识别 skill，请先读取 .agents/skills/anan-iphone-use/SKILL.md。
 ```
 
-[anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) 会引导 StopWatch 复用固件，其他 ESP32 按实际硬件做最小适配，并处理无屏设备的操作方式。
-
-StopWatch 升级固件时使用 `flash.sh` 或 `flash.py`，保留 BLE 配对及 Wi-Fi/MCP 配置，见[烧录说明](docs/setup.zh-CN.md)。
+Skill 引导烧录和连接配置，也可为其他 ESP32 板型做最小适配。升级时使用 `flash.sh` / `flash.py`，保留 BLE 配对及 Wi-Fi/MCP 配置，见[烧录说明](docs/setup.zh-CN.md)。
 
 ## MCP 接口
 
-默认地址：`http://192.168.7.1/mcp`。配对后导出的配置包含 Bearer 请求头。
+默认地址：**`http://stopwatch.local/mcp`**，USB/Wi-Fi 共用；USB 备用地址为 `http://192.168.7.1/mcp`。导入设备导出的配置及其 Bearer 请求头，切换 USB/BLE 输入无需重新导入。
 
 | 方法 | 用途 | 参数 |
 | --- | --- | --- |
@@ -107,9 +108,9 @@ StopWatch 升级固件时使用 `flash.sh` 或 `flash.py`，保留 BLE 配对及
 
 ## 当前限制
 
-- 当前适配 M5Stack StopWatch。Wi-Fi MCP 与 BLE 输入已作为候选实现，真机未验证；首次 Wi-Fi 配网可使用 USB 或设备临时热点。
+- Wi-Fi 使用 2.4 GHz，客户端须能访问同一局域网；配置热点会暂停 BLE，不充当互联网路由器。最多记住五个 Wi-Fi 网络。
 - 只支持竖屏、单指针和 US 键盘布局的 ASCII 输入，不直接输入中文。
-- 其他客户端兼容性、最新仅 MCP 固件的真机回归与持续运行仍需验证，见[验证记录](docs/validation.zh-CN.md)。
+- BLE 输入仍为实验性；指针精度、重连、客户端兼容性和持续运行需实机验收，编译/离线结果单独记录于[验证记录](docs/validation.zh-CN.md)。
 
 ## 项目对比与致谢
 
@@ -117,7 +118,7 @@ StopWatch 升级固件时使用 `flash.sh` 或 `flash.py`，保留 BLE 配对及
 
 | 项目 | 观察与 Agent | 动作接入 | iPhone 输入 |
 | --- | --- | --- | --- |
-| Anan iPhone Use + [Anan](https://anan.sh) | 手机内屏幕共享与 Agent | MCP | USB 绝对坐标鼠标与键盘 |
+| Anan iPhone Use + [Anan](https://anan.sh) | 手机内屏幕共享与 Agent | USB/Wi-Fi MCP | USB / 实验性 BLE 绝对定位与键盘 |
 | [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | 手机内 Agent、CoreDevice 显示流 | CoreDevice | CoreDevice 点击与拖动 |
 | [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | 电脑端 AirPlay 与 Python Agent | Wi-Fi TCP | USB 相对鼠标与键盘 |
 

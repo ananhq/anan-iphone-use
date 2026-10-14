@@ -2,11 +2,11 @@
 
 English · [简体中文](README.zh-CN.md)
 
-**An MCP server running on ESP32-S3 that operates a real iPhone through USB mouse and keyboard input.**
+**An iPhone MCP server built for M5Stack StopWatch (ESP32-S3), with USB and Bluetooth mouse and keyboard input.**
 
-Connect it to a client agent to add **iPhone Use**: the client observes the screen, decides what to do, calls MCP tools, and checks the result. The firmware executes taps, drags, key presses and ASCII input. It runs no model and provides no phone screenshots.
+The client observes the screen, decides what to do and checks the result; StopWatch executes taps, drags, scrolling and keyboard input. The firmware runs no model and provides no phone screenshots.
 
-**This repository is built for M5Stack StopWatch and integrates with [Anan](https://anan.sh) (an entirely client-side agent, coming soon as open source).** It also includes the [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md): tell your agent to use `$anan-iphone-use` and describe your agent and ESP32 board to get guided client integration and board adaptation.
+Integrated with **[Anan](https://anan.sh) (an entirely client-side agent, coming soon as open source)**. Other MCP agents and ESP32 boards are welcome; the [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) guides setup and hardware-specific adaptation.
 
 ## Demos and setup
 
@@ -28,35 +28,38 @@ Connect it to a client agent to add **iPhone Use**: the client observes the scre
 </tr>
 </table>
 
-**1 · Connect and configure the local network:** connect the iPhone to StopWatch and set up USB Ethernet on the phone: manual IP `192.168.7.2`, mask `255.255.255.0`, no router or DNS, and enable AssistiveTouch. Then pair, import the MCP configuration and enable control as shown below.
+After flashing, choose a connection:
+
+- **Wireless:** scan the StopWatch Wi-Fi QR, open `http://192.168.4.1`, confirm MCP pairing, then select your 2.4 GHz Wi-Fi. Copy the MCP configuration before closing setup; rejoin your usual Wi-Fi, import it, then select BLE input and pair **Anan StopWatch** on iPhone.
+- **USB:** connect StopWatch to iPhone, configure USB Ethernet (`192.168.7.2`, mask `255.255.255.0`, no router/DNS), then open `http://192.168.7.1` to pair and import MCP.
+
+Enable AssistiveTouch for either route, then tap **Start control** on StopWatch. Wireless setup is illustrated below; [full setup and recovery](docs/wireless.md) covers both routes.
 
 <table>
 <tr>
-<th>2 · Open connection settings</th>
-<th>3 · Match and confirm pairing</th>
-<th>4 · Copy JSON on phone and import</th>
-<th>5 · Go back and enable control</th>
+<th>1 · Join the setup hotspot</th>
+<th>2 · Confirm MCP pairing</th>
+<th>3 · Copy config before leaving</th>
+<th>4 · Pair BLE and start control</th>
 </tr>
 <tr>
-<td><img src="docs/images/setup/en-settings.png" width="200" alt="StopWatch settings: Connect MCP app"></td>
+<td><img src="docs/images/setup/en-pair-hotspot.png" width="200" alt="StopWatch setup hotspot: Wi-Fi QR and browser address"></td>
 <td><img src="docs/images/setup/en-pair-confirm.png" width="200" alt="StopWatch pairing confirmation: match the code on the phone"></td>
-<td><img src="docs/images/setup/en-pair-ready.png" width="200" alt="StopWatch pairing ready: copy config on phone and return after import"></td>
-<td><img src="docs/images/setup/en-home-active.png" width="200" alt="StopWatch home: control enabled, stop available"></td>
+<td><img src="docs/images/setup/en-hotspot-ready.png" width="200" alt="Copy MCP config before returning to close the setup hotspot"></td>
+<td><img src="docs/images/setup/en-home-wireless.png" width="200" alt="StopWatch home: Wi-Fi and BLE connected, Start control available"></td>
 </tr>
 </table>
 
-*UI illustrations [rendered from the current firmware layout](tools/render_ui.py), not device screenshots; `123456` is a sample pairing code. Open `http://192.168.7.1` in phone Safari to pair and export configuration, with no certificate required. The skill below guides the full setup.*
+*Static illustrations [rendered from the firmware layout](tools/render_ui.py), not device screenshots. Codes, Wi-Fi password and IP are synthetic examples; MCP pairing is separate from Bluetooth pairing.*
 
 ## How it works
 
-Candidate **0.7.3-discovery** adds Wi-Fi MCP, BLE input, temporary hotspot QR setup and five saved networks while retaining USB. HTTP configuration uses **`http://stopwatch.local/mcp`** for USB and Wi-Fi. Build/offline checks pass; the new setup flow still needs device acceptance. See [wireless setup and limits](docs/wireless.md).
-
-Tool descriptions include concise English/Chinese task words such as opening apps, typing, browsing and drawing. For multi-step control, the service suggests first browsing its seven-tool overview; full parameters are read as needed. See [tool discovery](docs/tool-discovery.md).
+A phone or computer agent reaches StopWatch's MCP over USB networking or Wi-Fi; StopWatch sends input to iPhone over USB or experimental BLE. Network access and input selection are independent, so Wi-Fi MCP can also control a USB-connected phone.
 
 ```mermaid
 flowchart LR
     Phone["iPhone"] -->|"Screen sharing"| Agent["Client agent, such as Anan<br/>Observe · Reason · Plan"]
-    Agent -->|"MCP actions"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP server"]
+    Agent -->|"MCP over USB network / Wi-Fi"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP server"]
     Device -->|"USB / experimental BLE mouse and keyboard"| Phone
 ```
 
@@ -66,9 +69,9 @@ After each action, the client should observe again to verify its effect. Tool co
 
 | Item | Requirement |
 | --- | --- |
-| Device | M5Stack StopWatch (ESP32-S3) and a USB-C data cable |
-| Phone | USB-C iPhone with AssistiveTouch enabled |
-| Client | [Anan](https://anan.sh), or an HTTP MCP client that can reach the USB subnet or configured Wi-Fi LAN |
+| Device | M5Stack StopWatch (ESP32-S3); computer and data cable for initial flashing |
+| Phone | iPhone with AssistiveTouch enabled; USB input requires a USB-C connection |
+| Client | [Anan](https://anan.sh), or a phone/computer HTTP MCP client with access to the USB subnet or Wi-Fi LAN |
 | Screen observation | Supplied by the client; [Anan](https://anan.sh)'s system screen sharing requires iOS 27+ |
 
 ## Quick start
@@ -85,13 +88,11 @@ Use $anan-iphone-use to identify my board, flash the firmware and set up iPhone 
 If the skill is not discovered, first read .agents/skills/anan-iphone-use/SKILL.md.
 ```
 
-The [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) reuses StopWatch firmware or minimally adapts another ESP32 for its actual hardware, including controls for boards without screens.
-
-For StopWatch firmware updates, use `flash.sh` or `flash.py` to preserve BLE pairing and Wi-Fi/MCP settings. See [flashing instructions](docs/setup.md).
+The skill guides flashing and connection setup, or minimal adaptation for another ESP32 board. Update through `flash.sh` / `flash.py` to preserve BLE pairing and Wi-Fi/MCP settings; see [flashing instructions](docs/setup.md).
 
 ## MCP interface
 
-Default endpoint: `http://192.168.7.1/mcp`. The exported pairing configuration includes the Bearer header.
+Default endpoint: **`http://stopwatch.local/mcp`** over USB/Wi-Fi; USB fallback: `http://192.168.7.1/mcp`. Import the exported configuration, including its Bearer header; switching USB/BLE input does not require a new import.
 
 | Method | Purpose | Parameters |
 | --- | --- | --- |
@@ -107,9 +108,9 @@ Coordinates are portrait-normalized **0…1**; times are in milliseconds. Screen
 
 ## Current limitations
 
-- M5Stack StopWatch remains the target. Wi-Fi MCP and BLE input are implemented as a device-unverified candidate; initial Wi-Fi setup can use USB or a temporary device hotspot.
+- Wi-Fi uses 2.4 GHz and an accessible local network; the setup hotspot pauses BLE and is not an Internet router. Up to five Wi-Fi networks are remembered.
 - Portrait, one pointer and US-layout ASCII input only; no direct Chinese text input.
-- Other client interoperability, device regression of the latest MCP-only firmware and endurance remain to be verified. See [validation](docs/validation.md).
+- BLE input remains experimental. Pointer accuracy, reconnection, client interoperability and endurance need device acceptance; build/offline results are recorded separately in [validation](docs/validation.md).
 
 ## Comparison and credits
 
@@ -117,7 +118,7 @@ Thanks to **actell** for the USB NCM/HID source reference, and **esp32-iphone-ag
 
 | Project | Observation and agent | Action interface | iPhone input |
 | --- | --- | --- | --- |
-| Anan iPhone Use + [Anan](https://anan.sh) | Phone-side screen sharing and agent | MCP | USB absolute mouse and keyboard |
+| Anan iPhone Use + [Anan](https://anan.sh) | Phone-side screen sharing and agent | USB/Wi-Fi MCP | USB / experimental BLE absolute positioning and keyboard |
 | [actell](https://github.com/ja1chen/actell/tree/e701786d1686823f9ab60524e689e387b7c3b904) | Phone-side agent, CoreDevice display stream | CoreDevice | CoreDevice taps and drags |
 | [esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent/tree/68584cfc8b3f227d6324ec7c8008c48b53f20a18) | Computer-side AirPlay and Python agent | Wi-Fi TCP | USB relative mouse and keyboard |
 
