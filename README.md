@@ -74,8 +74,6 @@ git clone https://github.com/ananhq/anan-iphone-use.git
 cd anan-iphone-use
 ```
 
-*This repository is currently private; cloning requires an authorized GitHub account. You can also use an existing local checkout.*
-
 Open your agent in the repository directory and enter:
 
 ```text
@@ -89,14 +87,40 @@ The [anan-iphone-use skill](.agents/skills/anan-iphone-use/SKILL.md) reuses Stop
 
 Default endpoint: `http://192.168.7.1/mcp`. The exported pairing configuration includes the required Bearer header. An optional HTTPS endpoint is also retained.
 
-| Tool | Function |
-| --- | --- |
-| `device_status` | Read connection and control status |
-| `tap` | Tap a position |
-| `drag` | Drag or swipe |
-| `key` | Send a keyboard key |
-| `type_ascii` | Type ASCII text |
-| `stop` | Stop input and revoke control permission |
+| Tool | Function | Required arguments | Optional arguments (defaults) |
+| --- | --- | --- | --- |
+| `device_status` | Read USB, control grant and input-busy status | None | None |
+| `tap` | Single click, double-click or long press | `x`, `y` | `count`: 1 or 2 (1); `holdMs`: 0 or 100…2000 (0); `intervalMs`: 50…300 (100), double-click only |
+| `drag` | Two-point swipe/drag or multi-point continuous stroke | `points`: 2…32 `{x,y}` objects; `durationMs`: 100…2000 | `holdMs`: 0…1000 (0), wait before moving |
+| `press_key` | Named keyboard, editing and system/media keys | `key`: name below | `repeat`: 1…5 (1); `pressMs`: 20…100 (40); `gapMs`: 50…300 (100) |
+| `type_ascii` | Type into focused input; no Chinese/Unicode | `text`: 1…120 US-layout ASCII bytes, including TAB/LF | None |
+| `scroll` | Send wheel input over a chosen region | `x`, `y`; `vertical`: −10…10 | `horizontal`: −10…10 (0); `repeat`: 1…5 (1); `gapMs`: 50…300 (100) |
+| `stop` | Interrupt input and revoke control; physically enable again for further input | None | None |
+
+Coordinates are portrait-normalized **0…1**, with the origin at top-left; times are integer milliseconds. `tap` defaults to a single click: use `count=2` for double-click or `holdMs>0` for long press, never both. `drag` keeps the primary button held through all points and releases at the end; `durationMs` must be at least `20 × (point count − 1)`. Scroll values are signed integer wheel units, not pixels; at least one axis must be nonzero. Start small and observe direction/distance.
+
+<details>
+<summary><code>press_key</code> key names</summary>
+
+Navigation (the only keys allowing `repeat>1`): `tab`, `shift_tab`, `up`, `down`, `left`, `right`, `select_left`, `select_right`, `word_left`, `word_right`.
+
+Keyboard/editing: `enter`, `escape`, `space`, `backspace`, `delete`, `command_space`, `select_all`, `copy`, `paste`, `cut`, `undo`, `redo`.
+
+System/media: `home`, `search`, `toggle_keyboard`, `globe`, `volume_up`, `volume_down`, `mute`, `play_pause`, `next_track`, `previous_track`, `brightness_up`, `brightness_down`. `home` opens Home, `search` opens Spotlight, and `toggle_keyboard` toggles the onscreen keyboard. Other effects depend on context; observe toggles before repeating.
+
+</details>
+
+Example tool arguments (not complete MCP requests):
+
+| Operation | Tool | Arguments |
+| --- | --- | --- |
+| Double-click | `tap` | `{"x":0.5,"y":0.6,"count":2}` |
+| Long press | `tap` | `{"x":0.5,"y":0.6,"holdMs":700}` |
+| Draw one continuous stroke | `drag` | `{"points":[{"x":0.2,"y":0.3},{"x":0.5,"y":0.6},{"x":0.8,"y":0.3}],"durationMs":800}` |
+| Open Home | `press_key` | `{"key":"home"}` |
+| Scroll a region | `scroll` | `{"x":0.5,"y":0.6,"vertical":-2}` |
+
+Candidate `0.5.1-mcp` advertises seven tools with concise descriptions, enums and limits; firmware retains compatibility calls. No custom phone bindings or Full Keyboard Access required. Refresh tool discovery after updating firmware. New HID behavior remains device-unverified; see [tool reference](docs/hid-tools.md).
 
 Screen observation belongs to the client and is not a device MCP tool. A desktop or cloud agent needs an explicit network path to the phone's USB subnet; MCP support alone does not make the device reachable. See [client integration](docs/client.md) for parameters and session behavior.
 

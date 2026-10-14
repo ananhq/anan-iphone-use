@@ -19,9 +19,10 @@ At this documentation review, the read-only Anan source snapshot in `apps/ios/An
 ## MCP integration
 
 1. Follow [pairing/import](mcp.md). Use `http://192.168.7.1/mcp`, or optional HTTPS8443, with the board's Bearer header. Import through Anan MCP settings; do not use its old direct StopWatch TCP connection entry.
-2. Initialize MCP, retain the session/version headers, send initialized notification and discover the six tools. Status/discovery do not authorize phone input.
-3. On StopWatch tap Start control. The first input session owns that grant. `tap`, `drag`, `key`, `type_ascii` execute USB HID; `device_status` and `stop` inspect/revoke control. See [schemas and session rules](mcp.md).
-4. Supply normalized portrait coordinates 0…1, US-layout ASCII up to120 bytes, keyboard usages4…231 and modifier bits0…255. Do not send the historical ANAN1 line format.
-5. Observe before and after actions. Completion confirms input dispatch, not app success; stop/cancel and inspect unknown partial results instead of replaying. USB loss/reboot revoke control, and no reconnect restores input permission.
+2. Initialize MCP, retain the session/version headers, send initialized notification and discover the seven tools. Status/discovery do not authorize phone input.
+3. On StopWatch tap Start control. The first input session owns that grant. `tap`, `drag`, `press_key`, `type_ascii`, `scroll` execute USB HID; `device_status` and `stop` inspect/revoke control. See [schemas and session rules](mcp.md).
+4. Supply normalized portrait coordinates 0…1, US-layout ASCII up to120 bytes, named keys from the discovered enum (raw usages only through the hidden compatibility entry). Do not send the historical ANAN1 line format.
+5. Prefer named keyboard/system keys and bounded gestures from [extended HID tools](hid-tools.md); refresh discovery after upgrading. No new phone bindings or Full Keyboard Access setup is required. Optional focus navigation depends on existing phone settings.
+6. Observe before and after actions. Completion confirms input dispatch, not app success; stop/cancel and inspect unknown partial results instead of replaying. USB loss/reboot revoke control, and no reconnect restores input permission.
 
 From `0.4.0-mcp`, port28766, ANAN1 READY/PING/STOP and direct/MCP source switching no longer exist. [PROTOCOL.md](../PROTOCOL.md) is retained solely for historical builds, not a current integration option. USB Ethernet and HID still use the same cable; supporting MCP does not provide screenshots or a route from desktop/cloud to that USB subnet.

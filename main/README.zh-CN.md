@@ -7,11 +7,12 @@ Anan iPhone Use（`anan-iphone-use`）：面向 M5Stack StopWatch 的 ESP-IDF C 
 | 模块 | 职责 |
 | --- | --- |
 | `board.c`、`bridge.h` | 保留 SDA47/SCL48、M5PM1 0x6e 寄存器0x07 bit5 MCU供电保持、GPIO1/2低电平停止；导出现有 I2C 总线供显示使用 |
-| `usb.c` | 原 USB 全速 NCM/绝对坐标鼠标/键盘实现，与检查点字节相同 |
+| `usb.c` | USB NCM 与保留的绝对鼠标/键盘 ID；滚轮发送及追加 Consumer ID 3 |
 | `main.c` | 仅初始化板级/USB/动作/MCP/UI；不再包含 ANAN1 TCP 监听/解析/心跳 |
 | `actions.c/h` | 共用单 worker/槽，保留原 US ASCII 映射与 HID 报告/暂停顺序；调用方提供存活检查和完成回调 |
+| `hid_input.c/h` | 合并手势/按键与旧调用兼容的严格有界解析、命名键盘/Consumer 映射与进度单位 |
 | `device.c/h` | 触屏/实体备用操作、原始按键停止、MCP 授权持续至停止/拔线/重启；独立触摸/低优先级显示任务 |
-| `mcp.c/h`、`mcp_tools.h` | 有界 HTTP/HTTPS MCP2025-11-25、六个工具、会话归属/ID记账、异步响应；仅 USB 配对/证书/配置及只读启动诊断 |
+| `mcp.c/h`、`mcp_tools.h` | 有界 HTTP/HTTPS MCP2025-11-25、七个展示工具及旧兼容入口、会话归属/ID记账、异步响应；仅 USB 配对/证书/配置及只读启动诊断 |
 | `identity.c/h` | 硬件熵初始化 DRBG，生成 CA/证书/token，独立 NVS 身份分区；显式维护/重置 |
 | `display.c/h`、`panel_init.h` | CO5300 QSPI 条带渲染，M5IOE1 唤醒/重试/处理间隔及显示供电/复位回读，自写 ASCII 字形；保留 MIT 厂商命令表声明 |
 | `touch.c/h` | CST820B 0x15 原生有界轮询、GPIO13、扩展芯片 PYG4 复位；触摸错误取消手势 |
@@ -22,7 +23,7 @@ Anan iPhone Use（`anan-iphone-use`）：面向 M5Stack StopWatch 的 ESP-IDF C 
 [MCP 文档](../docs/mcp.zh-CN.md)描述当前唯一控制协议与配置；
 [PROTOCOL.md](../PROTOCOL.md) 保持为未改写的历史 ANAN1 契约。
 旧服务和控制来源切换 UI 已删除，默认进入 MCP，但不自动授权控制。命令、控制授权、请求、连接不持久化；生成的 TLS/配对身份及独立语言偏好持久化。
-保留 USB 描述符及原 MCU 供电保持/5V boost 行为，显示供电单独初始化。
+保留原鼠标/键盘 ID 和旧时序，追加 Consumer ID 3；保留原 MCU 供电保持/5V boost 行为，显示供电单独初始化。
 不含 Wi-Fi/BLE、PSRAM分配、截图服务、模型 provider 或复制的 [Anan](https://anan.sh) 客户端。
 
 仓库根目录使用固定 ESP-IDF5.5.5 和 `./build.sh` 构建；准确依赖见
@@ -31,5 +32,4 @@ Anan iPhone Use（`anan-iphone-use`）：面向 M5Stack StopWatch 的 ESP-IDF C 
 
 [触屏 UI](../docs/touch-ui.zh-CN.md)记录硬件/交互及预定义检查。默认中文，设置可选
 English，记忆语言；手机页面也可切换。实体键备用：黄键选、蓝键确认；选中重置后
-按住蓝键两秒。触摸或实体键停止不复用同次接触重新授权。`tools/`仅生成字体和静态
-文档预览，不是设备/模拟器/E2E 或固件运行时依赖。
+按住蓝键两秒。触摸或实体键停止不复用同次接触重新授权。`tools/`生成字体/静态预览，并运行实施前编写的离线 HID 场景，均不是设备/模拟器/E2E 或固件运行时依赖。见[扩展工具](../docs/hid-tools.zh-CN.md)。

@@ -110,3 +110,9 @@ build-time glyph generation/static document previews, not a linked firmware
 component. Rendering uses Pillow's FreeType support; source font hash is checked,
 and layout previews export the same first-party C widget layout. Preserve
 applicable toolchain notices if redistributing those development tools.
+
+## HID expansion additions
+
+Candidate `0.5.0-mcp` adds first-party bounded parsing/execution, schemas and offline acceptance fixtures. The fixtures were authored before implementation and simulate reports/time, not device acceptance. USB code now uses the existing locked TinyUSB `0.21.0~2` Consumer descriptor/API; no upstream implementation was copied or dependency upgraded. Numeric Consumer usages follow Apple Accessory Design Guidelines 2026-09-21, chapter14 table14-3 (including 0x029D, absent as a named enum in this SDK); [research](docs/hid-capabilities.md) records the PDF hash. Existing original USB/board provenance gaps and license notices remain. Mouse/keyboard IDs and USB configuration are retained with Consumer ID3 appended.
+
+Candidate `0.5.1-mcp` consolidates tool discovery and first-party parsing, retaining the executor and USB code. The added consolidation acceptance scenarios preceded this implementation. No external code, dependencies or licenses changed; prior provenance gaps remain.

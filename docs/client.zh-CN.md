@@ -10,7 +10,7 @@ Anan iPhone Use（仓库名 `anan-iphone-use`）是设备端执行器。[Anan](h
 
 > 观察并操作当前 iPhone。通过系统屏幕共享获取画面，通过已连接的硬件执行点击、拖动、按键和 ASCII 输入。需要用户开启本次任务控制；动作后应重新观察，确认实际效果。
 
-`observe` / Anan 的 `phone.observe` 由手机客户端通过系统屏幕共享提供，不属于固件或其 MCP 工具；`tap`、`drag`、`key`、`type_ascii` 由硬件执行。HID `DONE` 或 MCP 工具结果仅确认输入序列，不代表目标操作成功；每次动作后应获取新截图确认实际效果。
+`observe` / Anan 的 `phone.observe` 由手机客户端通过系统屏幕共享提供，不属于固件或其 MCP 工具；`tap`、`drag`、`press_key`、`type_ascii`、`scroll` 由硬件执行。HID `DONE` 或 MCP 工具结果仅确认输入序列，不代表目标操作成功；每次动作后应获取新截图确认实际效果。
 
 手机内客户端与电脑端 Agent 的网络可达条件不同。直连手机可访问 USB 子网，电脑/云端 Agent 需要明确路由/桥接及自己的截图来源，不能仅凭支持 MCP 就直接访问手机 USB 子网。第三方互通仍未验证。实际 Anan 工具描述代码归另一 Anan 仓库/session，本次不修改。
 
@@ -19,9 +19,10 @@ Anan iPhone Use（仓库名 `anan-iphone-use`）是设备端执行器。[Anan](h
 ## MCP 接入
 
 1. 按[配对/导入](mcp.zh-CN.md)配置 `http://192.168.7.1/mcp` 或可选 HTTPS8443，带板上 Bearer 请求头。使用 Anan MCP 设置，不再使用旧“直连 StopWatch” TCP 连接入口。
-2. 初始化 MCP，保留会话/版本请求头，发送 initialized 通知并发现六个工具；状态/发现不授权手机输入。
-3. StopWatch 点“开始控制”，首个输入会话拥有该授权。`tap`、`drag`、`key`、`type_ascii` 执行 USB HID，`device_status` 和 `stop` 查看/撤销控制，见[工具 schema 与会话规则](mcp.zh-CN.md)。
-4. 使用竖屏归一化坐标0…1、最多120字节的 US 布局 ASCII、键盘 usage4…231 和 modifier位0…255，不发送历史 ANAN1 行格式。
-5. 动作前后观察屏幕。完成仅确认输入派发，不代表 App 成功；停止/取消后检查未知局部结果，不重放。USB掉线/重启撤销权限，重连不恢复输入授权。
+2. 初始化 MCP，保留会话/版本请求头，发送 initialized 通知并发现七个工具；状态/发现不授权手机输入。
+3. StopWatch 点“开始控制”，首个输入会话拥有该授权。`tap`、`drag`、`press_key`、`type_ascii`、`scroll` 执行 USB HID，`device_status` 和 `stop` 查看/撤销控制，见[工具 schema 与会话规则](mcp.zh-CN.md)。
+4. 使用竖屏归一化坐标0…1、最多120字节的 US 布局 ASCII、发现的命名按键枚举（原始 usage 仅供隐藏兼容入口），不发送历史 ANAN1 行格式。
+5. 优先使用[扩展 HID 工具](hid-tools.zh-CN.md)的命名键盘/系统按键与有界手势；升级后刷新工具发现。不要求新增手机绑定或开启全键盘控制；可选焦点导航依已有系统设置。
+6. 动作前后观察屏幕。完成仅确认输入派发，不代表 App 成功；停止/取消后检查未知局部结果，不重放。USB掉线/重启撤销权限，重连不恢复输入授权。
 
 从 `0.4.0-mcp` 起，28766端口、ANAN1 READY/PING/STOP 和直连/MCP来源切换均不再存在。[PROTOCOL.md](../PROTOCOL.md)仅供历史版本使用，不是当前接入选项。USB以太网与HID仍使用同一数据线；MCP不提供截图，也不自动打通电脑/云端至USB子网的网络路径。

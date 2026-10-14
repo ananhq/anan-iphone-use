@@ -11,6 +11,7 @@ Anan iPhone Use (`anan-iphone-use`) executes iPhone actions on M5Stack StopWatch
 | MCP and required UI | Implemented through candidate `0.4.0-mcp`, compilation/static previews passed; user reports display lighting and MCP satisfaction; scoped touch/persistence/interoperability/stop acceptance remains pending |
 | Plain HTTP MCP | Implemented HTTP80 MCP and same-page pairing/config export; user reports separate [Anan](https://anan.sh) HTTP support; user reports the preceding HTTP first-user flow works well; the new MCP-only image remains unverified |
 | MCP-only | User-approved removal of ANAN1 port28766/parser/heartbeat and source selection; USB NCM/HID retained, MCP default without input grant |
+| HID expansion | Candidate `0.5.1-mcp`: seven advertised tools, compatibility calls retained, retained mouse/keyboard IDs/timing plus Consumer ID 3; no additional phone mappings/FKA; device acceptance pending |
 | Wireless | Follows MCP; retain USB, first establish BLE absolute-pointer feasibility on iPhone |
 | Further display | Touch/bilingual settings now authorized; animations/model-thinking remain outside scope |
 
@@ -23,7 +24,7 @@ See [MCP decisions](mcp-development.md) and [implementation/setup](mcp.md).
 
 [PROTOCOL.md](../PROTOCOL.md) remains the historical ANAN1 contract; the runtime
 service is retired at the user's request. MCP is the current sole control protocol and uses the
-same HID worker, preserves USB descriptors/timing, has explicit physical grants,
+same HID worker, preserves original mouse/keyboard reports and legacy timing (with Consumer ID 3 appended in `0.5.0-mcp`), has explicit physical grants,
 session ownership and no implicit input retry/reconnect. Ordinary identity
 storage is separate from control grants. USB reachability and native Anan
 observation gates remain limits; MCP supplies neither screenshots nor a network

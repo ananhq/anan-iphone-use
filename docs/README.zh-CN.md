@@ -18,6 +18,7 @@
 | 文件、工具与本地产物 | [仓库组织](repository.zh-CN.md)、[固件模块](../main/README.zh-CN.md) |
 | 架构与范围 | [设计](design.zh-CN.md)、[路线图](roadmap.zh-CN.md) |
 | 实现决策 | [MCP 开发](mcp-development.zh-CN.md)、[触屏 UI 与语言](touch-ui.zh-CN.md) |
+| 扩展 HID 工具与验收 | [工具参考](hid-tools.zh-CN.md)、[预定义范围](hid-development.zh-CN.md) |
 | 贡献流程 | [贡献说明](../CONTRIBUTING.zh-CN.md) |
 
 ## 证据与分发

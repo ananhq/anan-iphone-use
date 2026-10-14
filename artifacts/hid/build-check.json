@@ -1,0 +1,150 @@
+{
+  "candidate": "0.5.1-mcp",
+  "baseCommit": "c794813f960b139089a1d4c72106e5c46c265b61",
+  "createdAt": "2026-10-14T08:37:11.912353+00:00",
+  "scope": "firmware tool consolidation, compilation, packaging and predefined offline acceptance; no device execution",
+  "priorCandidateRecord": "artifacts/hid/expansion-build-check.json",
+  "tools": {
+    "count": 7,
+    "advertised": [
+      "device_status",
+      "tap",
+      "drag",
+      "press_key",
+      "type_ascii",
+      "scroll",
+      "stop"
+    ],
+    "unlistedCompatibilityNames": [
+      "key",
+      "keyboard",
+      "long_press",
+      "double_tap",
+      "drag_hold",
+      "draw_path",
+      "system_key"
+    ],
+    "legacyDragArgumentsAccepted": true,
+    "clientDiscoveryRefreshRequired": true,
+    "catalogueBytes": 4522,
+    "priorCatalogueBytes": 8468,
+    "descriptionBytes": 1356,
+    "tokenCountsMeasured": false
+  },
+  "compile": {
+    "passed": true,
+    "idf": "ESP-IDF v5.5.5",
+    "target": "esp32s3",
+    "board": "M5Stack StopWatch 16MB",
+    "appBytes": 744976,
+    "compilerWarningsObserved": false
+  },
+  "image": {
+    "file": "build/hid-merged-candidate/anan-stopwatch-flash.bin",
+    "offset": "0x0",
+    "bytes": 810512,
+    "sha256": "88aa3fd595ad6f3451fc3e9b4fecdb19532b5adce80315b50cdf864a1bd36588",
+    "credentialStorageIncluded": false
+  },
+  "sources": {
+    "CMakeLists.txt": "eda933ca17dcabae4e65cb498c9156fb7d6cab43949d51a5de9a77695f6f13d5",
+    "build.sh": "79233af5f1ba5a46f75de7481cc41abf138bfc43e578f6374f07bfdfe0a53d7c",
+    "dependencies.lock": "1b475b1c868e239f587d361fd11e2de0c016cbcf219ebb9fa70e9797af525672",
+    "flash.sh": "eb74fafd794943413dbdb87ecf49f53945c3b7de9ae1ee7a7359e2aa12a15fe3",
+    "main/CMakeLists.txt": "d0e385ceb06380cffa0ede1c5bf74263c8b6465ebb912bf772203fbc6d2a1d4c",
+    "main/README.md": "afae0bcb5d3f567cebffdd293c3adb484d9bb0a0976301168e17480fbe763661",
+    "main/README.zh-CN.md": "d1bfcd5921d9e3f0427902d71520e22e31b6bdeb7a4069fd60de20190496ab47",
+    "main/actions.c": "529d9c9e7042df5aa836f31befa5fe36ea77e4ee401240fd9d27f14320ace1d3",
+    "main/actions.h": "40a37c5cfd283e75f71ba442ba3d73e62240324977a8a248633880f4e386655e",
+    "main/board.c": "3a55e8225cc2230f7a3bbc05e5b74a03d37f5394b6521e2a9203bf68270af633",
+    "main/bridge.h": "f3c29da60e31caf35267ecea9272eca73ba853b176a7efd0da646d0a20f202e0",
+    "main/device.c": "812f54d4d9b7b14ddcd279e0775c58bfad12ef7065cb875926bd4119025bf449",
+    "main/device.h": "1ee2320e0093eada0546f9603a06ae1edc9eeb4e7bc3bac1da645299314cae95",
+    "main/display.c": "db0f38c2ad5ec4a4bb4884c7540633fe51f59ee996f3ff9917d40398415d0eb4",
+    "main/display.h": "fda1901261e5666f529b672c35b254961748085c129c04bfb25e8512b390adf4",
+    "main/hid_input.c": "e0c3c37d19f8c1e387d46875bf38d814a1668480fa6a2b47d94ae332b4bd5935",
+    "main/hid_input.h": "2da2ad21975d7af4fc527fa7199eed466a6491af8a3a38bda966ac8ab10350e5",
+    "main/identity.c": "73be388dd210067bfe60cb8b79f0bdf07785fc836ff58cf914c6d8bdcaceb7b8",
+    "main/identity.h": "fa926a6f0004a1ea235f1907929633c53b7b368e0eb6cae3382d6fe5474981ca",
+    "main/idf_component.yml": "bb3bb3e7bac5abd75570a60a2f002ef09a024f59acdf8b7fb831874e59f89e01",
+    "main/main.c": "c212ec38ae33e6e64b93706ab343e105064427601cb8ba76f18048d57d4a90ae",
+    "main/mcp.c": "6656bf04d1f1eb5c82c9fa38e3a100704916ffc751a26e1f14abee6de5fe5fcf",
+    "main/mcp.h": "8173bc77bd0254ce26dd30c4a64487851df4edb59a7a7e8cade5826523fa7f30",
+    "main/mcp_tools.h": "92f714ba7395bf1436ede9d511904cdcba2fc606704b4ea0b78d6b4f8729b89e",
+    "main/panel_init.h": "75ed3403c1423050d1fd8ab3183d6f92c8a401044cf7821ae9dc6acafa99c3d1",
+    "main/touch.c": "aaa3484590be996422bb7ce39a9d766de1ee604daf2608ad4f65c9f6bdaf3535",
+    "main/touch.h": "aa5706991edce0d8aa09b00d963e9107cc523d4ce4e6e928a3f46883000674de",
+    "main/ui.c": "916a9f7282160558a6ffe89dcc84e7192b2c96ae7bdf3114ba160b0143613660",
+    "main/ui.h": "e03358f296c392f458d2f3444439fb888d45956db51085780a383fedfcb4f093",
+    "main/ui_font.h": "e3703af538a618190bc92821c79d1c7566d1a7729fb9d92bca9af7ab7239df03",
+    "main/ui_layout.c": "85b4e4cb10a123111016187b08d9486189b7f1b9157708ebc31bf3a67e229f40",
+    "main/ui_preferences.c": "332d3b1edd53c22ec1ef2567c55630ebfc25e84bdcf31baeba6b162d20161e80",
+    "main/ui_preferences.h": "acd8a59bdb4373affaae9bc3ae66b4aa230e49482ed5afea13b1839db6eb156e",
+    "main/usb.c": "65203f80a7d13e272c7054bf088a4fb7a28734a2299854142fd5153c1b435279",
+    "main/web/setup.html": "0ce761b9cf48dd97c49f2f7608f4faab8c305bb300e3bf8a9e1d04630d9b9634",
+    "package.py": "d9fd865814e648feb17b9d5eefd53e452527cc5258c6e442c859f567439bd47d",
+    "partitions.csv": "d9dafbd13f79c0dfa6b1ec13a952c5e84a1aa3ac07d59cc6b30157a33b59b949",
+    "sdkconfig.defaults": "e9c0d433dd92dd3b45d631e5b4ddae3cd44f9b1b6537307911e086192036fdf9"
+  },
+  "offlineFixturesSHA256": {
+    "tools/hid_acceptance/acceptance.c": "22dd57adc9a9b11cf4bd47b23440d776a425898a5ff97bd5926593b15467dc17",
+    "tools/hid_acceptance/esp_timer.h": "05d489fb1eebce39edae14e621caf9367bcca80d8bf7596bfaa738279372b64c",
+    "tools/hid_acceptance/freertos/FreeRTOS.h": "90bc04884b7ef97f682e373ec49536376a466b19f2cbe236d3f760cb5d58646c",
+    "tools/hid_acceptance/freertos/queue.h": "6bb83f544a1503210cffe8f24dfc38e1182b97e55c09e49c10fc92b90b929ed0",
+    "tools/hid_acceptance/freertos/task.h": "3e6de0a00090bf362a4460ca77f1519cb91482e030763373dddc9e8d9b2a65c8"
+  },
+  "offline": {
+    "passed": true,
+    "command": "bash tools/check_hid.sh",
+    "consolidationScenariosAuthoredBeforeImplementation": true,
+    "cases": [
+      "named modifiers and editing mapping",
+      "invalid enum, range, fraction and unknown fields",
+      "navigation-only repetition",
+      "wheel signs and repeats",
+      "hold and double-click timing",
+      "pre-drag hold",
+      "continuous path corner and endpoint",
+      "conservative progress",
+      "Consumer press and zero release in mocked sender",
+      "interruption while held and between repeats",
+      "legacy key/tap timing",
+      "merged tap defaults, hold/double dispatch and invalid combinations",
+      "two-point drag timing equals old argument form",
+      "held and multi-point drag dispatch",
+      "old/new drag form mixing rejected",
+      "merged keyboard and all twelve Consumer mappings match legacy names",
+      "merged navigation-only repeats and raw-key ambiguity rejected"
+    ],
+    "limitations": [
+      "time/FreeRTOS/report functions are simulated",
+      "does not exercise SDK USB driver, thread scheduling, phone or MCP client"
+    ]
+  },
+  "static": {
+    "passed": true,
+    "checks": [
+      "exactly seven advertised schemas",
+      "34 named key enums match parser tables",
+      "descriptions at most 300 ASCII characters each",
+      "executor and USB descriptors/senders unchanged from expansion candidate",
+      "board, physical grant/stop, dependency lock and historical protocol unchanged",
+      "client source read-only; server description supported",
+      "bilingual links and 22 JSON examples",
+      "packaged source and image hashes match working files",
+      "git diff --check passed"
+    ]
+  },
+  "deviceVerified": false,
+  "flashed": false,
+  "clientChanged": false,
+  "phoneSettingsChanged": false,
+  "providersExecuted": false,
+  "publishedCandidate": false,
+  "pending": [
+    "Anan refreshed tool directory and merged-argument interoperability",
+    "legacy calls subject to client-side directory validation",
+    "actual gesture, keyboard, Consumer and wheel responses",
+    "physical stop latency and endurance"
+  ]
+}

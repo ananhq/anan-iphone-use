@@ -84,3 +84,15 @@ Agent 未执行新的烧录、证书删除、板上重置、HTTP 手机互通或
 保留 USB/HID 输入序列，初始化 MCP 但不自动授权。旧 HTTP 构建保留于
 [http-onboarding-build-check.json](../artifacts/mcp/http-onboarding-build-check.json)。
 源码/符号/编译/打包/文档渲染检查与新烧录/真机运行分开，仅 MCP 镜像仍待验收。
+
+## HID 扩展候选
+
+候选 `0.5.0-mcp` 实现十三个 MCP 工具，包括七个命名键盘/滚轮/手势/Consumer 工具，不修改客户端、不要求新增手机绑定或全键盘控制配置。原鼠标/键盘ID及旧执行/发送函数体保留，追加 Consumer ID3。[预定义验收](hid-development.zh-CN.md)及第一方离线场景先于实施。锁定IDF完整编译/打包和模拟输入/取消/进度检查通过，[脱敏记录](../artifacts/hid/expansion-build-check.json)将其与真机行为区分。
+
+没有执行烧录、手机输入、provider、客户端连接或E2E。Consumer枚举/映射、滚轮/手势识别、新工具Anan互通、停止延迟与续航仍未验证；历史来源/验收缺口继续保留，上文 `usb.c` 字节相同结论仅适用于之前候选。
+
+## 工具合并候选
+
+候选 `0.5.1-mcp` 在 `tools/list` 展示七项，将长按/双击归入 `tap`、保持拖动/连续路径归入 `drag`、命名键盘/Consumer 按键归入 `press_key`。固件保留隐藏旧名称和旧拖动参数，客户端仍需刷新发现；本地缓存可能拒绝旧名称或新参数。默认点击和无保持的两点拖动保留旧时序。说明保持简短，公共规则同时放入服务描述与 initialize instructions；只读核对的 Anan 客户端读取服务描述，不依赖它读取 instructions。
+
+预先定义的合并场景通过离线模拟；七项 schema/完整按键枚举、旧执行器/USB/板级供电/授权/停止/依赖不变与中英文文档检查通过。完整锁定IDF编译与打包结果记录于[当前记录](../artifacts/hid/build-check.json)；前一轮记录保留在[扩展记录](../artifacts/hid/expansion-build-check.json)。未烧录或执行手机、客户端连接、provider/E2E；合并后 Anan 发现/调用与真机行为仍未验证。

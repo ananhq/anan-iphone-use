@@ -87,9 +87,81 @@ static bool stroke(uint32_t owner, uint8_t modifiers, uint8_t key) {
     return alive(owner) && bridge_key(modifiers, key) && pause_action(owner, 12) &&
            bridge_key(0, 0) && pause_action(owner, 12);
 }
-static bool execute(const action *a) {
+static bool tween(uint32_t owner, action_point from, action_point to, unsigned duration) {
+    unsigned steps = (duration + 19) / 20;
+    for (unsigned i = 1; i <= steps; ++i) {
+        uint16_t x = from.x + ((int32_t)to.x - from.x) * (int32_t)i / (int32_t)steps;
+        uint16_t y = from.y + ((int32_t)to.y - from.y) * (int32_t)i / (int32_t)steps;
+        unsigned wait = duration * i / steps - duration * (i - 1) / steps;
+        if (!alive(owner) || !bridge_mouse(1,x,y) || !pause_action(owner,wait)) return false;
+    }
+    return true;
+}
+static bool execute_hid(action *a) {
+    if (a->kind == ACTION_KEYBOARD) {
+        for (unsigned i = 0; i < a->repeat; ++i) {
+            if (!alive(a->epoch) || !bridge_key(a->modifiers,a->key) ||
+                !pause_action(a->epoch,a->press_ms) || !alive(a->epoch) || !bridge_key(0,0)) return false;
+            ++a->completed_units;
+            if (i + 1 < a->repeat && !pause_action(a->epoch,a->gap_ms)) return false;
+        }
+        return alive(a->epoch);
+    }
+    if (a->kind == ACTION_CONSUMER) {
+        if (!alive(a->epoch) || !bridge_consumer(a->consumer) ||
+            !pause_action(a->epoch,a->press_ms) || !alive(a->epoch) || !bridge_consumer(0)) return false;
+        a->completed_units = 1;
+        return alive(a->epoch);
+    }
+    if (!alive(a->epoch) || !bridge_mouse(0,a->x,a->y) || !pause_action(a->epoch,30)) return false;
+    if (a->kind == ACTION_SCROLL) {
+        for (unsigned i = 0; i < a->repeat; ++i) {
+            if (!alive(a->epoch) || !bridge_scroll(a->x,a->y,a->vertical,a->horizontal)) return false;
+            ++a->completed_units;
+            if (i + 1 < a->repeat && !pause_action(a->epoch,a->gap_ms)) return false;
+        }
+        return alive(a->epoch);
+    }
+    if (a->kind == ACTION_DOUBLE_TAP) {
+        for (unsigned i = 0; i < 2; ++i) {
+            if (!alive(a->epoch) || !bridge_mouse(1,a->x,a->y) ||
+                !pause_action(a->epoch,40) || !alive(a->epoch) || !bridge_mouse(0,a->x,a->y)) return false;
+            ++a->completed_units;
+            if (!i && !pause_action(a->epoch,a->gap_ms)) return false;
+        }
+        return alive(a->epoch);
+    }
+    if (!alive(a->epoch) || !bridge_mouse(1,a->x,a->y)) return false;
+    if (a->kind == ACTION_LONG_PRESS) {
+        if (!pause_action(a->epoch,a->duration) || !alive(a->epoch) ||
+            !bridge_mouse(0,a->x,a->y)) return false;
+        a->completed_units = 1;
+        return alive(a->epoch);
+    }
+    if (a->hold_ms && !pause_action(a->epoch,a->hold_ms)) return false;
+    if (a->kind == ACTION_DRAG_HOLD) {
+        if (!tween(a->epoch,(action_point){a->x,a->y},(action_point){a->end_x,a->end_y},a->duration) ||
+            !alive(a->epoch) || !bridge_mouse(0,a->end_x,a->end_y)) return false;
+        a->completed_units = 1;
+        return alive(a->epoch);
+    }
+    if (a->kind == ACTION_PATH) {
+        unsigned segments = a->point_count - 1;
+        for (unsigned i = 0; i < segments; ++i) {
+            unsigned duration = a->duration * (i + 1) / segments - a->duration * i / segments;
+            if (!tween(a->epoch,a->points[i],a->points[i + 1],duration)) return false;
+            ++a->completed_units;
+        }
+        action_point last = a->points[a->point_count - 1];
+        return alive(a->epoch) && bridge_mouse(0,last.x,last.y) && alive(a->epoch);
+    }
+    return false;
+}
+static bool execute(action *a) {
     if (!alive(a->epoch))
         return false;
+    if (a->kind >= ACTION_KEYBOARD)
+        return execute_hid(a);
     if (a->kind == ACTION_KEY)
         return stroke(a->epoch, a->modifiers, a->key);
     if (a->kind == ACTION_TYPE) {

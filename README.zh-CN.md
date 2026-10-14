@@ -74,8 +74,6 @@ git clone https://github.com/ananhq/anan-iphone-use.git
 cd anan-iphone-use
 ```
 
-*仓库目前为私有，克隆需要具有访问权限的 GitHub 账号；现有本地仓库可直接打开。*
-
 在仓库目录打开你使用的 Agent，输入：
 
 ```text
@@ -89,14 +87,40 @@ cd anan-iphone-use
 
 默认地址：`http://192.168.7.1/mcp`。配对后导出的配置包含所需的 Bearer 请求头；另保留可选 HTTPS 接口。
 
-| 工具 | 功能 |
-| --- | --- |
-| `device_status` | 查看连接与控制状态 |
-| `tap` | 点击指定位置 |
-| `drag` | 拖动或滑动 |
-| `key` | 发送键盘按键 |
-| `type_ascii` | 输入 ASCII 文本 |
-| `stop` | 停止输入并撤销控制授权 |
+| 工具 | 功能 | 必填参数 | 可选参数（默认值） |
+| --- | --- | --- | --- |
+| `device_status` | 查看 USB、控制授权及输入忙碌状态 | 无 | 无 |
+| `tap` | 单击、双击或长按 | `x`、`y` | `count`：1或2（1）；`holdMs`：0或100…2000（0）；`intervalMs`：50…300（100），仅双击可传 |
+| `drag` | 两点滑动/拖动、多点连续绘图 | `points`：2…32个 `{x,y}`；`durationMs`：100…2000 | `holdMs`：0…1000（0），移动前先保持 |
+| `press_key` | 命名键盘、编辑快捷键及系统/媒体按键 | `key`：下方名称 | `repeat`：1…5（1）；`pressMs`：20…100（40）；`gapMs`：50…300（100） |
+| `type_ascii` | 向当前焦点输入，不支持中文/Unicode | `text`：1…120字节 US 布局 ASCII，含 TAB/LF | 无 |
+| `scroll` | 在指定区域发送滚轮 | `x`、`y`；`vertical`：−10…10 | `horizontal`：−10…10（0）；`repeat`：1…5（1）；`gapMs`：50…300（100） |
+| `stop` | 中断输入并撤销控制，后续输入需重新物理启用 | 无 | 无 |
+
+坐标为竖屏归一化 **0…1**，左上角为原点；时间均为整数毫秒。`tap` 默认单击，`count=2` 为双击，`holdMs>0` 为长按，不能同时使用。`drag` 沿所有点持续按住左键，结束后释放；`durationMs` 至少为 `20 ×（点数 − 1）`。滚轮参数是带符号的整数单位，不是像素，至少一轴非零；应先小幅操作，观察实际方向和距离。
+
+<details>
+<summary><code>press_key</code> 可用按键名称</summary>
+
+导航（仅这些允许 `repeat>1`）：`tab`、`shift_tab`、`up`、`down`、`left`、`right`、`select_left`、`select_right`、`word_left`、`word_right`。
+
+键盘/编辑：`enter`、`escape`、`space`、`backspace`、`delete`、`command_space`、`select_all`、`copy`、`paste`、`cut`、`undo`、`redo`。
+
+系统/媒体：`home`、`search`、`toggle_keyboard`、`globe`、`volume_up`、`volume_down`、`mute`、`play_pause`、`next_track`、`previous_track`、`brightness_up`、`brightness_down`。`home` 返回主屏幕，`search` 打开 Spotlight，`toggle_keyboard` 切换屏幕键盘。其他效果依上下文，切换类动作应先观察再决定是否重复。
+
+</details>
+
+工具参数示例（不是完整 MCP 请求）：
+
+| 操作 | 工具 | 参数 |
+| --- | --- | --- |
+| 双击 | `tap` | `{"x":0.5,"y":0.6,"count":2}` |
+| 长按 | `tap` | `{"x":0.5,"y":0.6,"holdMs":700}` |
+| 画一笔连续路径 | `drag` | `{"points":[{"x":0.2,"y":0.3},{"x":0.5,"y":0.6},{"x":0.8,"y":0.3}],"durationMs":800}` |
+| 返回主屏幕 | `press_key` | `{"key":"home"}` |
+| 滚动指定区域 | `scroll` | `{"x":0.5,"y":0.6,"vertical":-2}` |
+
+候选 `0.5.1-mcp` 展示七个工具，由 MCP 提供简短描述、枚举与边界；旧调用在固件中保留兼容入口。不要求自定义手机绑定或开启全键盘控制。更新固件后刷新工具发现；新增 HID 行为尚待真机验证，见[工具参考](docs/hid-tools.zh-CN.md)。
 
 屏幕观察由客户端提供，不是设备 MCP 工具。电脑或云端 Agent 需要另行建立到手机 USB 子网的网络路径；仅支持 MCP 不代表能直接连接设备。参数和会话说明见[客户端接入](docs/client.zh-CN.md)。
 

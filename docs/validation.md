@@ -103,3 +103,15 @@ without automatically granting control. The prior HTTP build is preserved in
 [http-onboarding-build-check.json](../artifacts/mcp/http-onboarding-build-check.json).
 Source/symbol/build/package/document-render checks are separate from a new
 flash/device run; current MCP-only acceptance remains pending.
+
+## HID expansion candidate
+
+Candidate `0.5.0-mcp` implements thirteen MCP tools including seven named keyboard/scroll/gesture/Consumer tools; no client changes or new phone bindings/FKA setup. Existing mouse/keyboard IDs and legacy executor/sender bodies are retained; Consumer ID3 is appended. [Predefined acceptance](hid-development.md) and first-party offline fixtures preceded implementation. Full pinned-IDF compilation/packaging and simulated input/cancellation/progress checks passed; [sanitized record](../artifacts/hid/expansion-build-check.json) separates them from device behavior.
+
+No flash, phone input, provider, client connection or E2E was executed. Consumer enumeration/mappings, wheel/gesture recognition, new-tool Anan interoperability, stop latency and endurance remain device-unverified. Prior provenance and acceptance gaps remain; historical `usb.c` byte-identity statements above apply to earlier candidates.
+
+## Tool consolidation candidate
+
+Candidate `0.5.1-mcp` advertises seven tools, merging stationary gestures into `tap`, held drags/continuous paths into `drag` and named keyboard/Consumer keys into `press_key`. Firmware retains hidden legacy names and old drag arguments; clients must refresh discovery and may locally reject old names or new parameters. Default tap and unheld two-point drag retain prior timing. Descriptions are concise; shared rules appear in both server description and initialize instructions. Read-only inspection found Anan consumes the server description, so the design does not depend on its consuming instructions.
+
+Predefined consolidation scenarios passed with simulated reports/time; seven schemas/full key enums, unchanged executor/USB/power/grants/stop/dependencies and bilingual documentation checks passed. Full pinned-IDF compile/package outcomes are in the [current record](../artifacts/hid/build-check.json); the prior [expansion record](../artifacts/hid/expansion-build-check.json) is preserved. No flash, phone actions, client connection, provider or E2E ran; merged Anan discovery/calls and device behavior remain unverified.

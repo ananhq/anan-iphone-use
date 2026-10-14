@@ -16,7 +16,7 @@ Anan iPhone Use（`anan-iphone-use`）提供设备端 USB 输入执行；客户�
 4. 确认后，同一网页自动生成 MCP JSON；复制或下载后导入 Anan 或兼容 HTTP MCP 的客户端。导出端点为 `http://192.168.7.1/mcp`，带设备独立 Bearer 请求头。无需安装描述文件或开启系统证书信任。
 5. StopWatch 点“已导入 返回”，再点“开始控制”。控制持续至停止/拔线/重启或其他已记录撤销事件。发现工具/读取状态不授权输入；控制时触屏或按任一正面实体键停止，同次接触不会再启用。
 
-明文 HTTP 不提供 TLS 加密，仍限定原有准确 USB 地址/Host/Origin。HTTPS 保留在网页折叠的可选区域：HTTPS 配置页导出 `https://192.168.7.1:8443/mcp`，仍需原有证书安装/信任。两种传输共用六个工具、会话和 HID 执行器；HTTP 控制不再依赖 HTTPS 启动成功。
+明文 HTTP 不提供 TLS 加密，仍限定原有准确 USB 地址/Host/Origin。HTTPS 保留在网页折叠的可选区域：HTTPS 配置页导出 `https://192.168.7.1:8443/mcp`，仍需原有证书安装/信任。两种传输共用七个展示工具、会话和 HID 执行器；HTTP 控制不再依赖 HTTPS 启动成功。
 
 网页只在标签页 session storage 保留临时配对凭据；配置/token 留在页面/下载中，不放入 local storage。HTTP 下安全上下文剪贴板 API 不可用时使用浏览器复制备用方式，仍可选中文本复制或下载 JSON。实际 Safari 复制行为待真机检查。关闭、过期或重新配对后，重进“连接MCP应用”再开始。配置导出要求物理确认、有效十分钟窗口及临时 HttpOnly、SameSite Strict 设置 Cookie。重新物理配对可导出现有 token。
 
@@ -41,12 +41,15 @@ POST 返回 JSON，已认证 GET 返回 405，DELETE 终止会话，通知返回
 
 | 工具 | 必填参数 | 含义 |
 | --- | --- | --- |
-| `device_status` | 无 | USB 在线、模式、输入忙碌、权限及剩余时间 |
-| `tap` | `x`、`y`：0…1 数值 | 竖屏归一化绝对坐标点击 |
-| `drag` | `x`、`y`、`toX`、`toY`：0…1；`durationMs`：100…2000 整数 | 有界拖动 |
-| `key` | `keycode`：4…231 整数；`modifiers`：0…255 整数 | 一次 USB HID 按下/松开 |
-| `type_ascii` | `text`：1…120 字节，US 布局可打印 ASCII 加 TAB/LF | 有界键盘输入，不支持 Unicode/输入法 |
-| `stop` | 无 | 撤销 MCP 权限，中断共用 HID 并请求释放 |
+| `device_status` | 无 | USB、模式、输入忙碌与物理授权状态 |
+| `tap` | `x`,`y`：0…1 | 默认单击；count=2 双击；holdMs>0 长按 |
+| `drag` | `points`：2…32个坐标；`durationMs`：100…2000 | 两点拖动，多点连续路径，可先保持 |
+| `press_key` | `key`：名称枚举 | 命名键盘/编辑及系统/媒体按键 |
+| `type_ascii` | `text`：1…120字节 US 布局 ASCII 加 TAB/LF | 不支持 Unicode/输入法 |
+| `scroll` | `x`,`y`,`vertical` | 目标区域的有界滚轮，非像素单位 |
+| `stop` | 无 | 撤销权限、中断输入并请求释放 |
+
+候选 `0.5.1-mcp` 展示七项；可选参数、范围、进度与隐藏兼容调用见[HID 工具参考](hid-tools.zh-CN.md)。旧调用仍由固件接受，但不再进入工具目录；升级后刷新发现。不要求新增手机绑定或全键盘控制配置。
 
 未知参数会被拒绝。完成仅代表 HID 序列完成，不代表 App/任务成功。失败、取消或响应
 丢失可能已经产生部分效果，应另行观察手机，不自动重试。`phone.observe` 是 Anan
@@ -75,7 +78,7 @@ HTTP/HTTPS MCP 共用一个 HID worker，单槽调度，忙碌时拒绝输入。
 HTTP 响应断开本身不被视为必然取消：客户端应发送取消/停止，实体停止和单动作八秒时限仍生效。响应丢失属于结果未知，不表示可以安全重试。
 
 `0.4.0-mcp` 删除旧 ANAN1 监听/解析/心跳和来源切换 UI。原生手机观察归客户端，
-已检查的 Anan 观察就绪条件不要求旧输入连接。USB描述符及HID报告时序保留。
+已检查的 Anan 观察就绪条件不要求旧输入连接。从 `0.5.0-mcp` 起追加 Consumer 描述符/报告 ID 3，保留原鼠标/键盘 ID 与旧 HID 时序。
 当前 `device_status.mode` 为 `mcp` 或 `setup`，没有旧 `usb` 控制模式。
 
 两项服务要求本地 USB IP `192.168.7.1`、对端 `192.168.7.2`、准确 Host；若有 Origin，

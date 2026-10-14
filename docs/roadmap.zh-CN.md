@@ -11,6 +11,7 @@ Anan iPhone Use（`anan-iphone-use`）在 M5Stack StopWatch 上执行 iPhone 动
 | MCP 与必要 UI | 已实现至候选 `0.4.0-mcp`，编译/静态预览通过；用户反馈屏幕亮起及 MCP 满意，具体验收中的触摸/记忆/互通/停止仍待完成 |
 | 明文 HTTP MCP | 已实现 HTTP80 MCP 和同页配对/配置导出；用户反馈另一 [Anan](https://anan.sh) session 已完成 HTTP 支持，用户反馈上一候选 HTTP 新用户流程已验证良好，新的仅 MCP 镜像仍待真机验证 |
 | 仅 MCP | 按用户要求移除 ANAN1 28766端口/解析/心跳/来源切换；保留 USB NCM/HID，默认 MCP 但不授权输入 |
+| HID 扩展 | 候选 `0.5.1-mcp`：七个展示工具，保留兼容调用，保留原鼠标/键盘 ID/时序并追加 Consumer ID 3；不要求新增手机绑定/全键盘控制；真机验收待完成 |
 | 无线 | MCP 后进行，保留 USB，先验证 iPhone 的 BLE 绝对坐标指针可行性 |
 | 更多显示 | 触屏/双语设置已获授权，动画/模型思考仍不在范围 |
 
@@ -21,7 +22,7 @@ Anan iPhone Use（`anan-iphone-use`）在 M5Stack StopWatch 上执行 iPhone 动
 
 [PROTOCOL.md](../PROTOCOL.md) 保留历史 ANAN1 契约，运行服务按用户要求退役。
 MCP 是当前唯一控制协议，使用 HID worker、保留
-USB 描述符/时序、明确物理授权/会话归属、不隐式重试或重连输入。身份存储与控制授权
+原鼠标/键盘报告与旧时序（`0.5.0-mcp` 追加 Consumer ID 3）、明确物理授权/会话归属、不隐式重试或重连输入。身份存储与控制授权
 分开；USB 可达性和 Anan 原生观察门槛仍有限制，MCP 不提供截图或远程客户端网络桥。
 
 允许编译/静态检查；烧录、设备操作、provider、模拟器/E2E 要对当前范围另获授权。

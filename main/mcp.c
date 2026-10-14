@@ -2,6 +2,7 @@
 #include "mcp.h"
 #include "mcp_tools.h"
 #include "actions.h"
+#include "hid_input.h"
 #include "bridge.h"
 #include "device.h"
 #include "display.h"
@@ -45,6 +46,8 @@ typedef struct {
     uint32_t generation, device_generation, deadline;
     atomic_bool cancelled;
     bool success;
+    action_kind input_kind;
+    uint16_t completed_units, total_units;
     SemaphoreHandle_t done;
 } input_request;
 typedef struct {
@@ -350,19 +353,35 @@ static bool input_alive(uint32_t unused, void *context) {
            within(p->deadline);
 }
 static void input_done(const action *a, bool result, void *context) {
-    (void)a;
     input_request *p = context;
     p->success = result;
+    p->completed_units = a->completed_units;
     xSemaphoreGive(p->done);
 }
 static void respond_input(void *context) {
     input_request *p = context;
     xSemaphoreTake(p->done, portMAX_DELAY);
+    cJSON *progress = NULL;
+    char message[240];
+    if (p->input_kind >= ACTION_KEYBOARD) {
+        const char *unit = hid_input_unit(p->input_kind);
+        progress = cJSON_CreateObject();
+        cJSON_AddBoolToObject(progress,"sequenceCompleted",p->success);
+        cJSON_AddNumberToObject(progress,"completedUnits",p->completed_units);
+        cJSON_AddNumberToObject(progress,"totalUnits",p->total_units);
+        cJSON_AddStringToObject(progress,"unit",unit);
+        cJSON_AddStringToObject(progress,"phoneEffect","unverified");
+        cJSON_AddBoolToObject(progress,"partialEffectsPossible",!p->success);
+        snprintf(message,sizeof(message),"HID %u/%u %s completed. Phone effect is unverified. %s",
+                 p->completed_units,p->total_units,unit,
+                 p->success ? "Observe the phone to verify the result."
+                            : "Input interrupted or failed; partial effects are possible. Observe; do not retry.");
+    }
     tool_result(p->req, p->id, p->success,
-                p->success ? "HID sequence completed. Observe the phone to verify the result."
+                progress ? message : p->success ? "HID sequence completed. Observe the phone to verify the result."
                            : "Input interrupted or failed; partial effects are possible. Observe "
                              "the phone. Do not automatically retry.",
-                NULL);
+                progress);
     httpd_req_async_handler_complete(p->req);
     xSemaphoreTake(lock, portMAX_DELAY);
     active = NULL;
@@ -372,30 +391,8 @@ static void respond_input(void *context) {
     free(p);
     vTaskDelete(NULL);
 }
-static bool point(const cJSON *args, const char *name, uint16_t *out) {
-    const cJSON *v = field(args, name);
-    if (!cJSON_IsNumber(v) || !isfinite(v->valuedouble) || v->valuedouble < 0 || v->valuedouble > 1)
-        return false;
-    *out = (uint16_t)lround(v->valuedouble * 65535.0);
-    return true;
-}
 static bool parse_input(const char *name, const cJSON *args, action *out) {
     memset(out, 0, sizeof(*out));
-    if (!strcmp(name, "tap")) {
-        const char *keys[] = {"x", "y"};
-        out->kind = ACTION_TAP;
-        return object_keys(args, keys, 2) && point(args, "x", &out->x) && point(args, "y", &out->y);
-    }
-    if (!strcmp(name, "drag")) {
-        const char *keys[] = {"x", "y", "toX", "toY", "durationMs"};
-        out->kind = ACTION_DRAG;
-        if (!object_keys(args, keys, 5) || !point(args, "x", &out->x) ||
-            !point(args, "y", &out->y) || !point(args, "toX", &out->end_x) ||
-            !point(args, "toY", &out->end_y) || !integer(field(args, "durationMs"), 100, 2000))
-            return false;
-        out->duration = field(args, "durationMs")->valuedouble;
-        return true;
-    }
     if (!strcmp(name, "key")) {
         const char *keys[] = {"keycode", "modifiers"};
         out->kind = ACTION_KEY;
@@ -424,7 +421,7 @@ static bool parse_input(const char *name, const cJSON *args, action *out) {
         out->text_length = length;
         return true;
     }
-    return false;
+    return hid_input_parse(name, args, out);
 }
 static esp_err_t dispatch_input(httpd_req_t *r, const cJSON *id, const char *sid, action *a) {
     xSemaphoreTake(lock, portMAX_DELAY);
@@ -481,6 +478,8 @@ static esp_err_t dispatch_input(httpd_req_t *r, const cJSON *id, const char *sid
     p->generation = atomic_load(&input_generation);
     p->device_generation = gen;
     p->deadline = now_ms() + 8000;
+    p->input_kind = a->kind;
+    p->total_units = hid_input_total(a);
     snprintf(p->session_id, sizeof(p->session_id), "%s", sid);
     active = p;
     snprintf(owner, sizeof(owner), "%s", sid);
@@ -535,11 +534,21 @@ static esp_err_t handle_call(httpd_req_t *r, const cJSON *id, const char *sid,
                            NULL);
     }
     if (strcmp(name->valuestring, "tap") && strcmp(name->valuestring, "drag") &&
-        strcmp(name->valuestring, "key") && strcmp(name->valuestring, "type_ascii"))
+        strcmp(name->valuestring, "key") && strcmp(name->valuestring, "type_ascii") &&
+        !hid_input_is_tool(name->valuestring))
         return rpc_error(r, id, -32602, "Unknown tool");
     action a;
-    if (!parse_input(name->valuestring, args, &a))
+    if (!parse_input(name->valuestring, args, &a)) {
+        if (hid_input_is_tool(name->valuestring)) {
+            char reason[240];
+            snprintf(reason,sizeof(reason),
+                     "Invalid %s arguments; no input dispatched. Follow tools/list. "
+                     "Unlisted compatibility calls are documented in docs/hid-tools.md.",
+                     name->valuestring);
+            return rpc_error(r,id,-32602,reason);
+        }
         return rpc_error(r, id, -32602, "Invalid input arguments");
+    }
     return dispatch_input(r, id, sid, &a);
 }
 static esp_err_t mcp_handler(httpd_req_t *r) {
@@ -625,9 +634,16 @@ static esp_err_t mcp_handler(httpd_req_t *r) {
                 cJSON *info = cJSON_AddObjectToObject(data, "serverInfo");
                 cJSON_AddStringToObject(info, "name", "stopwatch");
                 cJSON_AddStringToObject(info, "version", esp_app_get_description()->version);
+                cJSON_AddStringToObject(info, "description",
+                                        "iPhone USB input: tap, drag/draw, keys, ASCII and scroll. Physical MCP enable required; "
+                                        "each call releases input. Client observes results; no UI tree. No automatic replay. "
+                                        "No custom phone bindings; Full Keyboard Access optional, not assumed.");
                 cJSON_AddStringToObject(data, "instructions",
                                         "Input requires StopWatch MCP mode and physical enable. "
-                                        "Observe separately. Never retry lost input responses.");
+                                        "Coordinates: portrait 0..1, origin top-left. Each call releases held input. "
+                                        "HID completion is not app success; observe separately. Interrupted/lost replies may have "
+                                        "partial effects; never replay automatically. No custom phone bindings; Full Keyboard Access "
+                                        "is optional, not assumed. Refresh tools after firmware updates.");
                 result = rpc_result(r, id, data);
             }
         }

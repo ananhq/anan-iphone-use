@@ -17,7 +17,7 @@ Anan iPhone Use (`anan-iphone-use`) supplies device-side USB input execution. Cl
 4. After confirmation, the same page generates MCP JSON automatically. Copy or download it and import into Anan or another HTTP-compatible MCP client. The exported endpoint is `http://192.168.7.1/mcp`, with a per-device Bearer header. No profile installation or system certificate trust is required.
 5. On StopWatch tap Imported, go back, then Start control. Control stays enabled until stop/detach/reboot or another documented revocation event. Discovery/status do not enable input. Touch during control or either front button stops and consumes that contact.
 
-Plain HTTP has no TLS encryption and is restricted to the existing exact USB addresses/Host/Origin. HTTPS remains optional under the collapsed page section; it exports `https://192.168.7.1:8443/mcp` from the HTTPS configuration page and retains the prior certificate/trust requirements. Both transports share the same six tools, sessions and HID executor. HTTPS startup is no longer a prerequisite for HTTP control.
+Plain HTTP has no TLS encryption and is restricted to the existing exact USB addresses/Host/Origin. HTTPS remains optional under the collapsed page section; it exports `https://192.168.7.1:8443/mcp` from the HTTPS configuration page and retains the prior certificate/trust requirements. Both transports share the same seven advertised tools, sessions and HID executor. HTTPS startup is no longer a prerequisite for HTTP control.
 
 The page retains only its temporary pairing proof in tab session storage; configuration/token stays in the page/download, not local storage. On HTTP, copying uses a browser fallback when the secure-context clipboard API is unavailable; select/copy or JSON download remains available. Actual Safari clipboard behavior is a device check. After closing/expiry/restart, reopen Connect MCP app and start again. Config export requires physical confirmation, a valid ten-minute setup window and the temporary HttpOnly, SameSite Strict setup cookie. A fresh physical setup may export an existing token.
 
@@ -44,12 +44,15 @@ client needs another network path, which is outside this wired slice.
 
 | Tool | Required arguments | Meaning |
 | --- | --- | --- |
-| `device_status` | None | USB online, selected mode, action busy, permission/time remaining |
-| `tap` | `x`, `y`: numbers 0…1 | Absolute pointer tap; portrait coordinates |
-| `drag` | `x`, `y`, `toX`, `toY`: 0…1; `durationMs`: integer 100…2000 | Bounded absolute drag |
-| `key` | `keycode`: integer 4…231; `modifiers`: integer 0…255 | One USB HID key press/release |
-| `type_ascii` | `text`: 1…120 US-layout ASCII bytes, printable plus TAB/LF | Bounded keyboard input; no Unicode/IME |
-| `stop` | None | Revoke MCP authorization, interrupt shared input and request release |
+| `device_status` | None | USB, mode, busy and physical grant state |
+| `tap` | `x`,`y`: 0…1 | Default click; count=2 double-clicks; holdMs>0 long-presses |
+| `drag` | `points`: 2…32 coordinates; `durationMs`: 100…2000 | Two-point drag or continuous path, with optional pre-hold |
+| `press_key` | `key`: name enum | Named keyboard/editing and system/media keys |
+| `type_ascii` | `text`: 1…120 US-layout ASCII bytes plus TAB/LF | No Unicode/IME |
+| `scroll` | `x`,`y`,`vertical` | Bounded wheel over a target; not pixel units |
+| `stop` | None | Revoke authorization, interrupt input and request release |
+
+Candidate `0.5.1-mcp` advertises seven tools; optional parameters, limits, progress and hidden compatibility calls are in [HID tool reference](hid-tools.md). Firmware accepts old calls but excludes them from discovery; refresh after upgrading. No new phone bindings or Full Keyboard Access required.
 
 Unknown arguments are rejected. Tool completion confirms a HID sequence, never
 an app/task result. Failure/cancellation/lost replies can have partial effects;
@@ -88,8 +91,7 @@ clients should send cancellation/stop; physical stop and the eight-second per-ac
 
 The legacy ANAN1 listener/parser/heartbeat and source-selection UI are removed
 from `0.4.0-mcp`. Native phone observation is client-owned; the inspected Anan
-observe readiness does not require the old input connection. USB descriptors
-and HID report timing are retained. Current `device_status.mode` is `mcp` or
+observe readiness does not require the old input connection. From `0.5.0-mcp`, the Consumer descriptor/report ID 3 is appended; original mouse/keyboard IDs and legacy HID timing are retained. Current `device_status.mode` is `mcp` or
 `setup`; there is no `usb` legacy control mode.
 
 Both services require local USB IP `192.168.7.1`, peer `192.168.7.2`, exact Host

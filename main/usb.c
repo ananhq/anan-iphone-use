@@ -20,7 +20,8 @@
 
 static const uint8_t reports[] = {
     TUD_HID_REPORT_DESC_ABSMOUSE(HID_REPORT_ID(1)),
-    TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(2))
+    TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(2)),
+    TUD_HID_REPORT_DESC_CONSUMER(HID_REPORT_ID(3))
 };
 static const tusb_desc_device_t device = {
     .bLength = sizeof(tusb_desc_device_t), .bDescriptorType = TUSB_DESC_DEVICE,
@@ -42,6 +43,7 @@ static struct netif network;
 static SemaphoreHandle_t initialized;
 static uint8_t mac[6];
 static uint16_t pointer_x, pointer_y;
+static bool consumer_held;
 
 static void device_event(tinyusb_event_t *event, void *arg) {
     (void)arg;
@@ -72,9 +74,27 @@ bool bridge_key(uint8_t modifiers, uint8_t key) {
     uint8_t keys[6] = {key};
     return tud_hid_n_keyboard_report(0, 2, modifiers, keys) && report_completed(before);
 }
+bool bridge_scroll(uint16_t x, uint16_t y, int8_t vertical, int8_t horizontal) {
+    if (!report_ready()) return false;
+    unsigned before = atomic_load(&completed);
+    pointer_x = x; pointer_y = y;
+    return tud_hid_n_abs_mouse_report(0, 1, 0, x >> 1, y >> 1, vertical, horizontal) &&
+           report_completed(before);
+}
+bool bridge_consumer(uint16_t usage) {
+    if (!report_ready()) return false;
+    unsigned before = atomic_load(&completed);
+    // Remember uncertain presses too: cleanup must attempt a zero report.
+    if (usage) consumer_held = true;
+    bool sent = tud_hid_n_report(0, 3, &usage, sizeof(usage)) && report_completed(before);
+    if (sent && !usage) consumer_held = false;
+    return sent;
+}
 void bridge_release(void) {
     bridge_mouse(0, pointer_x, pointer_y);
     bridge_key(0, 0);
+    // Legacy actions send no additional report unless a Consumer press needs release.
+    if (consumer_held) bridge_consumer(0);
 }
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) { (void)instance; return reports; }
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t id, hid_report_type_t type, uint8_t *buffer, uint16_t len) {

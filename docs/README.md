@@ -18,6 +18,7 @@ English · [简体中文](README.zh-CN.md)
 | Files, tools and local outputs | [Repository layout](repository.md), [firmware modules](../main/README.md) |
 | Architecture and scope | [Design](design.md), [roadmap](roadmap.md) |
 | Implementation decisions | [MCP development](mcp-development.md), [touch UI and language](touch-ui.md) |
+| Extended HID tools and acceptance | [Tool reference](hid-tools.md), [predefined scope](hid-development.md) |
 | Contribution process | [Contributing](../CONTRIBUTING.md) |
 
 ## Evidence and distribution
