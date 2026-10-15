@@ -58,14 +58,7 @@
 
 手机或电脑上的 Agent 通过 USB 网络或 Wi-Fi 访问 StopWatch 的 MCP；StopWatch 通过 USB 或实验性 BLE 向 iPhone 发送输入。网络连接与输入方式独立，因此也可以通过 Wi-Fi MCP 控制有线连接的手机。
 
-```mermaid
-flowchart LR
-    Phone["iPhone"] -->|"屏幕共享"| Agent["客户端 Agent（如 Anan）<br/>观察屏幕 · 推理 · 规划"]
-    Agent -->|"USB 网络 / Wi-Fi MCP"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP Server"]
-    Device -->|"USB / 实验性 BLE 鼠标和键盘"| Phone
-```
-
-每次动作后，客户端应重新观察屏幕，确认实际效果。工具执行完成只代表输入已发送，不代表目标操作成功。
+![iPhone 上的 Anan 通过 Wi-Fi 向 StopWatch 内置 MCP Server 发送请求，设备通过 BLE 模拟鼠标键盘操作手机；屏幕共享留在 iPhone 内。](docs/images/architecture/iphone-agent.zh-CN.png)
 
 ## 你需要什么
 

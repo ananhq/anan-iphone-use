@@ -58,14 +58,7 @@ Enable AssistiveTouch for either route, then tap **Start control** on StopWatch:
 
 A phone or computer agent reaches StopWatch's MCP over USB networking or Wi-Fi; StopWatch sends input to iPhone over USB or experimental BLE. Network access and input selection are independent, so Wi-Fi MCP can also control a USB-connected phone.
 
-```mermaid
-flowchart LR
-    Phone["iPhone"] -->|"Screen sharing"| Agent["Client agent, such as Anan<br/>Observe · Reason · Plan"]
-    Agent -->|"MCP over USB network / Wi-Fi"| Device["M5Stack StopWatch<br/>ESP32-S3 MCP server"]
-    Device -->|"USB / experimental BLE mouse and keyboard"| Phone
-```
-
-After each action, the client should observe again to verify its effect. Tool completion means input was sent, not that the intended operation succeeded.
+![Anan running on iPhone sends Wi-Fi MCP requests to the server on StopWatch, which returns BLE mouse and keyboard input. Screen sharing stays on the iPhone.](docs/images/architecture/iphone-agent.en.png)
 
 ## What you need
 
