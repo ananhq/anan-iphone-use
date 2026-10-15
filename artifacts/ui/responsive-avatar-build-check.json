@@ -1,0 +1,133 @@
+{
+  "candidate": "0.9.2-avatar-responsive",
+  "scope": "Remove idle vignette; restore live tilt and optimize native avatar rendering",
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "sourceManifestMatched": true,
+    "imageBytes": 1804736,
+    "imageSHA256": "363d175a5249f7f961550a4fb16e329740fef845626a5be946d9479ef72e3620",
+    "sourceArchiveBytes": 296308,
+    "sourceArchiveSHA256": "39b16a35709e4c8b90e1210498460c9b5802a7364b4a680d4244e958ccf98d18",
+    "avatarOnlyOptimization": "-O2; no fast-math",
+    "inputOptimizationUnchanged": "-Og"
+  },
+  "offline": {
+    "predefinedResponsiveFixtures": true,
+    "idleWithoutPropsSeconds": 20,
+    "shortPropHoldMs": 480,
+    "shortPropFadeMs": 140,
+    "noOldNewPropOverlap": true,
+    "constantTarget200msEqualsFive40msSteps": true,
+    "liveTiltDuringMcp": true,
+    "actualFingerGaze": true,
+    "clockWrapAndReset": true,
+    "compactFullRasterEquivalent": true,
+    "maxObservedCommands": 44,
+    "commandCapacity": 160,
+    "syntheticIdleChangedFrames": 9,
+    "syntheticIdleUpdateFrames": 71,
+    "syntheticNarrowRegionOriginalTransfers": 12,
+    "syntheticNarrowRegionCompactTransfers": 2,
+    "overlapMergeCapacityErrorsAndTimeouts": true,
+    "existingUiStopHidWirelessImuFlashAndSourceFixtures": true,
+    "optimizedHostFixtures": true,
+    "bilingualStaticPreviews": 46
+  },
+  "memory": {
+    "previousStaticDramBytes": 90112,
+    "candidateStaticDramBytes": 99144,
+    "staticDramDeltaBytes": 9032,
+    "dmaScratchBytesUnchanged": 14912,
+    "runtimeFreeHeapMeasured": false
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4432,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4208,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5072,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2144,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1552,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2288,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1328,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4096,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "byteRetainedInputs": [
+    "main/actions.c",
+    "main/eyes.c",
+    "main/eyes.h",
+    "main/input.c",
+    "main/usb.c",
+    "main/ble_input.c",
+    "main/ble_reports.c",
+    "main/hid_input.c",
+    "main/board.c",
+    "main/imu.c",
+    "main/mcp.c",
+    "main/mcp_tools.h",
+    "sdkconfig.defaults",
+    "dependencies.lock"
+  ],
+  "unchangedDeviceFunctionBodies": [
+    "device_stop",
+    "buttons",
+    "touch_input",
+    "same_controls",
+    "current",
+    "activate"
+  ],
+  "vendorChangeLimitedTo": "AvatarEngine::updateInteraction; recorded in ORIGIN.md",
+  "validation": {
+    "flashed": false,
+    "deviceProbed": false,
+    "deviceVerified": false,
+    "actualFpsOrLatencyMeasured": false,
+    "livePhoneProviderSimulatorOrE2E": false
+  },
+  "limitations": [
+    "Synthetic DMA/frame reductions are not board timing measurements.",
+    "Persistent pixel cleanup and physical scanout tearing are separate; offline raster equality does not validate tearing.",
+    "Sensor noise and physical responsiveness require device acceptance."
+  ]
+}

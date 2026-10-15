@@ -1,0 +1,129 @@
+{
+  "candidate": "0.9.4-network-diagnostics",
+  "purpose": "Diagnose USB/Wi-Fi/hotspot failure; correct misleading pending/failure setup page",
+  "rootCauseConfirmed": false,
+  "connectionFailureFixed": false,
+  "precedingUserReport": {
+    "smallVisualDefectsRemain": true,
+    "usbAndStationHttpUnavailable": true,
+    "setupQrAndHotspotAbsent": true
+  },
+  "precedingScopedReadOnlyProbe": {
+    "http80": "timeout",
+    "https8443": "timeout",
+    "neighborResolution": "incomplete",
+    "hidOrConfigurationWrite": false
+  },
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "sourceManifestMatched": true,
+    "imageBytes": 1808208,
+    "imageSHA256": "4b9f98c85fff52441cea2aeec2c62b6ee4062e1bb7624f97433fd77ca008ec03",
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "sha256": "7793fa6aa20f88e6b558932fa1d575f2c7200e70f163cce7546b103b9cf0fde6",
+      "bytes": 298385
+    }
+  },
+  "offline": {
+    "fixturesDefinedBeforeRuntimeEdits": true,
+    "asyncSetupContextAndBack": true,
+    "apStagesPerApiFailureAndRollback": true,
+    "httpStartAndEachOf15RouteFailures": true,
+    "httpsDoesNotMaskHttpDiagnostic": true,
+    "existingUiStopHidWirelessImuAvatarSourceSyntheticFlash": true,
+    "nativeBilingualPreviews": 50,
+    "allLayoutCjkGlyphsPresent": true
+  },
+  "byteRetainedInputs": [
+    "main/usb.c",
+    "main/input.c",
+    "main/actions.c",
+    "main/hid_input.c",
+    "main/ble_input.c",
+    "main/ble_reports.c",
+    "main/board.c",
+    "main/imu.c",
+    "main/display.c",
+    "main/avatar.cpp",
+    "main/avatar_native.cpp",
+    "main/avatar_activity.cpp",
+    "main/vendor/stopwatch_avatar/avatar_engine.cpp",
+    "main/mcp_tools.h",
+    "sdkconfig.defaults",
+    "dependencies.lock",
+    "partitions.csv"
+  ],
+  "retainedDeviceFunctionBodies": [
+    "void device_stop(",
+    "bool device_control_allowed(",
+    "static void buttons(",
+    "static void touch_input("
+  ],
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4480,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4224,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5136,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2208,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1616,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2352,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1392,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4160,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "implementationValidation": {
+    "flashed": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "simulatorOrE2E": false
+  },
+  "nextDeviceEvidence": [
+    "AP stage/error",
+    "HTTP startup status/error",
+    "current/minimum free heap",
+    "USB/station/hotspot reachability"
+  ]
+}

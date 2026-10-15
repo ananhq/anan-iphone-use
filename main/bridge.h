@@ -5,6 +5,8 @@
 
 void board_init(void);
 bool board_stop_pressed(void);
+// Optional read-only M5PM1 voltage sample; never changes power/charging policy.
+bool board_battery_voltage(uint16_t *millivolts);
 void bridge_usb_init(void);
 bool bridge_usb_online(void);
 void bridge_input_init(void);

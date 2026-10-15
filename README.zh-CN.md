@@ -33,7 +33,9 @@
 - **无线：** 扫码加入 StopWatch 热点，打开 `http://192.168.4.1`，确认 MCP 配对后选择自己的 2.4 GHz Wi-Fi。退出配网前复制 MCP 配置；手机回到原 Wi-Fi 后导入，再在设备选择 BLE 输入，并在 iPhone 配对 **Anan StopWatch**。
 - **有线：** 连接 StopWatch 与 iPhone，配置 USB 以太网（IP `192.168.7.2`、掩码 `255.255.255.0`，无路由器/DNS），打开 `http://192.168.7.1` 配对并导入 MCP。
 
-两种方式均需开启辅助触控，再在 StopWatch 点“开始控制”。下图展示无线配置，[完整配置与恢复](docs/wireless.zh-CN.md)涵盖两种方式。
+两种方式均需开启辅助触控，再在 StopWatch 点“开始控制”：黑底白眼睛随输入、倾斜和触摸变化，工具操作伴随彩色光标、键帽等动画，按任一正面实体键停止并返回首页。下图展示无线配置，[完整配置与恢复](docs/wireless.zh-CN.md)涵盖两种方式。
+
+> **表情动画致谢：** 大眼睛移植自 **[Trentct/m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar)**，本项目在此基础上增加 MCP 输入反馈。
 
 <table>
 <tr>
@@ -50,7 +52,7 @@
 </tr>
 </table>
 
-*由[固件布局](tools/render_ui.py)静态渲染的示意图，非真机截图。验证码、Wi-Fi 密码和 IP 均为合成示例；MCP 配对与蓝牙配对是两回事。*
+*由[固件布局](tools/render_ui.py)静态渲染的示意图，非真机截图。验证码、Wi-Fi 密码、IP 和电量均为合成示例；MCP 配对与蓝牙配对是两回事。*
 
 ## 工作原理
 
@@ -114,7 +116,9 @@ Skill 引导烧录和连接配置，也可为其他 ESP32 板型做最小适配�
 
 ## 项目对比与致谢
 
-感谢 **actell** 的 USB NCM/HID 源码参考，以及 **esp32-iphone-agent** 对 iPhone 硬件自动化的探索。
+特别感谢 **Trentct 和 [m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar) 的贡献者**。控制界面移植了该项目的表情引擎，包括表情表、眨眼和过渡动画；本仓库将其适配到原生 ESP-IDF，增加 MCP 操作动画，并调整渲染与运动跟随。[来源记录](main/vendor/stopwatch_avatar/ORIGIN.md)列出了固定提交和具体修改，上游 AGPL-3.0-or-later 声明已保留。
+
+同时感谢 **[actell](https://github.com/ja1chen/actell)** 的 USB NCM/HID 源码参考，以及 **[esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent)** 对 iPhone 硬件自动化的探索。
 
 | 项目 | 观察与 Agent | 动作接入 | iPhone 输入 |
 | --- | --- | --- | --- |
@@ -126,6 +130,6 @@ actell 另保留本项目参考的 USB NCM/HID 方案，表中列的是其 CoreD
 
 ## 许可证
 
-项目整体采用 **[GPL-3.0-only](LICENSE)**。发行二进制时须按协议提供对应源码及所需构建材料。
+既有代码保留 **[GPL-3.0-only](LICENSE)**；控制表情引入 [Trentct/m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar) 的 **[AGPL-3.0-or-later](licenses/StopWatch-avatar-AGPL-3.0.txt)** 引擎，组合依 GPLv3/AGPLv3 第 13 节处理。配置页提供本次构建的[源码和构建说明](SOURCE.zh-CN.md)。
 
-保留上游版权及第三方代码、字体的适用许可，见 [NOTICE](NOTICE) 和 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。
+上游版权及代码/字体适用声明保留在 [NOTICE](NOTICE) 和 [THIRD_PARTY](THIRD_PARTY.zh-CN.md)。

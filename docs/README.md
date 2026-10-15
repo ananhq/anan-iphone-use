@@ -14,12 +14,16 @@ English · [简体中文](README.zh-CN.md)
 
 ## Development
 
+See the [firmware index](../main/README.md) and [tools index](../tools/README.md).
+Implementation decisions are grouped under [history](history/README.md);
+approach exploration lives under [research](research/README.md).
+
 | Topic | Document |
 | --- | --- |
 | Files, tools and local outputs | [Repository layout](repository.md), [firmware modules](../main/README.md) |
 | Architecture and scope | [Design](design.md), [roadmap](roadmap.md) |
-| Implementation decisions | [MCP development](mcp-development.md), [touch UI and language](touch-ui.md) |
-| Extended HID tools and acceptance | [Tool reference](hid-tools.md), [predefined scope](hid-development.md) |
+| Implementation decisions | [MCP development](history/mcp-development.md), [touch UI and language](history/touch-ui.md), [control eyes](history/eyes.md), [upstream avatar](history/avatar-upstream.md), [responsive input activity](history/avatar-responsive.md), [network startup diagnostics](history/network-startup.md) |
+| Extended HID tools and acceptance | [Tool reference](hid-tools.md), [predefined scope](history/hid-development.md) |
 | Contribution process | [Contributing](../CONTRIBUTING.md) |
 
 ## Evidence and distribution
@@ -33,6 +37,6 @@ English · [简体中文](README.zh-CN.md)
 
 [PROTOCOL.md](../PROTOCOL.md) is the unchanged historical ANAN1 protocol/state definition; current firmware runs only MCP and no port28766 service. Validation records distinguish source, compilation, user reports and device execution. MCP and Chinese/English touch-first UI are implemented development code; compilation/static previews and user reports are separate from scoped device acceptance. See [MCP setup and endpoint](mcp.md).
 
-[Wireless setup acceptance](wireless-setup-development.md) defines the fixed-hostname, network-memory and temporary-hotspot slice.
+[Wireless setup acceptance](history/wireless-setup-development.md) defines the fixed-hostname, network-memory and temporary-hotspot slice.
 
-[Tool discovery guidance](tool-discovery.md) describes task keywords, optional whole-group browsing and unchanged schema/authorization boundaries.
+[Tool discovery guidance](history/tool-discovery.md) describes task keywords, optional whole-group browsing and unchanged schema/authorization boundaries.

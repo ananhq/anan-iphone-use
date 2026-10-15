@@ -18,16 +18,16 @@ Read `AGENTS.md`, [design](design.md), [source notices](../THIRD_PARTY.md) and t
 | --- | --- | --- |
 | `sdkconfig.defaults`, build configuration | ESP32-S3, 16MB flash and current memory settings | Select the actual chip and verified flash/PSRAM settings; unsupported chips need more than configuration |
 | `partitions.csv`, `package.py`, `flash.sh` | Identity NVS at `0xf00000`; packaging/flashing hardcodes S3/16MB and the merged-image bound | Fit all partitions into actual flash; update variant packaging, image bound, manifest board identity and flash command together; avoid erasing identity during normal upgrades |
-| `main/board.c` | I2C SDA47/SCL48, M5PM1 `0x6e`, register `0x07` bit5, active-low stop GPIO1/2 | Replace only the confirmed board's power/buttons; do not issue M5-specific power writes on another board or enable a supply that backfeeds the phone |
-| `main/display.c`, `main/touch.c` | CO5300 466×466 QSPI, M5IOE1 and CST820B | Adapt confirmed screen/touch hardware, or implement the reviewed headless path below |
-| `main/device.c`, `main/ui.c`, `main/ui_layout.c` | Visible-frame checks gate pairing and control | Retain StopWatch checks; provide a distinct physical authorization path for headless hardware |
-| `main/usb.c`, `main/actions.c`, `main/mcp.c` | USB NCM/HID, input timing, six MCP tools and sessions | Reuse unchanged where possible; preserve release/stop, no replay and explicit fresh grants |
+| `main/hardware/board.c` | I2C SDA47/SCL48, M5PM1 `0x6e`, register `0x07` bit5, active-low stop GPIO1/2 | Replace only the confirmed board's power/buttons; do not issue M5-specific power writes on another board or enable a supply that backfeeds the phone |
+| `main/hardware/display.c`, `main/hardware/touch.c` | CO5300 466×466 QSPI, M5IOE1 and CST820B | Adapt confirmed screen/touch hardware, or implement the reviewed headless path below |
+| `main/app/device.c`, `main/ui/ui.c`, `main/ui/ui_layout.c` | Visible-frame checks gate pairing and control | Retain StopWatch checks; provide a distinct physical authorization path for headless hardware |
+| `main/input/usb.c`, `main/input/actions.c`, `main/network/mcp.c` | USB NCM/HID, input timing, seven MCP tools and sessions | Reuse unchanged where possible; preserve release/stop, no replay and explicit fresh grants |
 
 Treat tool/session behavior, HID descriptors, USB identifiers and phone subnet checks as stable. Do not restore retired ANAN1/TCP28766. Do not add Wi-Fi/BLE, screen capture or [Anan](https://anan.sh) code as incidental work. Record exact source versions, reused files, modifications and licenses before adding third-party code.
 
 ## Boards without a screen
 
-Current `main/device.c` requires `screen_ok` and a current rendered frame for pairing and enabling control. Removing display initialization alone cannot make a headless board usable. Setting `screen_ok = true`, auto-confirming pairing or enabling at boot/reconnect bypasses the existing interaction and is not a port.
+Current `main/app/device.c` requires `screen_ok` and a current rendered frame for pairing and enabling control. Removing display initialization alone cannot make a headless board usable. Setting `screen_ok = true`, auto-confirming pairing or enabling at boot/reconnect bypasses the existing interaction and is not a port.
 
 Agree a small physical workflow suited to the actual board. Prefer a usable **USER button plus an LED**, keeping configuration and JSON on the existing phone web page. A single-button design may use state-specific gestures for entering setup, confirming a pending pairing and separately enabling control; define durations and feedback explicitly before coding. Do not assume a BOOT/RESET button is safe to repurpose: check strap pins, reset wiring and boot behavior.
 

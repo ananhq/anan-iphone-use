@@ -6,7 +6,7 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 idf_build_set_property(EXTRA_CMAKE_ARGS "-DCMAKE_POLICY_DEFAULT_CMP0126=NEW" APPEND)
 list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES CMAKE_TOOLCHAIN_FILE)
 # The migration checkpoint preserves the old version; this is the MCP development build.
-set(PROJECT_VER "0.7.3-discovery")
+set(PROJECT_VER "0.9.10-ble-state")
 project(anan_stopwatch)
 # Activate the existing pinned lwIP responder on raw USB and SDK Wi-Fi netifs.
 # Apply definitions globally: every component must use the same netif ABI.

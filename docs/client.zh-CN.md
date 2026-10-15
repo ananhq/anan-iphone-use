@@ -31,4 +31,4 @@ Anan iPhone Use（仓库名 `anan-iphone-use`）是设备端执行器。[Anan](h
 
 ## 任务词与整组概览
 
-候选 `0.7.3-discovery` 保留七个工具 schema，增加简短中英文用途词。打开应用是主屏幕/Spotlight、按需 ASCII 输入、点击观察到的图标/结果组成的 UI 流程，不是 bundle ID 启动器。多步控制时，服务建议在概览尚不可见时，用空 query、准确客户端 group、limit=10 浏览整组，再读取选定工具参数。简介不加载完整 schema 或授予控制。Anan 自定义服务文字可能覆盖此建议，刷入后应刷新发现。见[细节及预定义检查](tool-discovery.zh-CN.md)，本固件阶段不修改 Anan 客户端。
+候选 `0.7.3-discovery` 保留七个工具 schema，增加简短中英文用途词。打开应用是主屏幕/Spotlight、按需 ASCII 输入、点击观察到的图标/结果组成的 UI 流程，不是 bundle ID 启动器。多步控制时，服务建议在概览尚不可见时，用空 query、准确客户端 group、limit=10 浏览整组，再读取选定工具参数。简介不加载完整 schema 或授予控制。Anan 自定义服务文字可能覆盖此建议，刷入后应刷新发现。见[细节及预定义检查](history/tool-discovery.zh-CN.md)，本固件阶段不修改 Anan 客户端。

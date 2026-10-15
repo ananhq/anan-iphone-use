@@ -1,0 +1,91 @@
+{
+  "candidate": "0.9.0-upstream-avatar",
+  "scope": "Approved upstream expression port, native primitive renderer, local gestures and matching network source offer",
+  "upstream": {
+    "repository": "https://github.com/Trentct/m5stack-stopwatch-avatar",
+    "commit": "204963257cb4dc2f3d7501eff900897bac55ef82",
+    "license": "AGPL-3.0-or-later",
+    "documentedPatchVerified": true
+  },
+  "build": {
+    "idf": "5.5.5",
+    "warnings": 0,
+    "compiled": true,
+    "packaged": true,
+    "sourceManifestMatched": true,
+    "imageBytes": 1790576,
+    "imageSHA256": "8af7b7062f360763fdce580cef8d79d6e35213ee4b01930e8e75de9c4750bb21",
+    "sourceArchiveBytes": 290128,
+    "sourceArchiveSHA256": "c15887d3e42436e62447293e9456e9a6e0b81c43d09f03a440310eec01942afe"
+  },
+  "offline": {
+    "upstreamExpressions": 12,
+    "dirtyFullRasterEquivalent": true,
+    "brows": true,
+    "shortActionAndGestureLifecycle": true,
+    "commandOverflowGuard": true,
+    "uiControlsAndPhysicalStop": true,
+    "hidTimingAndReports": true,
+    "wirelessAndBleReports": true,
+    "flashHelper": true,
+    "deterministicAllowlistedSource": true,
+    "staticBilingualPreviews": 46
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4400,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4192,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4960,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1936,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1504,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "unchangedFromAvatarFast": [
+    "actions.c",
+    "input.c",
+    "usb.c",
+    "ble_input.c",
+    "ble_reports.c",
+    "hid_input.c",
+    "board.c",
+    "display.c",
+    "imu.c",
+    "tilt.c",
+    "mcp_tools.h"
+  ],
+  "validation": {
+    "flashed": false,
+    "deviceProbed": false,
+    "deviceVerified": false,
+    "actualFrameRateMeasured": false,
+    "liveSourceDownloadVerified": false,
+    "phoneOrProviderOrE2E": false
+  },
+  "limitations": [
+    "Actual cadence, gesture feel, sensor orientation and input coexistence require separately authorized device acceptance.",
+    "Existing source provenance and SDK linked-notice review remain incomplete."
+  ]
+}

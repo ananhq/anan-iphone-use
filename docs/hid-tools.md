@@ -6,7 +6,7 @@ Candidate `0.5.1-mcp` advertises seven tools through MCP `tools/list`. It merges
 
 Keep the existing AssistiveTouch, USB Ethernet, pairing/import and physical Start setup. Full Keyboard Access is optional, neither enabled nor detected by firmware. Tab/arrow behavior depends on the App and existing settings.
 
-Candidate `0.7.3-discovery` updates descriptions only with English/Chinese task vocabulary for app-opening workflows, browsing, input/editing and drawing. The seven schemas and execution remain unchanged. The service softly recommends browsing the complete group before multi-step planning when its overview is not visible. See [discovery guidance](tool-discovery.md).
+Candidate `0.7.3-discovery` updates descriptions only with English/Chinese task vocabulary for app-opening workflows, browsing, input/editing and drawing. The seven schemas and execution remain unchanged. The service softly recommends browsing the complete group before multi-step planning when its overview is not visible. See [discovery guidance](history/tool-discovery.md).
 
 ## Choose an operation
 
@@ -32,7 +32,7 @@ Other keyboard keys (repeat=1): `enter`, `escape`, `space`, `backspace`, `delete
 
 System/media keys (repeat=1): `home`, `search`, `toggle_keyboard`, `globe`, `volume_up`, `volume_down`, `mute`, `play_pause`, `next_track`, `previous_track`, `brightness_up`, `brightness_down`.
 
-Home/Search use Consumer reports; `command_space` remains a keyboard shortcut. Globe depends on text context, media controls the current player, volume/brightness change relative levels. Toggles require observation. There is no universal Back or unlock. System mappings follow Apple Accessory Design Guidelines 2026-09-21 table 14-3; see [research](hid-capabilities.md). Mouse/keyboard IDs 1/2 and Consumer ID 3 are unchanged from `0.5.0-mcp`.
+Home/Search use Consumer reports; `command_space` remains a keyboard shortcut. Globe depends on text context, media controls the current player, volume/brightness change relative levels. Toggles require observation. There is no universal Back or unlock. System mappings follow Apple Accessory Design Guidelines 2026-09-21 table 14-3; see [research](research/hid-capabilities.md). Mouse/keyboard IDs 1/2 and Consumer ID 3 are unchanged from `0.5.0-mcp`.
 
 ## Example arguments
 
@@ -76,4 +76,4 @@ Extended actions still return text and structured HID progress:
 
 Units are completed key/Consumer press-release cycles, wheel reports, double clicks, path segments or held gestures. Legacy single tap/two-point drag/raw key/typing retain text-only results. Counts are conservative: incomplete units can affect the phone, and final-release failure can occur after all path segments were counted. Completion never proves App/task success; observe afterwards.
 
-All actions share the same worker, physical grant, session owner, input-ID ledger, cancellation and eight-second deadline. Stop/cancel/failure requests release; detach release is best effort. No reconnect restores grants or replays actions. See [MCP sessions](mcp.md), [predefined acceptance](hid-development.md) and [validation](validation.md). Source: [parser](../main/hid_input.c), [schemas](../main/mcp_tools.h), [executor](../main/actions.c), [USB](../main/usb.c).
+All actions share the same worker, physical grant, session owner, input-ID ledger, cancellation and eight-second deadline. Stop/cancel/failure requests release; detach release is best effort. No reconnect restores grants or replays actions. See [MCP sessions](mcp.md), [predefined acceptance](history/hid-development.md) and [validation](validation.md). Source: [parser](../main/input/hid_input.c), [schemas](../main/network/mcp_tools.h), [executor](../main/input/actions.c), [USB](../main/input/usb.c).

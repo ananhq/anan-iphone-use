@@ -1,0 +1,115 @@
+{
+  "candidate": "0.9.6-hotspot-lifecycle",
+  "scope": "Correct reproduced hotspot re-entry and stale-close navigation; expose reset diagnostics",
+  "installedDeviceVersionConfirmed": false,
+  "rootNetworkFailureConfirmed": false,
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "imageBytes": 1810816,
+    "imageSHA256": "95d358954d3ff50c7a462584f1de8927493125d2e7f60b3fa20c381bd624c04a",
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "sha256": "f9c7efd32e76b15ce0cf819878f006209b8304bff7f08f88b18c99b0abb4d3f8",
+      "bytes": 299701
+    },
+    "sourceHashesMatch": true
+  },
+  "offline": {
+    "fixturesDefinedBeforeRuntimeEdits": true,
+    "oldPendingCloseReentryFailed": true,
+    "oldStaleCloseCancelledNewSetup": true,
+    "newRequestAndFailureRemainVisible": true,
+    "genuineExpiryExits": true,
+    "existingUiWirelessHidTimingAvatarAndSourceChecks": true,
+    "nativeBilingualPreviews": 50,
+    "newDiagnosticPagesVisuallyInspected": true
+  },
+  "byteRetainedSinceToolsMemory": [
+    "main/actions.c",
+    "main/usb.c",
+    "main/ble_input.c",
+    "main/input.c",
+    "main/hid_input.c",
+    "main/mcp_tools.h",
+    "main/board.c",
+    "main/display.c",
+    "main/avatar.cpp",
+    "main/avatar_native.cpp",
+    "main/avatar_activity.cpp",
+    "main/imu.c",
+    "main/identity.c",
+    "sdkconfig.defaults",
+    "dependencies.lock"
+  ],
+  "retainedDeviceFunctionBodies": [
+    "void device_stop(",
+    "bool device_control_allowed(",
+    "static void buttons(",
+    "static void touch_input("
+  ],
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4560,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4272,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5264,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2336,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1744,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2480,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1520,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4288,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "simulatorOrE2E": false
+  },
+  "limitations": [
+    "User-reported return to Home may be navigation or actual reset; this is not yet established.",
+    "Offline lifecycle correction is not proof of restored USB/station access.",
+    "Actual reset reason, uptime, startup error and heap remain device evidence."
+  ]
+}

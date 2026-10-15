@@ -2,11 +2,11 @@
 
 English · [简体中文](wireless.zh-CN.md)
 
-Candidate **0.7.2-wifi-qr** adds temporary hotspot configuration with a screen Wi-Fi QR code, five
-saved networks and corrected native IPv4-only mDNS probing to the preceding Wi-Fi/BLE candidates. USB remains
-supported. The user reported the previous wireless flow working; that report
+Candidate **0.7.6-touch-ui** retains USB, temporary hotspot configuration, screen Wi-Fi QR,
+five saved networks and fixed-hostname MCP. Its large-button menus and Home-only estimated
+battery are documented in [UI acceptance](history/touch-usability.md). The user reported the previous wireless flow working; that report
 has no independently checked image hash or full acceptance trace. This candidate
-has compilation/offline evidence only. See [predefined checks](wireless-setup-development.md).
+has compilation/offline evidence only. See [predefined checks](history/wireless-setup-development.md).
 
 ## Connections
 
@@ -28,8 +28,7 @@ Initial firmware flashing still uses a computer and data cable. With the candida
 installed, phone network configuration can use the device hotspot:
 
 1. With no saved network, StopWatch opens a temporary **StopWatch-setup** hotspot
-   and its pairing page. Later, use **Settings → Input / network → Wi-Fi setup /
-   manage** to open it manually. Input is stopped and BLE suspended, retaining
+   and its pairing page. Later, use **Settings → Connect / Wi-Fi → Set up Wi-Fi** to open it manually. Input is stopped and BLE suspended, retaining
    the selected backend and bond. The hotspot closes after ten minutes or when
    you return from setup. It is configuration-only and provides no Internet.
 2. Scan the Wi-Fi QR code on StopWatch with your phone camera and choose to join.
@@ -52,14 +51,15 @@ installed, phone network configuration can use the device hotspot:
    Configuration can be exported after saving even while Wi-Fi is connecting;
    exporting it is not proof that the saved network works. Wait for the page's
    Wi-Fi address before finishing, or correct the password/retry if it never joins.
-6. Tap **Imported, go back** (or Back) on StopWatch to close the hotspot. Rejoin
+6. Tap **Done / Home** (or Back) on StopWatch to close the hotspot. Rejoin
    your usual Wi-Fi on the phone, then import the copied configuration into
    [Anan](https://anan.sh) or another HTTP MCP client. BLE resumes only if selected;
    control stays disabled. The phone/computer and StopWatch must be on the same
    accessible IPv4 LAN.
-7. For wireless input select **Settings → Input / network → BLE**, pair **Anan
+7. For wireless input select **Settings → Phone input → Bluetooth LE**, pair **Anan
    StopWatch** on iPhone and enable AssistiveTouch. Return home and tap **Start
-   control** once input is connected. Only one bonded phone is supported.
+   control** once input is connected: animated eyes replace Home; either front key
+   stops and returns Home. Only one bonded phone is supported.
 
 The hotspot is a setup tool, not a router or permanent MCP/BLE operating mode.
 Phone hotspots, captive-login Wi-Fi and enterprise authentication are not accepted
@@ -68,7 +68,7 @@ features. A LAN overlapping `192.168.7.0/24` or `192.168.4.0/24` is rejected.
 ## USB setup and recovery
 
 The existing [USB phone configuration](setup.md) and `http://192.168.7.1` setup
-page remain available. Start **Settings → Connect MCP app**, pair physically,
+page remain available. Start **Settings → Connect / Wi-Fi → Connect MCP app**, pair physically,
 scan/save or manage Wi-Fi from that page. Returning from setup also closes any
 active hotspot. Optional HTTPS and certificate export remain USB-only at
 `https://192.168.7.1:8443/mcp`.
@@ -110,10 +110,16 @@ candidate does not assign collision suffixes or rename an existing client URL.
 - BLE bonds live in default `nvs`: reboot and updates through the current
   `flash.sh` / `flash.py` preserve them. A continuous merged-image write from
   `0x0` still erases bonds; use the [flash helper](setup.md). Previously erased
-  or inconsistent bonds need **Hold 2s: reset BLE**, forgetting on the phone and
+  or inconsistent bonds need **Settings → More settings → Pair Bluetooth → Hold 2s to reset**, forgetting on the phone and
   one new pairing. Updates preserve `mcp_kv` but never restore control grants.
 
 ## Implementation and evidence
+
+Candidate `0.7.5-ble-absolute` tests USB's single absolute mouse report over BLE,
+after the user reported that `0.7.4` did not fix Notes drawing. BLE report ID4 is
+removed; re-pair for this descriptor change and first verify ordinary taps.
+See [comparison and acceptance](history/ble-absolute.md). Drawing remains unverified;
+USB and the seven MCP tools are unchanged.
 
 Host/Origin validation accepts the exact numeric device address or
 `stopwatch.local`, with an exact matching Origin when supplied. USB still requires

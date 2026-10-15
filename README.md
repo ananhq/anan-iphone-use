@@ -33,7 +33,9 @@ After flashing, choose a connection:
 - **Wireless:** scan the StopWatch Wi-Fi QR, open `http://192.168.4.1`, confirm MCP pairing, then select your 2.4 GHz Wi-Fi. Copy the MCP configuration before closing setup; rejoin your usual Wi-Fi, import it, then select BLE input and pair **Anan StopWatch** on iPhone.
 - **USB:** connect StopWatch to iPhone, configure USB Ethernet (`192.168.7.2`, mask `255.255.255.0`, no router/DNS), then open `http://192.168.7.1` to pair and import MCP.
 
-Enable AssistiveTouch for either route, then tap **Start control** on StopWatch. Wireless setup is illustrated below; [full setup and recovery](docs/wireless.md) covers both routes.
+Enable AssistiveTouch for either route, then tap **Start control** on StopWatch: white eyes on black react to input, tilt and touch, with colored cursors and keycaps during operations. Press either front key to stop and return Home. Wireless setup is illustrated below; [full setup and recovery](docs/wireless.md) covers both routes.
+
+> **Avatar credit:** the expressive eyes are adapted from **[Trentct/m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar)**, with MCP input feedback added here.
 
 <table>
 <tr>
@@ -46,11 +48,11 @@ Enable AssistiveTouch for either route, then tap **Start control** on StopWatch.
 <td><img src="docs/images/setup/en-pair-hotspot.png" width="200" alt="StopWatch setup hotspot: Wi-Fi QR and browser address"></td>
 <td><img src="docs/images/setup/en-pair-confirm.png" width="200" alt="StopWatch pairing confirmation: match the code on the phone"></td>
 <td><img src="docs/images/setup/en-hotspot-ready.png" width="200" alt="Copy MCP config before returning to close the setup hotspot"></td>
-<td><img src="docs/images/setup/en-home-wireless.png" width="200" alt="StopWatch home: Wi-Fi and BLE connected, Start control available"></td>
+<td><img src="docs/images/setup/en-home-wireless.png" width="200" alt="StopWatch home: Wi-Fi and BLE connected, estimated battery and Start control"></td>
 </tr>
 </table>
 
-*Static illustrations [rendered from the firmware layout](tools/render_ui.py), not device screenshots. Codes, Wi-Fi password and IP are synthetic examples; MCP pairing is separate from Bluetooth pairing.*
+*Static illustrations [rendered from the firmware layout](tools/render_ui.py), not device screenshots. Codes, Wi-Fi password, IP and battery values are synthetic examples; MCP pairing is separate from Bluetooth pairing.*
 
 ## How it works
 
@@ -114,7 +116,9 @@ Coordinates are portrait-normalized **0…1**; times are in milliseconds. Screen
 
 ## Comparison and credits
 
-Thanks to **actell** for the USB NCM/HID source reference, and **esp32-iphone-agent** for exploring iPhone hardware automation.
+Special thanks to **Trentct and the contributors to [m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar)**. The control face adapts their expression engine, including expression tables, blinking and transitions. This repository ports it to native ESP-IDF and adds MCP activity animations and rendering/motion adjustments. The [source origin record](main/vendor/stopwatch_avatar/ORIGIN.md) lists the pinned commit and modifications; upstream AGPL-3.0-or-later notices are retained.
+
+Thanks also to **[actell](https://github.com/ja1chen/actell)** for the USB NCM/HID source reference, and **[esp32-iphone-agent](https://github.com/onehumanbeing/esp32-iphone-agent)** for exploring iPhone hardware automation.
 
 | Project | Observation and agent | Action interface | iPhone input |
 | --- | --- | --- | --- |
@@ -126,6 +130,6 @@ actell also retains the USB NCM/HID route referenced here; the table describes i
 
 ## License
 
-The combined project is licensed under **[GPL-3.0-only](LICENSE)**. Binary distribution must include Corresponding Source and required build materials through a compliant GPL distribution method.
+Existing code retains **[GPL-3.0-only](LICENSE)**. The control avatar incorporates the **[AGPL-3.0-or-later](licenses/StopWatch-avatar-AGPL-3.0.txt)** engine from [Trentct/m5stack-stopwatch-avatar](https://github.com/Trentct/m5stack-stopwatch-avatar); the combination follows GPLv3/AGPLv3 section 13. The setup page offers this build’s [source and build instructions](SOURCE.md).
 
 Upstream copyright notices and applicable licenses for third-party code and fonts are retained in [NOTICE](NOTICE) and [THIRD_PARTY](THIRD_PARTY.md).

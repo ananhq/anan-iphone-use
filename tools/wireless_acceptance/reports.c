@@ -6,14 +6,18 @@
 #include "ble_reports.h"
 int main(void) {
     uint8_t p[7], r[5], k[8], c[2];
-    ble_pointer_payload(p, 65535, 0);
+    ble_pointer_payload(p, 0, 65535, 0);
     const uint8_t end[] = {0, 255, 127, 0, 0, 0, 0};
     assert(!memcmp(p, end, sizeof(end)));
-    ble_pointer_payload(p, 0, 65535);
+    ble_pointer_payload(p, 0, 0, 65535);
     const uint8_t other[] = {0, 0, 0, 255, 127, 0, 0};
     assert(!memcmp(p, other, sizeof(other)));
-    ble_pointer_payload(p, 32768, 32768);
+    ble_pointer_payload(p, 0, 32768, 32768);
     assert(p[0] == 0 && p[1] == 0 && p[2] == 64 && p[4] == 64);
+    ble_pointer_payload(p, 1, 32768, 32768);
+    assert(p[0] == 1 && p[2] == 64 && p[4] == 64);
+    ble_pointer_payload(p, 0, 32768, 32768);
+    assert(p[0] == 0 && p[2] == 64 && p[4] == 64);
     ble_relative_payload(r, 1, -127, 127);
     const uint8_t wheel[] = {1, 0, 0, 129, 127};
     assert(!memcmp(r, wheel, sizeof(wheel)));

@@ -6,7 +6,7 @@
 
 保留原有 AssistiveTouch、USB Ethernet、配对/导入与物理“开始控制”。全键盘控制可选，固件既不启用也不检测；Tab/方向键依 App 和已有系统设置工作。
 
-候选 `0.7.3-discovery` 仅调整描述，增加打开应用流程、浏览、输入/编辑和绘图的中英文任务词；七个 schema 和执行不变。服务柔性建议在多步规划前、概览尚不可见时浏览整组，见[工具发现说明](tool-discovery.zh-CN.md)。
+候选 `0.7.3-discovery` 仅调整描述，增加打开应用流程、浏览、输入/编辑和绘图的中英文任务词；七个 schema 和执行不变。服务柔性建议在多步规划前、概览尚不可见时浏览整组，见[工具发现说明](history/tool-discovery.zh-CN.md)。
 
 ## 选择操作
 
@@ -32,7 +32,7 @@
 
 系统/媒体键（repeat=1）：`home`、`search`、`toggle_keyboard`、`globe`、`volume_up`、`volume_down`、`mute`、`play_pause`、`next_track`、`previous_track`、`brightness_up`、`brightness_down`。
 
-Home/Search 使用 Consumer 报告，`command_space` 仍是键盘快捷键。Globe 依文本上下文，媒体依当前播放器，音量/亮度是相对调整；切换类动作需观察。不提供通用返回或解锁。系统映射依据 Apple 2026-09-21 配件指南表14-3，见[调研](hid-capabilities.zh-CN.md)。鼠标/键盘ID1/2、Consumer ID3与 `0.5.0-mcp` 相同。
+Home/Search 使用 Consumer 报告，`command_space` 仍是键盘快捷键。Globe 依文本上下文，媒体依当前播放器，音量/亮度是相对调整；切换类动作需观察。不提供通用返回或解锁。系统映射依据 Apple 2026-09-21 配件指南表14-3，见[调研](research/hid-capabilities.zh-CN.md)。鼠标/键盘ID1/2、Consumer ID3与 `0.5.0-mcp` 相同。
 
 ## 参数示例
 
@@ -76,4 +76,4 @@ Home/Search 使用 Consumer 报告，`command_space` 仍是键盘快捷键。Glo
 
 单位是完整按下释放、滚轮报告、双击中的点击、路径段或保持手势。旧单击/两点拖动/原始按键/文本仍返回文字结果。计数是保守进度：未完成单位可能已影响手机，终点释放失败也可能发生在全部路径段完成后。完成不证明 App/任务成功，应再次观察。
 
-全部动作复用单 worker、物理授权、会话归属、输入ID账本、取消与8秒 deadline。停止/取消/失败请求释放；拔线后释放尽力处理。重连不恢复授权、不重放。见[MCP会话](mcp.zh-CN.md)、[预定义验收](hid-development.zh-CN.md)、[验证](validation.zh-CN.md)。源码：[解析](../main/hid_input.c)、[schema](../main/mcp_tools.h)、[执行器](../main/actions.c)、[USB](../main/usb.c)。
+全部动作复用单 worker、物理授权、会话归属、输入ID账本、取消与8秒 deadline。停止/取消/失败请求释放；拔线后释放尽力处理。重连不恢复授权、不重放。见[MCP会话](mcp.zh-CN.md)、[预定义验收](history/hid-development.zh-CN.md)、[验证](validation.zh-CN.md)。源码：[解析](../main/input/hid_input.c)、[schema](../main/network/mcp_tools.h)、[执行器](../main/input/actions.c)、[USB](../main/input/usb.c)。

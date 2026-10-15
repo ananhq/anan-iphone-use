@@ -14,12 +14,15 @@
 
 ## 开发
 
+当前模块见[固件索引](../main/README.zh-CN.md)，现有命令见[工具索引](../tools/README.zh-CN.md)；
+实施决策归入[开发历史](history/README.zh-CN.md)，方案探索归入[研究材料](research/README.zh-CN.md)。
+
 | 主题 | 文档 |
 | --- | --- |
 | 文件、工具与本地产物 | [仓库组织](repository.zh-CN.md)、[固件模块](../main/README.zh-CN.md) |
 | 架构与范围 | [设计](design.zh-CN.md)、[路线图](roadmap.zh-CN.md) |
-| 实现决策 | [MCP 开发](mcp-development.zh-CN.md)、[触屏 UI 与语言](touch-ui.zh-CN.md) |
-| 扩展 HID 工具与验收 | [工具参考](hid-tools.zh-CN.md)、[预定义范围](hid-development.zh-CN.md) |
+| 实现决策 | [MCP 开发](history/mcp-development.zh-CN.md)、[触屏 UI 与语言](history/touch-ui.zh-CN.md)、[控制眼睛](history/eyes.zh-CN.md)、[上游表情](history/avatar-upstream.zh-CN.md)、[跟手操作动画](history/avatar-responsive.zh-CN.md)、[网络启动诊断](history/network-startup.zh-CN.md) |
+| 扩展 HID 工具与验收 | [工具参考](hid-tools.zh-CN.md)、[预定义范围](history/hid-development.zh-CN.md) |
 | 贡献流程 | [贡献说明](../CONTRIBUTING.zh-CN.md) |
 
 ## 证据与分发
@@ -33,6 +36,6 @@
 
 [PROTOCOL.md](../PROTOCOL.md) 是未改写的历史 ANAN1 协议/状态契约；当前固件仅运行 MCP，不提供28766服务。验证记录区分源码、编译、用户反馈与设备执行；MCP/中英触屏 UI 已有开发实现，编译/静态预览及用户反馈与具体验收分开记录，见[配置与端点](mcp.zh-CN.md)。
 
-[无线配网验收](wireless-setup-development.zh-CN.md)定义固定域名、网络记忆及临时热点阶段。
+[无线配网验收](history/wireless-setup-development.zh-CN.md)定义固定域名、网络记忆及临时热点阶段。
 
-[工具发现说明](tool-discovery.zh-CN.md)记录任务关键词、可选整组浏览及保留的 schema/授权边界。
+[工具发现说明](history/tool-discovery.zh-CN.md)记录任务关键词、可选整组浏览及保留的 schema/授权边界。

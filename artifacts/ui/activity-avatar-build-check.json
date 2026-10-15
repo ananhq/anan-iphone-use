@@ -1,0 +1,105 @@
+{
+  "candidate": "0.9.1-avatar-activity",
+  "scope": "Display-only colored input props and larger face motion, retaining upstream avatar style",
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "currentSourceManifestMatched": true,
+    "imageBytes": 1802336,
+    "imageSHA256": "a3761c5ed662b18f71b49a5fbf0be25137c881065e9931ff7f9198d8c64c57da",
+    "sourceArchiveBytes": 294729,
+    "sourceArchiveSHA256": "77004311b312624b2277635c48947aa32698a2341bfe50687c06493ea94e0249"
+  },
+  "offline": {
+    "predefinedActivityScenarios": true,
+    "coloredInputProps": true,
+    "shortActionLifetime": true,
+    "rapidReplacementAndReset": true,
+    "dirtyFullRasterEquivalent": true,
+    "maxCommandsObserved": 52,
+    "commandCapacity": 160,
+    "preActivityIdlePreviewByteMatches": 3,
+    "decorativeWaiting": true,
+    "existingUiAndInputStop": true,
+    "existingHidWirelessDmaImuAndFlashFixtures": true,
+    "sourceOfferDeterminismAndAllowlist": true,
+    "staticBilingualPreviews": 46,
+    "syntheticPreviewFramesPerSecond": 10
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4432,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4208,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5024,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2176,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1552,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2320,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1280,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "byteRetainedFromPreviousCandidate": [
+    "main/actions.c",
+    "main/input.c",
+    "main/usb.c",
+    "main/ble_input.c",
+    "main/ble_reports.c",
+    "main/eyes.c",
+    "main/eyes.h",
+    "main/device.c",
+    "main/display.c",
+    "main/board.c",
+    "main/imu.c",
+    "main/tilt.c",
+    "main/mcp.c",
+    "main/mcp_tools.h",
+    "main/vendor/stopwatch_avatar/avatar_engine.cpp",
+    "main/vendor/stopwatch_avatar/avatar_engine.h"
+  ],
+  "validation": {
+    "flashed": false,
+    "deviceProbed": false,
+    "deviceVerified": false,
+    "actualFrameRateMeasured": false,
+    "liveProviderPhoneSimulatorOrE2E": false
+  },
+  "limitations": [
+    "Waiting bubbles are decorative and do not represent actual agent thinking.",
+    "HID completion does not verify the phone application outcome.",
+    "Actual visibility, cadence, coexistence, colors and stop latency require device acceptance."
+  ]
+}

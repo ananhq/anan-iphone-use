@@ -1,0 +1,122 @@
+{
+  "candidate": "0.9.10-ble-state",
+  "scope": "Home distinguishes disconnected BLE from connected link awaiting full HID readiness; actual reconnection timing unchanged",
+  "userReport": "Phone shows connected; StopWatch eventually shows connected after a long wait. Duration and protocol phase not measured.",
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "imageBytes": 1816288,
+    "imageSHA256": "227d216e7477bac63caeef4a8f871328e1f02820c79c3b61de51d996cffca538",
+    "sourceHashesMatch": true,
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "bytes": 302947,
+      "sha256": "34148998ac8bff0ab9006beaf1a472a412bc6a82081540537953af286b6456db"
+    }
+  },
+  "offline": {
+    "scopeAndPreviewsDefinedBeforeEdits": true,
+    "oldConnectedNotReadyLabelSuggestedPairing": true,
+    "previews": {
+      "zh-home-wireless.png": {
+        "label": "蓝牙输入已连接",
+        "startEnabled": true
+      },
+      "zh-home-ble-wait.png": {
+        "label": "等待蓝牙连接",
+        "startEnabled": false
+      },
+      "zh-home-ble-linked.png": {
+        "label": "蓝牙已连接 等待输入",
+        "startEnabled": false
+      },
+      "en-home-wireless.png": {
+        "label": "BLE input connected",
+        "startEnabled": true
+      },
+      "en-home-ble-wait.png": {
+        "label": "Waiting for Bluetooth",
+        "startEnabled": false
+      },
+      "en-home-ble-linked.png": {
+        "label": "BLE connected / wait HID",
+        "startEnabled": false
+      }
+    },
+    "bilingualPreviewCount": 54,
+    "newStatusLayoutsVisuallyInspected": true,
+    "existingUiStopWirelessAndTargetStackChecks": true,
+    "noNewFontGlyphs": true
+  },
+  "preservation": {
+    "soleFirmwareImplementationChange": "main/ui_layout.c",
+    "sdkConfigAndOtherFirmwareSourcesUnchanged": true,
+    "readyGateStillRequiresEncryptionAndSubscriptions": true,
+    "compactCacheRetained": true,
+    "noAutomaticControlGrant": true
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4624,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4304,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5360,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2480,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1840,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2704,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1616,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4448,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "deviceVerified": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "committed": false
+  },
+  "limitations": [
+    "Display clarification does not shorten the actual BLE reconnection delay.",
+    "Runtime event timestamps are needed to locate the delayed phase."
+  ]
+}

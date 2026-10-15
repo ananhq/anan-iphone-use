@@ -25,7 +25,7 @@ assert output.stat().st_size <= 0xf00000
 source = pathlib.Path(__file__).parent
 # Hash the current component's source/configuration/document inputs, not local
 # metadata, credentials or generated outputs that happen to be under main/.
-component_suffixes = {".c", ".h", ".md", ".yml", ".html"}
+component_suffixes = {".c", ".h", ".cpp", ".hpp", ".md", ".yml", ".html"}
 inputs = [path for path in (source / "main").rglob("*")
           if path.is_file()
           and not any(part.startswith(".") or part == "__pycache__"
@@ -34,11 +34,18 @@ inputs = [path for path in (source / "main").rglob("*")
 inputs += [source / name for name in ("CMakeLists.txt", "sdkconfig.defaults", "dependencies.lock", "package.py", "build.sh", "flash.sh", "flash.py", "partitions.csv")]
 source_hashes = {str(path.relative_to(source)): hashlib.sha256(path.read_bytes()).hexdigest()
                  for path in sorted(inputs)}
+sys.path.insert(0,str(source / "tools"))
+from source_bundle import bundle
+source_archive = build / "esp-idf/main/firmware-source.tar.gz"
+assert source_archive.read_bytes() == bundle(), "Embedded source is stale; rebuild before packaging"
 manifest = {"protocol": "MCP", "mcp": {"version": "2025-11-25", "transport": "HTTP/HTTPS Streamable HTTP"}, "board": "M5Stack StopWatch ESP32-S3 16MB",
             "idf": "5.5.5", "createdAt": datetime.now(timezone.utc).isoformat(),
             "binary": output.name, "flashOffset": "0x0", "flashSize": "16MB",
             "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
             "bytes": output.stat().st_size, "sources": source_hashes,
+            "sourceArchive": {"path": "esp-idf/main/firmware-source.tar.gz", "url": "/source",
+                              "sha256": hashlib.sha256(source_archive.read_bytes()).hexdigest(),
+                              "bytes": source_archive.stat().st_size},
             "idfVersion": subprocess.check_output(["idf.py", "--version"], text=True).strip(),
             "componentLockSHA256": source_hashes["dependencies.lock"],
             "validation": {"compiled": True, "flashed": False, "deviceVerified": False}}

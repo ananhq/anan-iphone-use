@@ -1,0 +1,125 @@
+{
+  "scope": "Directory and documentation organization only; no firmware logic changes",
+  "baseline": {
+    "version": "0.9.10-ble-state",
+    "evidence": "../ui/ble-state-build-check.json"
+  },
+  "layout": {
+    "firmwareComponentCount": 1,
+    "firmwareGroups": [
+      "app",
+      "hardware",
+      "input",
+      "network",
+      "ui"
+    ],
+    "retainedDirectories": [
+      "main/vendor",
+      "main/web"
+    ],
+    "documentationGroups": [
+      "docs/history",
+      "docs/research"
+    ],
+    "existingCommandEntrypointsRetained": true
+  },
+  "preservation": {
+    "scope": "directory-and-documentation-only",
+    "implementationFilesByteIdentical": 70,
+    "compiledFirmwareTranslationUnits": 34,
+    "compilerOptionDifferencesBeyondPaths": [],
+    "objectDifferencesBeyondDebugMetadata": [],
+    "elfSectionSizeChanges": {
+      ".flash.rodata": {
+        "before": 550224,
+        "after": 540944
+      }
+    },
+    "sdkconfigByteIdentical": true,
+    "rootConfigurationAndFlashEntrypointsByteIdentical": true
+  },
+  "validation": {
+    "compiled": true,
+    "packaged": true,
+    "compilerWarnings": 0,
+    "existingOfflineUiChecks": true,
+    "existingOfflineHidChecks": true,
+    "existingOfflineWirelessChecks": true,
+    "syntheticFlashingChecks": true,
+    "sourceOfferChecks": true,
+    "bilingualPreviewImagesByteIdentical": 54,
+    "previewGalleryAndLayoutJsonByteIdentical": true,
+    "targetStackReportIdenticalToBaseline": true,
+    "stackBudgets": {
+      "touch_input": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 4624,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "buttons": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 4304,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 5360,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen-avatar-render": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 2480,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen-avatar-reset": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 1840,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen-activity-render": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 2704,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen-activity-sample": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 1616,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      },
+      "screen-compact-paint": {
+        "allocatedBytes": 8192,
+        "knownPathFramesBytes": 4448,
+        "additionalReserveBytes": 2048,
+        "passes": true
+      }
+    },
+    "relativeMarkdownLinksValid": true,
+    "whitespaceCheckPassed": true,
+    "flashed": false,
+    "deviceVerified": false,
+    "hardwarePerformanceMeasured": false,
+    "committed": false,
+    "whitespaceCheckScope": "First-party changes; pinned vendor sources and license texts retain upstream bytes and whitespace"
+  },
+  "binary": {
+    "version": "0.9.10-ble-state",
+    "bytes": 1807008,
+    "sha256": "9f435605ddf5c2f010bc8faabe3f7adcee1aae475a07d994845f8a4d2126143c"
+  },
+  "sourceArchive": {
+    "bytes": 293651,
+    "sha256": "c854a41f3ae866997c183c422d3abb9955bf61d23a9deca71689fed6b08a384b"
+  },
+  "limits": [
+    "Source paths/debug metadata and embedded source archive differ. Allocatable code/data and relocations of all 34 firmware translation units are identical.",
+    "Only flash read-only section size changes; RAM/IRAM section sizes, SDK configuration and stack budgets are unchanged.",
+    "Existing source-origin gaps and pending device acceptance remain; no radio, phone or board execution was performed."
+  ]
+}

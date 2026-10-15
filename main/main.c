@@ -6,8 +6,10 @@
 #include "wireless.h"
 #include "input_backends.h"
 #include "discovery.h"
+#include "reset_trace.h"
 
 void app_main(void) {
+    reset_trace_init();
     board_init();
     bridge_usb_init();
     bridge_input_init();

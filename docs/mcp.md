@@ -16,10 +16,10 @@ Anan iPhone Use (`anan-iphone-use`) supplies device-side USB input execution. Cl
 For wireless first setup, follow [the device-hotspot flow](wireless.md#first-setup-without-a-phone-cable).
 
 1. Connect the unlocked iPhone to M5Stack StopWatch. Configure USB Ethernet as `192.168.7.2/24`, with no gateway/DNS, and enable AssistiveTouch; see [setup](setup.md).
-2. On StopWatch tap Settings → Connect MCP app. Chinese/English selection is remembered.
+2. On StopWatch tap Settings → Connect / Wi-Fi → Connect MCP app. Chinese/English selection is remembered.
 3. In Safari open `http://192.168.7.1`, tap Start pairing, compare the six-digit code and tap Confirm pairing on StopWatch. The setup window lasts ten minutes.
 4. After confirmation, the same page generates MCP JSON automatically. Copy or download it and import into Anan or another HTTP-compatible MCP client. The current exported endpoint is `http://stopwatch.local/mcp`; `http://192.168.7.1/mcp` remains a numeric fallback, with a per-device Bearer header. No profile installation or system certificate trust is required.
-5. On StopWatch tap Imported, go back, then Start control. Control stays enabled until stop/detach/reboot or another documented revocation event. Discovery/status do not enable input. Touch during control or either front button stops and consumes that contact.
+5. On StopWatch tap Done / Home, then Start control. Control stays enabled until stop/detach/reboot or another documented revocation event. Discovery/status do not enable input. During control the display shows only animated eyes on black. Either front button stops and returns Home; touches only animate the face; they never send phone input or stop control, and the stop press stays consumed until release.
 
 Plain HTTP has no TLS encryption. USB retains the exact device/phone address checks; current HTTP Host/Origin accepts its numeric address or the fixed hostname with a matching Origin. STA/hotspot restrictions are in [wireless setup](wireless.md). HTTPS remains optional under the collapsed page section; it exports `https://192.168.7.1:8443/mcp` from the HTTPS configuration page and retains the prior certificate/trust requirements. Both transports share the same seven advertised tools, sessions and HID executor. HTTPS startup is no longer a prerequisite for HTTP control.
 
@@ -30,7 +30,7 @@ The page retains only its temporary pairing proof in tab session storage; config
 1. Flash the identified HTTP candidate, then reset the board normally; do not erase the whole chip.
 2. On iPhone open Settings → General → VPN & Device Management, select only **StopWatch Local CA** and Remove Profile. Enter the iPhone passcode if requested. Do not remove unrelated profiles. See [Apple profile guidance](https://support.apple.com/guide/iphone/install-or-remove-configuration-profiles-iph6c493b19/ios).
 3. Delete the old StopWatch HTTPS connection from the client's MCP settings and close the old setup browser tab. Old downloaded profile/config files can be deleted separately.
-4. On StopWatch open Settings → Reset pairing, then hold the red confirmation button for two seconds. This clears identity/CA/token and interrupts control; it preserves language preference. Do not reset all iPhone network settings.
+4. On StopWatch open Settings → More settings → Reset MCP, then hold the red confirmation button for two seconds. This clears identity/CA/token and interrupts control; it preserves language preference. Do not reset all iPhone network settings.
 5. Repeat the HTTP first-setup steps above. Check that imported JSON uses the current shared `http://stopwatch.local/mcp` endpoint rather than the previous HTTPS connection. A client connection/status check is separate from real phone input verification.
 
 Identity remains board-generated in the dedicated `mcp_kv` NVS partition at `0xf00000`, outside normal merged images. Ordinary upgrades preserve it; whole-chip erase, factory recovery or a different partition layout can remove it. Reset clears only the identity namespace, not language; no commands/actions/grants persist.
@@ -107,7 +107,7 @@ are not deliberately logged; SDK diagnostics must also stay out of public artifa
 ## Source and acceptance
 
 [Module ownership](../main/README.md), [third-party notices](../THIRD_PARTY.md),
-[development decisions and predefined checks](mcp-development.md). Panel init
+[development decisions and predefined checks](history/mcp-development.md). Panel init
 uses a pinned, attributed M5Stack MIT command table and the pinned Espressif
 CO5300 driver; native UI uses CST820B touch, own ASCII glyphs and a licensed Chinese font subset, without LVGL. Failure
 to initialize/transfer the display prevents MCP enable and pairing confirmation;
@@ -142,13 +142,15 @@ the user's `USB origin/host required` report; phone acceptance still needs a ret
 
 ## Touch and bilingual operation
 
-See [touch UI decisions and predefined checks](touch-ui.md). Home shows MCP
-control, one start/stop button and Settings. There is no Anan direct/source
+See [touch UI decisions and predefined checks](history/touch-ui.md). Stopped Home shows input/network status, a coarse estimated battery percentage and one
+96px Start button. Start switches to [interactive eyes](history/avatar.md) on black, without text, battery or buttons. Settings is shown while stopped; menus use 72–88px targets. There is no Anan direct/source
 selection; the same USB cable still carries both Ethernet and HID.
 For fallback, yellow A selects/highlights a visible button, blue B activates it;
 a long yellow press opens Settings. A press that stops control is consumed until
-release. Touch enables only on a fresh release over the same visible button;
-failed reads, moved-out contacts, stale frames or control changes cancel the tap.
+release. Either front key stops and returns Home; touches only animate the face; they never send phone input or stop control.
+Touch enables only on a fresh release over the same visible button;
+normal taps tolerate 10px drift without retargeting. Failed reads, larger drift,
+stale frames or control changes cancel the tap. Reset holds retain strict bounds.
 Reset alone uses a two-second hold. Touch I2C polling and display rendering are
 separate from the I2C-free, higher-priority physical stop task. The remembered
 language changes device UI; the phone page also has its own bilingual switch.

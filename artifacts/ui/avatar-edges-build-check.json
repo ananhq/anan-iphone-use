@@ -1,0 +1,182 @@
+{
+  "candidate": "0.9.3-avatar-edges",
+  "scope": "Even compact panel windows and DMA chunks; retain responsive animation",
+  "reportedByUser": {
+    "precedingCandidateMotion": "smooth",
+    "precedingCandidateFineTrails": true
+  },
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "sourceManifestMatched": true,
+    "imageBytes": 1805552,
+    "imageSHA256": "aceccd3bbc3381193de3db9c2b704967390005b1e7792cc76e5e496c9d70ccf8",
+    "sourceArchiveBytes": 297071,
+    "sourceArchiveSHA256": "fd4383bd3ebcfb77adaf57f370e59408f34da26a66099263e331c7c625356ae0"
+  },
+  "offline": {
+    "fixtureDefinedBeforeRuntimeEdits": true,
+    "oldCodeRejectedOdd93RowBatch": true,
+    "everyDmaWindowStartsAndDimensionsEven": true,
+    "oddOriginAndSizePixelCoverage": true,
+    "onePixelAndPanelEdgeCoverage": true,
+    "fullScreenAndVaryingCompactCapacity": true,
+    "noCoverageHolesOrDuplicatesWithinSingleRegion": true,
+    "existingOverlapStrideCapacityAndFailureChecks": true,
+    "fullDirtyAvatarEquivalent": true,
+    "uiStopHidWirelessImuSourceAndSyntheticFlashChecks": true
+  },
+  "buffer": {
+    "dmaScratchBytesUnchanged": 14912,
+    "periodicFullScreenRefreshAdded": false
+  },
+  "retention": {
+    "changedManifestInputs": [
+      "CMakeLists.txt",
+      "main/README.md",
+      "main/README.zh-CN.md",
+      "main/display.c"
+    ],
+    "retainedManifestInputs": [
+      "build.sh",
+      "dependencies.lock",
+      "flash.py",
+      "flash.sh",
+      "main/CMakeLists.txt",
+      "main/actions.c",
+      "main/actions.h",
+      "main/avatar.cpp",
+      "main/avatar.h",
+      "main/avatar_activity.cpp",
+      "main/avatar_activity.hpp",
+      "main/avatar_native.cpp",
+      "main/avatar_native.hpp",
+      "main/avatar_timing.c",
+      "main/avatar_timing.h",
+      "main/battery.c",
+      "main/battery.h",
+      "main/ble_input.c",
+      "main/ble_reports.c",
+      "main/ble_reports.h",
+      "main/board.c",
+      "main/bridge.h",
+      "main/device.c",
+      "main/device.h",
+      "main/discovery.c",
+      "main/discovery.h",
+      "main/display.h",
+      "main/eyes.c",
+      "main/eyes.h",
+      "main/hid_input.c",
+      "main/hid_input.h",
+      "main/identity.c",
+      "main/identity.h",
+      "main/idf_component.yml",
+      "main/imu.c",
+      "main/imu.h",
+      "main/input.c",
+      "main/input_backends.h",
+      "main/main.c",
+      "main/mcp.c",
+      "main/mcp.h",
+      "main/mcp_tools.h",
+      "main/network_authority.c",
+      "main/network_authority.h",
+      "main/network_store.c",
+      "main/network_store.h",
+      "main/panel_init.h",
+      "main/tilt.c",
+      "main/tilt.h",
+      "main/touch.c",
+      "main/touch.h",
+      "main/ui.c",
+      "main/ui.h",
+      "main/ui_font.h",
+      "main/ui_layout.c",
+      "main/ui_preferences.c",
+      "main/ui_preferences.h",
+      "main/usb.c",
+      "main/vendor/bmi270/bmi2.c",
+      "main/vendor/bmi270/bmi2.h",
+      "main/vendor/bmi270/bmi270.c",
+      "main/vendor/bmi270/bmi270.h",
+      "main/vendor/bmi270/bmi2_defs.h",
+      "main/vendor/qrcodegen.c",
+      "main/vendor/qrcodegen.h",
+      "main/vendor/stopwatch_avatar/ORIGIN.md",
+      "main/vendor/stopwatch_avatar/UPSTREAM-NOTICES.md",
+      "main/vendor/stopwatch_avatar/avatar_engine.cpp",
+      "main/vendor/stopwatch_avatar/avatar_engine.h",
+      "main/web/setup.html",
+      "main/wifi_qr.c",
+      "main/wifi_qr.h",
+      "main/wireless.c",
+      "main/wireless.h",
+      "package.py",
+      "partitions.csv",
+      "sdkconfig.defaults"
+    ]
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4432,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4208,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5072,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2144,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1552,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2288,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1328,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4096,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "deviceProbed": false,
+    "deviceVerified": false,
+    "livePhoneProviderSimulatorOrE2E": false
+  },
+  "limitations": [
+    "Offline violation reproduction does not establish physical trail causation or removal.",
+    "Physical scanout tearing is not validated by software pixel coverage."
+  ]
+}

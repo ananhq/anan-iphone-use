@@ -7,7 +7,11 @@ Original repository: https://github.com/ananhq/anan
 Original directory: hardware/stopwatch/
 Public repository address: not assigned; no repository creation or publication is implied.
 
-The combined Anan iPhone Use project is distributed under GPL-3.0-only.
+Existing Anan iPhone Use code retains GPL-3.0-only. Starting with
+0.9.0-upstream-avatar the combined firmware includes AGPL-3.0-or-later
+avatar code under GPLv3/AGPLv3 section 13; the AGPL network-source requirement
+applies to the combination. The network setup page offers this build source
+archive at /source. See SOURCE.md and SOURCE.zh-CN.md.
 See LICENSE for the complete GPL version 3 text. This follows the maintainer's
 authorization to adopt an open-source license compatible with the actell source
 reference. Historical Apache-2.0 file declarations and grants are retained;
@@ -16,7 +20,7 @@ Third-party files/fonts retain their own applicable terms and notices.
 The user confirms that actell source was referenced. The inspected actell version
 is e701786d1686823f9ab60524e689e387b7c3b904 (GPL-3.0-only), specifically
 firmware-device/main/usb_network.c and firmware-device/main/usb_hid.c.
-Current main/usb.c has substantial structural overlap; exact derivation and
+Current main/input/usb.c has substantial structural overlap; exact derivation and
 historical source handling remain unresolved. See THIRD_PARTY.md.
 The overall GPL-3.0-only license does not establish a completed derivation audit.
 Existing source headers are retained, and their declarations alone do not resolve
@@ -34,8 +38,20 @@ See THIRD_PARTY.md and licenses/ for dependency notices.
 
 MCP display initialization data includes an adaptation from M5Stack
 M5StopWatch-UserDemo, Copyright (c) 2026 M5Stack Technology CO LTD, MIT.
-See main/panel_init.h, licenses/M5Stack-demo-MIT.txt and THIRD_PARTY.md.
+See main/hardware/panel_init.h, licenses/M5Stack-demo-MIT.txt and THIRD_PARTY.md.
 
 Chinese UI glyph data is derived from Noto Sans SC under SIL OFL-1.1,
 Copyright 2014-2021 Adobe, with Reserved Font Name 'Source'. The derived subset
 is named StopWatch UI Glyphs. See licenses/NotoSansSC-OFL-1.1.txt and THIRD_PARTY.md.
+
+BMI270 sensor support includes unmodified Bosch SensorAPI source/configuration,
+Copyright (c) 2023 Bosch Sensortec GmbH, BSD-3-Clause. See
+licenses/Bosch-BMI270-BSD-3-Clause.txt and THIRD_PARTY.md for exact source hashes.
+
+StopWatch avatar engine: Trentct/m5stack-stopwatch-avatar, commit
+204963257cb4dc2f3d7501eff900897bac55ef82, AGPL-3.0-or-later.
+Expression engine files are modified for native ESP-IDF on 2026-10-15.
+Original tables, timelines, easing, blink, projection and drawing are retained.
+Complete license: licenses/StopWatch-avatar-AGPL-3.0.txt.
+Exact origins/hashes/modifications: main/vendor/stopwatch_avatar/ORIGIN.md.
+No Arduino/M5Unified/M5GFX implementation is imported.

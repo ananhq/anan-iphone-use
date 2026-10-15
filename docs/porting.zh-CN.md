@@ -18,16 +18,16 @@
 | --- | --- | --- |
 | `sdkconfig.defaults`、构建配置 | ESP32-S3、16MB flash 与当前内存设置 | 选择真实芯片及已核实的 flash/PSRAM；不支持的芯片不是换配置即可 |
 | `partitions.csv`、`package.py`、`flash.sh` | 身份 NVS 位于 `0xf00000`；打包/烧录固定 S3/16MB 与合并镜像边界 | 分区适合实际 flash；同步调整该板打包、镜像边界、manifest 板型和烧录命令，普通升级不要擦除身份 |
-| `main/board.c` | I2C SDA47/SCL48、M5PM1 `0x6e`、寄存器 `0x07` bit5、低电平停止 GPIO1/2 | 仅替换已确认的电源/按键；不在其他板发送 M5 电源写入，不开启会向手机反向供电的电源 |
-| `main/display.c`、`main/touch.c` | CO5300 466×466 QSPI、M5IOE1 与 CST820B | 适配已确认的显示/触摸硬件，或实现下文经过讨论的无屏路径 |
-| `main/device.c`、`main/ui.c`、`main/ui_layout.c` | 可见帧检查约束配对与控制开启 | 保留 StopWatch 检查；为无屏硬件提供独立实体授权路径 |
-| `main/usb.c`、`main/actions.c`、`main/mcp.c` | USB NCM/HID、输入时序、六个 MCP 工具及会话 | 尽量原样复用；保留释放/停止、不重放和全新显式授权 |
+| `main/hardware/board.c` | I2C SDA47/SCL48、M5PM1 `0x6e`、寄存器 `0x07` bit5、低电平停止 GPIO1/2 | 仅替换已确认的电源/按键；不在其他板发送 M5 电源写入，不开启会向手机反向供电的电源 |
+| `main/hardware/display.c`、`main/hardware/touch.c` | CO5300 466×466 QSPI、M5IOE1 与 CST820B | 适配已确认的显示/触摸硬件，或实现下文经过讨论的无屏路径 |
+| `main/app/device.c`、`main/ui/ui.c`、`main/ui/ui_layout.c` | 可见帧检查约束配对与控制开启 | 保留 StopWatch 检查；为无屏硬件提供独立实体授权路径 |
+| `main/input/usb.c`、`main/input/actions.c`、`main/network/mcp.c` | USB NCM/HID、输入时序、七个 MCP 工具及会话 | 尽量原样复用；保留释放/停止、不重放和全新显式授权 |
 
 保持工具/会话行为、HID 描述符、USB 标识、手机子网检查稳定。不恢复旧 ANAN1/TCP28766，不顺便加入 Wi-Fi/BLE、截图或 [Anan](https://anan.sh) 代码。加入第三方代码前记录准确版本、复用文件、修改及许可。
 
 ## 没有屏幕的设备
 
-当前 `main/device.c` 依赖 `screen_ok` 和当前已渲染帧才能确认配对、开启控制。只删除显示初始化不能让无屏板可用。直接设置 `screen_ok = true`、自动确认配对、启动/重连即开启控制，都是绕过现有交互，不是适配。
+当前 `main/app/device.c` 依赖 `screen_ok` 和当前已渲染帧才能确认配对、开启控制。只删除显示初始化不能让无屏板可用。直接设置 `screen_ok = true`、自动确认配对、启动/重连即开启控制，都是绕过现有交互，不是适配。
 
 先根据实际板型商定简单实体流程。优先考虑可用的 **USER 按钮与 LED**，配置与 JSON 留在现有手机网页。单按钮可按状态区分进入配置、确认待配对、独立开启控制的手势；编码前明确时长与反馈。不能默认 BOOT/RESET 可复用，需检查绑带引脚、复位线路和启动行为。
 

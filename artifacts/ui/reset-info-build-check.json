@@ -1,0 +1,127 @@
+{
+  "candidate": "0.9.8-reset-info",
+  "scope": "Offline AP/reset evidence without PSRAM; network repair not claimed",
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "imageBytes": 1814928,
+    "imageSHA256": "666ab56e77b5bf1010573e78e5a63b7e6fe460ed328b1902c77b611902f37e8c",
+    "sourceHashesMatch": true,
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "bytes": 302084,
+      "sha256": "c4c52622341b13b6512097aec7ff731976ba05b9295cf5147de3014de887304a"
+    }
+  },
+  "sdkConfigurationIdenticalTo096": true,
+  "psramEnabled": false,
+  "offline": {
+    "fixturesDefinedBeforeRuntimeEdits": true,
+    "prechangeFixturesRejectedMissingTraceAndModelFields": true,
+    "rtcSoftwarePanicWatchdogRetention": true,
+    "coldBrownoutUnknownAndTornRecordRejected": true,
+    "noResurrectedRecordAfterIdleBoot": true,
+    "scalarHeapAndStackUnits": true,
+    "psramAndNonPsramDiagnosticBranches": true,
+    "retainedButtonsAndStop": true,
+    "existingUiWirelessHidAvatarSourceAndSyntheticFlashChecks": true,
+    "bilingualPreviews": 50,
+    "connectionDiagnosticLayoutVisuallyInspected": true
+  },
+  "preservation": {
+    "byteRetainedFrom096": [
+      "main/usb.c",
+      "main/input.c",
+      "main/ble_input.c",
+      "main/ble_reports.c",
+      "main/actions.c",
+      "main/hid_input.c",
+      "main/mcp_tools.h",
+      "main/identity.c",
+      "main/network_store.c",
+      "main/network_authority.c",
+      "main/discovery.c",
+      "main/board.c",
+      "main/display.c",
+      "main/touch.c",
+      "main/avatar.cpp",
+      "main/avatar_native.cpp",
+      "main/avatar_activity.cpp",
+      "main/imu.c",
+      "main/tilt.c",
+      "main/ui.c",
+      "partitions.csv",
+      "dependencies.lock"
+    ],
+    "sdkconfigDefaultsByteIdenticalTo096": true,
+    "deviceControlInputScreenFunctionsIdenticalTo096": true,
+    "wirelessOutsideScalarTraceIdenticalTo096": true
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4624,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4304,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5360,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2432,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1840,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2576,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1616,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4384,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "simulatorOrE2E": false,
+    "deviceVerified": false
+  },
+  "limitations": [
+    "User-reported blackout followed by Home is not yet a confirmed MCU reset.",
+    "HTTP status was reported unreachable; diagnostics do not depend on it.",
+    "Last AP record is not proof of a crashing call or full panic backtrace.",
+    "RTC retention and actual reset/heap/stack observations need device validation.",
+    "Original low-memory network failure is not fixed; diagnostic overhead has not been measured on device."
+  ]
+}

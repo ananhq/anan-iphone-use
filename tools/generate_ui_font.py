@@ -6,7 +6,7 @@ import pathlib
 import sys
 parser = argparse.ArgumentParser()
 parser.add_argument('font', type=pathlib.Path)
-parser.add_argument('--output', type=pathlib.Path, default=pathlib.Path('main/ui_font.h'))
+parser.add_argument('--output', type=pathlib.Path, default=pathlib.Path('main/ui/ui_font.h'))
 args = parser.parse_args()
 expected = 'a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da'
 if hashlib.sha256(args.font.read_bytes()).hexdigest() != expected:
@@ -14,7 +14,7 @@ if hashlib.sha256(args.font.read_bytes()).hexdigest() != expected:
 from PIL import Image, ImageDraw, ImageFont
 font = ImageFont.truetype(str(args.font), 22)
 font.set_variation_by_axes([500])
-source = pathlib.Path('main/ui_layout.c').read_text()
+source = pathlib.Path('main/ui/ui_layout.c').read_text()
 characters = sorted({c for c in source if ord(c) > 127}, key=ord)
 lines = ['// SPDX-License-Identifier: OFL-1.1',
  '// Copyright 2014-2021 Adobe, Reserved Font Name Source.',

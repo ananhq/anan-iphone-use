@@ -17,7 +17,7 @@ Anan iPhone Use（`anan-iphone-use`）：本文件记录发行准备状态，不
 
 | 项目 | 当前状态 / 所需处理 |
 | --- | --- |
-| 实现来源 | `main/usb.c` 与已检查的 actell USB 实现有相似结构，准确来源待定；`board.c` 寄存器实现和历史生成/复用也有记录在案的缺口。公开前解决并记录来源处理 |
+| 实现来源 | `main/input/usb.c` 与已检查的 actell USB 实现有相似结构，准确来源待定；`board.c` 寄存器实现和历史生成/复用也有记录在案的缺口。公开前解决并记录来源处理 |
 | 许可证与声明 | 已有 Apache-2.0 声明和第三方通知。项目整体已采用 GPL-3.0-only，保留原文件条款与第三方通知，见[许可与来源处理](license-plan.zh-CN.md)；仅署名不能解决衍生来源问题 |
 | 基线 | 用户反馈重新烧录成功并授权首次本地检查点；完整输入/停止验收与来源核实仍待完成 |
 | 仓库身份 | 仓库名 `anan-iphone-use`、展示名 Anan iPhone Use 已确定，仓库位于私有的 [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use)，获公开发布授权后再确定公开 commit/tag pin |

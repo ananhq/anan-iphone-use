@@ -1,0 +1,192 @@
+{
+  "candidate": "0.9.9-compact-cache",
+  "scope": "Reduce static avatar-cache memory without PSRAM or removed features",
+  "userReportedEvidence": {
+    "candidate": "0.9.8-reset-info",
+    "apStage": "MODE",
+    "error": "ESP_ERR_NO_MEM (0x101)",
+    "freeInternalBytes": 6388,
+    "minimumInternalApproxKiB": 1.1,
+    "largestInternalApproxKiB": 4,
+    "resetReason": 1,
+    "source": "User-provided screen; not an independent device run"
+  },
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "imageBytes": 1816128,
+    "imageSHA256": "621018cd48da829277d3f1b7ff9bc094e8b4b99bcc2d0421323ca0e6a63da6b6",
+    "sourceHashesMatch": true,
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "bytes": 302861,
+      "sha256": "c09bb0c6b89f118a0b3e6ec3179cb55f1292a334d791b8545a94a8218bf48477"
+    }
+  },
+  "memory": {
+    "capacityCommands": 160,
+    "cachedCommandBytes": 16,
+    "cachedBoundsBytes": 8,
+    "staticInternalBssBefore": 50288,
+    "staticInternalBssAfter": 41328,
+    "staticInternalBytesFreed": 8960,
+    "internalCodeBytesUnchanged": true,
+    "measuredRuntimeHeadroom": null,
+    "psramEnabled": false
+  },
+  "offline": {
+    "fixturesDefinedBeforeRuntimeEdits": true,
+    "nativeReferenceSavedBeforeEdits": true,
+    "byteIdenticalFullRgbSamples": 110,
+    "allExistingUiWirelessHidAvatarImuDmaStopTimingChecks": true,
+    "coordinateRangeAndOverflowChecks": true,
+    "retained160CommandCapacity": true,
+    "sourceManifestAndSyntheticFlashChecks": true
+  },
+  "sdkConfigurationIdenticalTo098": true,
+  "byteRetainedFirmwareInputs": [
+    "main/avatar_activity.hpp",
+    "main/identity.c",
+    "main/hid_input.c",
+    "main/display.c",
+    "main/discovery.h",
+    "main/eyes.h",
+    "main/battery.h",
+    "main/bridge.h",
+    "main/network_authority.h",
+    "main/device.h",
+    "main/CMakeLists.txt",
+    "main/.DS_Store",
+    "main/avatar.h",
+    "main/usb.c",
+    "main/ui.h",
+    "main/actions.h",
+    "main/ble_reports.h",
+    "main/board.c",
+    "main/avatar_native.hpp",
+    "main/idf_component.yml",
+    "main/avatar.cpp",
+    "main/tilt.h",
+    "main/imu.h",
+    "main/touch.h",
+    "main/reset_trace.c",
+    "main/avatar_timing.c",
+    "main/network_store.c",
+    "main/ui_preferences.h",
+    "main/wifi_qr.c",
+    "main/ui_font.h",
+    "main/mcp.c",
+    "main/wireless.h",
+    "main/discovery.c",
+    "main/input_backends.h",
+    "main/battery.c",
+    "main/eyes.c",
+    "main/hid_input.h",
+    "main/input.c",
+    "main/display.h",
+    "main/ble_input.c",
+    "main/identity.h",
+    "main/main.c",
+    "main/actions.c",
+    "main/ui.c",
+    "main/device.c",
+    "main/network_authority.c",
+    "main/reset_trace.h",
+    "main/avatar_activity.cpp",
+    "main/tilt.c",
+    "main/touch.c",
+    "main/imu.c",
+    "main/ble_reports.c",
+    "main/wifi_qr.h",
+    "main/wireless.c",
+    "main/ui_layout.c",
+    "main/panel_init.h",
+    "main/mcp.h",
+    "main/mcp_tools.h",
+    "main/ui_preferences.c",
+    "main/network_store.h",
+    "main/avatar_timing.h",
+    "main/web/setup.html",
+    "main/vendor/qrcodegen.h",
+    "main/vendor/qrcodegen.c",
+    "main/vendor/bmi270/bmi270.h",
+    "main/vendor/bmi270/bmi2.c",
+    "main/vendor/bmi270/bmi2_defs.h",
+    "main/vendor/bmi270/bmi270.c",
+    "main/vendor/bmi270/bmi2.h",
+    "main/vendor/stopwatch_avatar/avatar_engine.h",
+    "main/vendor/stopwatch_avatar/avatar_engine.cpp"
+  ],
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4624,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4304,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5360,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2480,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1840,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2704,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1616,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4448,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "simulatorOrE2E": false,
+    "deviceVerified": false
+  },
+  "limitations": [
+    "Freed static memory is a target link-map measurement, not actual free heap during AP/MCP operations.",
+    "Native RGB comparisons are same-host/compiler fixtures, not physical display or FPS measurements.",
+    "AP setup, scans, USB/Wi-Fi HTTP, MCP discovery/actions and sustained headroom still need device acceptance.",
+    "This does not establish absence of leaks, fragmentation or independent network failures."
+  ],
+  "followUpUserReport": {
+    "networkIssueReportedResolved": true,
+    "enduranceTestingPending": true,
+    "imageHashIndependentlyConfirmed": false,
+    "agentDeviceRun": false
+  }
+}

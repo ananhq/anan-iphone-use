@@ -1,0 +1,177 @@
+{
+  "candidate": "0.9.7-psram-memory",
+  "scope": "Enable manufacturer-configured StopWatch PSRAM and separate internal/external memory diagnostics; preserve existing features",
+  "userReportedFailure": {
+    "firmware": "0.9.6-hotspot-lifecycle",
+    "stage": "MODE",
+    "error": "ESP_ERR_NO_MEM (0x101)",
+    "freeHeapBytes": 2396,
+    "minimumFreeHeapBytes": 1084,
+    "resetReason": 1,
+    "source": "User-provided diagnostic screen; no independent device run"
+  },
+  "build": {
+    "idf": "5.5.5",
+    "compiled": true,
+    "packaged": true,
+    "warnings": 0,
+    "imageBytes": 1823552,
+    "imageSHA256": "81d78df6836c730a0997a4a4051901688c02d391065a3c7f37e82a52d4faf345",
+    "sourceHashesMatch": true,
+    "sourceArchive": {
+      "path": "esp-idf/main/firmware-source.tar.gz",
+      "url": "/source",
+      "sha256": "2ef21fd68f1a6e9fbcc715dc2409931e331800a6beb4fd1c1a81147db8935e57",
+      "bytes": 300960
+    }
+  },
+  "configuration": {
+    "CONFIG_BT_NIMBLE_MEM_ALLOC_MODE_INTERNAL": "y",
+    "CONFIG_SPIRAM": "y",
+    "CONFIG_SPIRAM_MODE_OCT": "y",
+    "CONFIG_SPIRAM_TYPE_AUTO": "y",
+    "CONFIG_SPIRAM_CLK_IO": "30",
+    "CONFIG_SPIRAM_CS_IO": "26",
+    "CONFIG_SPIRAM_SPEED_80M": "y",
+    "CONFIG_SPIRAM_SPEED": "80",
+    "CONFIG_SPIRAM_BOOT_HW_INIT": "y",
+    "CONFIG_SPIRAM_BOOT_INIT": "y",
+    "CONFIG_SPIRAM_PRE_CONFIGURE_MEMORY_PROTECTION": "y",
+    "CONFIG_SPIRAM_USE_MALLOC": "y",
+    "CONFIG_SPIRAM_MEMTEST": "y",
+    "CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL": "1024",
+    "CONFIG_SPIRAM_TRY_ALLOCATE_WIFI_LWIP": "y",
+    "CONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL": "32768",
+    "CONFIG_ESP_INT_WDT_TIMEOUT_MS": "800",
+    "CONFIG_ESP_WIFI_STATIC_RX_BUFFER_NUM": "10",
+    "CONFIG_ESP_WIFI_STATIC_TX_BUFFER_NUM": "16",
+    "CONFIG_ESP_WIFI_CACHE_TX_BUFFER_NUM": "32",
+    "CONFIG_ESP_WIFI_RX_BA_WIN": "6",
+    "CONFIG_LWIP_TCP_OOSEQ_MAX_PBUFS": "4",
+    "CONFIG_MBEDTLS_INTERNAL_MEM_ALLOC": "y"
+  },
+  "externalTaskStacksAllowed": false,
+  "linkMapDeltaBytes": {
+    "staticInternalDataAndBss": 1388,
+    "internalText": 6776,
+    "runtimeRecoveredHeap": null
+  },
+  "offline": {
+    "fixturesDefinedBeforeRuntimeEdits": true,
+    "prechangeConfigurationRejected": true,
+    "distinctInternalAndExternalMetrics": true,
+    "psramUnavailableAndAvailable": true,
+    "existingUiWirelessHidAvatarStopTimingChecks": true,
+    "syntheticFlashRetentionChecks": true,
+    "deterministicSourceAndManifestChecks": true,
+    "nativeBilingualPreviews": 50,
+    "diagnosticLayoutVisuallyInspected": true
+  },
+  "preservation": {
+    "comparedWith": "0.9.6-hotspot-lifecycle embedded source",
+    "byteIdenticalInputs": [
+      "main/usb.c",
+      "main/input.c",
+      "main/ble_input.c",
+      "main/ble_reports.c",
+      "main/actions.c",
+      "main/hid_input.c",
+      "main/identity.c",
+      "main/wireless.c",
+      "main/network_store.c",
+      "main/network_authority.c",
+      "main/discovery.c",
+      "main/board.c",
+      "main/display.c",
+      "main/touch.c",
+      "main/avatar.cpp",
+      "main/avatar_native.cpp",
+      "main/avatar_activity.cpp",
+      "main/imu.c",
+      "main/tilt.c",
+      "main/vendor/stopwatch_avatar/avatar_engine.cpp",
+      "partitions.csv",
+      "dependencies.lock"
+    ],
+    "deviceOutsideReadOnlyHeapDiagnosticsIdentical": true,
+    "mcpOutsideReadOnlyHeapDiagnosticsIdentical": true,
+    "deviceVerified": false
+  },
+  "stackBudget": {
+    "touch_input": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4576,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "buttons": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4272,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 5280,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2352,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-avatar-reset": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1760,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-render": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 2496,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-activity-sample": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 1536,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    },
+    "screen-compact-paint": {
+      "allocatedBytes": 8192,
+      "knownPathFramesBytes": 4304,
+      "additionalReserveBytes": 2048,
+      "passes": true
+    }
+  },
+  "validation": {
+    "flashed": false,
+    "additionalDeviceProbe": false,
+    "phoneInput": false,
+    "simulatorOrE2E": false,
+    "deviceVerified": false
+  },
+  "limitations": [
+    "PSRAM capacity and initialization are hardware-unverified for this candidate.",
+    "Static PSRAM support also consumes internal memory; recovered dynamic headroom has not been measured.",
+    "The 32KiB reserve is an allocation policy, not a guarantee of 32KiB free at runtime.",
+    "PSRAM does not establish that there is no memory leak, fragmentation or independent network failure.",
+    "SDK PSRAM defaults extend the interrupt watchdog from 300ms to 800ms; no input timing change.",
+    "Repeated AP setup/scan, cold boot, HTTP/MCP, BLE/USB input and stop need scoped device acceptance."
+  ],
+  "acceptanceStatus": "Withdrawn from recommendation after user-reported startup regression",
+  "followUpUserReport": {
+    "firmwareExpected": "0.9.7-psram-memory",
+    "imageHashIndependentlyConfirmed": false,
+    "homeAppears": true,
+    "buttonsUnresponsive": true,
+    "screenLaterBlack": true,
+    "resetOrCrashConfirmed": false,
+    "rootCauseConfirmed": false,
+    "agentDeviceRun": false,
+    "recovery": "Retained 0.9.6 image; no erase, flash or device operation executed"
+  }
+}

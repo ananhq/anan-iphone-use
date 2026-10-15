@@ -23,7 +23,7 @@ bilingual documentation and sanitized migration evidence. The repository address
 
 | Item | Current status / required action |
 | --- | --- |
-| Source origin | `main/usb.c` overlaps the inspected actell USB implementation; exact origin is unresolved. `board.c` register implementation and historical generation/reuse also have recorded gaps. Resolve and record source handling before public distribution |
+| Source origin | `main/input/usb.c` overlaps the inspected actell USB implementation; exact origin is unresolved. `board.c` register implementation and historical generation/reuse also have recorded gaps. Resolve and record source handling before public distribution |
 | License and notices | Existing Apache-2.0 declarations and third-party notices are present. The combined-project license is GPL-3.0-only; prior per-file terms and third-party notices are retained. See [license and source handling](license-plan.md); attribution alone does not resolve derivation |
 | Baseline | Initial local checkpoint authorized after the user's successful reflash report; full input/stop acceptance and source-origin resolution remain pending |
 | Repository identity | Chosen repository name `anan-iphone-use`, display name Anan iPhone Use; private repository at [ananhq/anan-iphone-use](https://github.com/ananhq/anan-iphone-use); assign public commit/tag pins only when public distribution is authorized |
